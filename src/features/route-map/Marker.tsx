@@ -8,7 +8,7 @@ import { RouteInfo } from './route-info';
 import { useTheme } from '@mui/material';
 import { routesActions, useAppSelector } from '../../store';
 import L from 'leaflet';
-
+import { MyMarkerProps } from '../../types/myMarkerTypes';
 type MarkerProps = {
   item: RouteDto;
   // selectedRouteItem: RouteDto | null;
@@ -17,8 +17,8 @@ type MarkerProps = {
   type: 'extraPoint' | 'routes';
 };
 
-export const Marker: FC<MarkerProps> = memo(
-  ({ item, onClick, type }) => { // remove from props --> , selectedRouteItem, selectedExtraItem 
+export const Marker: FC<MyMarkerProps> = memo(
+  ({ item, onClick, type, props }) => { // remove from props --> , selectedRouteItem, selectedExtraItem 
     console.log("Render Marker");
     const theme = useTheme();
     // const [chooseMarker, setChooseMarker] = useState(false)
@@ -65,6 +65,7 @@ export const Marker: FC<MarkerProps> = memo(
 
     return (
       <LeafletMarker
+        {...props}
         eventHandlers={{
           click: () => onClickMarker(),
         }}
