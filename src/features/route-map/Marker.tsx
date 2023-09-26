@@ -1,4 +1,4 @@
-import { FC, memo, useRef } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 
 import { Marker as LeafletMarker, Popup } from 'react-leaflet';
 import { RouteDto } from '../../models';
@@ -6,7 +6,7 @@ import { RouteDto } from '../../models';
 import { RouteInfo } from './route-info';
 
 import { useTheme } from '@mui/material';
-
+import { routesActions, useAppSelector } from '../../store';
 import L from 'leaflet';
 
 type MarkerProps = {
@@ -19,11 +19,17 @@ type MarkerProps = {
 
 export const Marker: FC<MarkerProps> = memo(
   ({ item, onClick, type }) => { // remove from props --> , selectedRouteItem, selectedExtraItem 
+    console.log("Render Marker");
     const theme = useTheme();
-
-    // const markerRef = useRef<any>(null);
+    // const [chooseMarker, setChooseMarker] = useState(false)
+    const markerRef = useRef<any>(null);
+    // const selectedExtraPoint = useAppSelector((state) => state.routes.selectedExtraPoint);
+    // console.log("▶ ⇛ selectedExtraPoint:");
 
     const onClickMarker = () => {
+      console.log("▶ ⇛ markerRef.current:", markerRef.current);
+
+      // setChooseMarker(true)
       onClick(item);
     };
 
@@ -33,6 +39,11 @@ export const Marker: FC<MarkerProps> = memo(
     //   }
     // };
 
+    // useEffect(() => {
+    //   if (chooseMarker) {
+    //     onClickShowMarker()
+    //   }
+    // }, [chooseMarker])
     // useEffect(() => {
     //   if (selectedRouteItem) {
     //     onClickShowMarker();
@@ -55,9 +66,10 @@ export const Marker: FC<MarkerProps> = memo(
     return (
       <LeafletMarker
         eventHandlers={{
-          click: onClickMarker,
+          click: () => onClickMarker(),
         }}
-        // ref={markerRef}
+        data={`data-${item.payload}`}
+        ref={markerRef}
         position={[item.latitude, item.longitude]}
         icon={
           new L.DivIcon({
