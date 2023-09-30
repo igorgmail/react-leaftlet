@@ -69,15 +69,16 @@ export const RightMenu: FC<PropsRightMenu> = memo(
     const wrapperWidth = wrapperRef.current?.clientWidth;
 
     const handleSelectRoute = useCallback(
-      (route: string) => {
+      (route: string | any) => {
         dispatch(routesActions.setSelectedRoute(filteredRoutes[route]));
 
         dispatch(routesActions.setLoading(true));
 
-        dispatch(routesActions.setSelectedExtraPoint(null));
+        // dispatch(routesActions.setSelectedExtraPoint(null));
+        dispatch(routesActions.setSelectedExtraPoint(route));
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [filteredRoutes]
+      [filteredRoutes, map]
     );
 
     const handleSelectExtraPoint = useCallback(
@@ -101,6 +102,7 @@ export const RightMenu: FC<PropsRightMenu> = memo(
         if (map) {
           map.setView([route.latitude, route.longitude], 18);
           map.setView([route.latitude, route.longitude], 18);
+          if (!findOneMarkerAndOpen(map, route)) findOneClusterAndOpen(map, route)
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps

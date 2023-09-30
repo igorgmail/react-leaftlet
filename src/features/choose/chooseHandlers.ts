@@ -2,15 +2,12 @@ import L from 'leaflet';
 
 
 const findOneMarkerAndOpen = (map: any, shipment: any) => {
-  console.log("▶ ⇛ shipment:", shipment);
-  console.log("▶ ⇛ findOneMarkerAndOpen:");
 
   let findMarker: any = {}
   for (let key in map._layers) {
     if (map._layers.hasOwnProperty(key)) {
-      if (map._layers[key]?.options.data === `data-${shipment.payload}`) {
+      if (map._layers[key]?.options.data === `markerKey-${shipment.unicKey}`) {
         findMarker = map._layers[key]
-        console.log("▶ ⇛ findMarker:", findMarker);
         setTimeout(() => findMarker.openPopup(), 300)
         return true
       }
@@ -20,16 +17,13 @@ const findOneMarkerAndOpen = (map: any, shipment: any) => {
 }
 
 const findOneClusterAndOpen = (map: any, shipment: any) => {
-  console.log("▶ ⇛ findOneClusterAndOpen:");
-
   let clusters: any = []
 
   map.eachLayer((l: any) => {
     if (l instanceof L.Marker && map.getBounds().contains(l.getLatLng())) clusters.push(l)
   })
   const findCluster = clusters[0]
-  console.log("▶ ⇛ findCluster:", findCluster);
-  const icon = findCluster._icon
+  const icon = findCluster?._icon
 
   if (icon) {
     setTimeout(() => {

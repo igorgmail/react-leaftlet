@@ -2,7 +2,8 @@ import { LatLngExpression, MarkerOptions } from 'leaflet';
 import { EventedProps } from '@react-leaflet/core';
 import { ReactNode } from 'react';
 import { RouteDto } from '../models';
-export interface MyMarkerProps extends MarkerOptions, EventedProps {
+
+export interface MarkerProps extends MarkerOptions, EventedProps {
   data?: string;
   unicKey?: string;
   children?: ReactNode;

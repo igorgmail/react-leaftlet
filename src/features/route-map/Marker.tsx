@@ -1,62 +1,24 @@
-import { FC, memo, useEffect, useRef, useState } from 'react';
+import { FC, memo, useRef } from 'react';
 
 import { Marker as LeafletMarker, Popup } from 'react-leaflet';
-import { RouteDto } from '../../models';
+// import { RouteDto } from '../../models';
 
 import { RouteInfo } from './route-info';
 
 import { useTheme } from '@mui/material';
-import { routesActions, useAppSelector } from '../../store';
+// import { routesActions, useAppSelector } from '../../store';
 import L from 'leaflet';
-import { MyMarkerProps } from '../../types/myMarkerTypes';
-type MarkerProps = {
-  item: RouteDto;
-  // selectedRouteItem: RouteDto | null;
-  // selectedExtraItem: RouteDto | null;
-  onClick: (item: RouteDto) => void;
-  type: 'extraPoint' | 'routes';
-};
+import { MarkerProps } from '../../types/myMarkerTypes';
 
-export const Marker: FC<MyMarkerProps> = memo(
+export const Marker: FC<MarkerProps> = memo(
   ({ item, onClick, type, props }) => { // remove from props --> , selectedRouteItem, selectedExtraItem 
-    console.log("Render Marker");
+
     const theme = useTheme();
-    // const [chooseMarker, setChooseMarker] = useState(false)
     const markerRef = useRef<any>(null);
-    // const selectedExtraPoint = useAppSelector((state) => state.routes.selectedExtraPoint);
-    // console.log("▶ ⇛ selectedExtraPoint:");
 
     const onClickMarker = () => {
-      console.log("▶ ⇛ markerRef.current:", markerRef.current);
-
-      // setChooseMarker(true)
       onClick(item);
     };
-
-    // const onClickShowMarker = () => {
-    //   if (markerRef.current) {
-    //     markerRef.current.openPopup();
-    //   }
-    // };
-
-    // useEffect(() => {
-    //   if (chooseMarker) {
-    //     onClickShowMarker()
-    //   }
-    // }, [chooseMarker])
-    // useEffect(() => {
-    //   if (selectedRouteItem) {
-    //     onClickShowMarker();
-    //   }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [selectedRouteItem, item]);
-
-    // useEffect(() => {
-    //   if (selectedExtraItem) {
-    //     onClickShowMarker();
-    //   }
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [selectedExtraItem, item]);
 
     const fill = {
       routes: theme.palette.primary.main,
@@ -69,7 +31,7 @@ export const Marker: FC<MyMarkerProps> = memo(
         eventHandlers={{
           click: () => onClickMarker(),
         }}
-        data={`data-${item.payload}`}
+        data={`markerKey-${item.unicKey}`}
         ref={markerRef}
         position={[item.latitude, item.longitude]}
         icon={
