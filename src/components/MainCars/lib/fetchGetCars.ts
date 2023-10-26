@@ -9,8 +9,10 @@ async function getCarsFetch(): Promise<ICarServerData> {
       headers: {
         'Accept': 'application/json',
         'Content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+      },
+      referrerPolicy: "unsafe-url",
     });
 
 

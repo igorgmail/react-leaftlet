@@ -24,15 +24,22 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
   function timeDifference(dateString: string) {
     const lastTrack = new Date(dateString)
     const dif = Date.now() - lastTrack.getTime()
-    const oneHour = 60 * 60 * 1000
+    const oneHour = 5 * 60 * 60 * 1000
 
     return dif < oneHour // Если с последнего track прошло меньше часа - true иначе false
   }
   const isConnection = timeDifference(String(car.last_track))
 
+  function getImgUrl(id: number) {
+    if (Number(id) === 1) return process.env.PUBLIC_URL + '/img/car1.png'
+    if (Number(id) === 2) return process.env.PUBLIC_URL + '/img/car2.png'
+    if (Number(id) === 33) return process.env.PUBLIC_URL + '/img/car3.png'
+    return ''
+  }
+
   useEffect(() => {
     var img = new Image();
-    img.src = car.pic;
+    img.src = getImgUrl(car.car_id)//car.pic;
 
     img.onload = function () {
       var width = img.width;
@@ -67,7 +74,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
       riseOnHover
       icon={
         new L.Icon({
-          iconUrl: car.pic,
+          iconUrl: getImgUrl(car.car_id),//iconUrlCar,//car.pic,
           iconSize: [imageSize.width, imageSize.height],
           // iconAnchor: [16, 32],
           popupAnchor: [0, 0],
