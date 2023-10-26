@@ -10,6 +10,7 @@ import MarkerCar from './MarkerCar';
 import getCarsFetch from './lib/fetchGetCars';
 import debounce from './lib/debounce';
 import carsPageconfig from './lib/config';
+import isHasToushScreen from './lib/isMobile';
 
 type IPainCars = L.LatLngBoundsExpression | [][] | any
 
@@ -19,6 +20,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   console.log("---Reneder Pain");
 
   const [carsData, setCarsData] = useState<ICars[]>(carsDataStart)
+  const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
   const map = useMap();
 
@@ -33,6 +35,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
     const actualBounds: IPainCars = getBoundsFromCarsData(carsData)
     map.fitBounds(actualBounds)
+    if (isMobile) map.zoomOut()
     setTimeout(() => {
       map.panBy([0, carsPageconfig.offsetMapPan], { animate: true });
     }, 300)
@@ -71,7 +74,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // Смещение карты при первой загрузке на велечину тултипа
   useEffect(() => {
     map.whenReady(() => {
-      map.zoomOut()
+      if (isMobile) map.zoomOut()
       map.panBy([0, 28], { animate: true });
     })
   }, [map])
