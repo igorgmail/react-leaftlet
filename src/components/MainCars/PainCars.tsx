@@ -35,8 +35,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
     const actualBounds: IPainCars = getBoundsFromCarsData(carsData)
     map.fitBounds(actualBounds)
-    if (isMobile) map.zoomOut()
     setTimeout(() => {
+      if (isMobile) map.zoomOut()
       map.panBy([0, carsPageconfig.offsetMapPan], { animate: true });
     }, 300)
 
