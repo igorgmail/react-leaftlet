@@ -71,6 +71,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // Смещение карты при первой загрузке на велечину тултипа
   useEffect(() => {
     map.whenReady(() => {
+      map.zoomOut()
       map.panBy([0, 28], { animate: true });
     })
   }, [map])

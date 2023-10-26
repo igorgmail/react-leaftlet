@@ -7,7 +7,7 @@ import 'leaflet-rotatedmarker';
 import { ICars } from '../../types/carsTypes';
 import NoConnection from './SvgIcon';
 import style from './style.module.css';
-
+import carsPageconfig from './lib/config';
 interface CarProps {
   car: ICars
 }
@@ -24,7 +24,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
   function timeDifference(dateString: string) {
     const lastTrack = new Date(dateString)
     const dif = Date.now() - lastTrack.getTime()
-    const oneHour = 5 * 60 * 60 * 1000
+    const oneHour = carsPageconfig.differentTime
 
     return dif < oneHour // Если с последнего track прошло меньше часа - true иначе false
   }
