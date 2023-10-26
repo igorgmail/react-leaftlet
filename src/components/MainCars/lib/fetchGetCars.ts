@@ -4,7 +4,7 @@ import { ICarServerData } from "../../../types/carsTypes";
 // http://89.108.99.163/gps/gpsapi.php/all_cars?park_id=1
 async function getCarsFetch(): Promise<ICarServerData> {
   try {
-    const response = await fetch('http://localhost:3002/cars', {
+    const response = await fetch('https://user-headers.onrender.com/cars', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
