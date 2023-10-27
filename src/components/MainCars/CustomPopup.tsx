@@ -15,7 +15,7 @@ interface ICustomPopup {
   speed: string,
 }
 const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
-  const isMobile = useMemo(() => isHasToushScreen(), [])
+  const isMobile = isHasToushScreen()
   console.log("▶ ⇛ isMobile:", isMobile);
   console.log("---Render Popup");
 
@@ -25,6 +25,17 @@ const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
   const [refReady, setRefReady] = useState(false);
   let popupRef = useRef(null)
 
+
+  // return (<Popup autoPan={true}
+  //     // ref={popupRef}
+  //     ref={(r) => {
+  //       console.log("REF", r);
+
+  //       // setRefReady(true);
+  //     }}
+  //   >
+  //     <p>{`скорость ${speed} км/ч`}</p>
+  // </Popup>)
 
   return (isMobile ?
     (<Popup autoPan={true}
@@ -37,10 +48,7 @@ const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
     >
       <p>{`скорость ${speed} км/ч`}</p>
     </Popup>) : null
-
   )
-
-
 
 })
 
