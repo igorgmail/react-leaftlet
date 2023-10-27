@@ -34,11 +34,14 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   const updateMap = useCallback(() => {
 
     const actualBounds: IPainCars = getBoundsFromCarsData(carsData)
-    map.fitBounds(actualBounds)
-    setTimeout(() => {
-      if (isMobile) map.zoomOut()
-      map.panBy([0, carsPageconfig.offsetMapPan], { animate: true });
-    }, 300)
+    map.panInsideBounds(actualBounds)
+    // console.log("▶ ⇛ map.getBounds()():", map.getBounds());
+    console.log("▶ ⇛ map.getPixelBounds():", map.getPixelBounds());
+    // map.fitBounds(actualBounds)
+    // setTimeout(() => {
+    //   if (isMobile) map.zoomOut()
+    //   map.panBy([0, carsPageconfig.offsetMapPan], { animate: true });
+    // }, 300)
 
   }, [map])
 
@@ -58,17 +61,17 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
 
 
-  // Подписываемся на событие изменения масштаба
-  useLayoutEffect(() => {
-    map.on('zoom', updateMapWhenNoUser);
-    map.on('moveend', updateMapWhenNoUser);
+  // // Подписываемся на событие изменения масштаба
+  // useLayoutEffect(() => {
+  //   map.on('zoom', updateMapWhenNoUser);
+  //   map.on('moveend', updateMapWhenNoUser);
 
-    // Отписываемся от события при размонтировании компонента
-    return () => {
-      map.off('zoom', updateMapWhenNoUser);
-      map.off('moveend', updateMapWhenNoUser);
-    };
-  }, [map, updateMapWhenNoUser]);
+  //   // Отписываемся от события при размонтировании компонента
+  //   return () => {
+  //     map.off('zoom', updateMapWhenNoUser);
+  //     map.off('moveend', updateMapWhenNoUser);
+  //   };
+  // }, [map, updateMapWhenNoUser]);
 
 
   // Смещение карты при первой загрузке на велечину тултипа

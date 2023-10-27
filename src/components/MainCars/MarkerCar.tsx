@@ -80,7 +80,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
           popupAnchor: [0, 0],
           shadowSize: [32, 32],
           shadowAnchor: [32, 72],
-          className: `${!isConnection && style.carIcon}`,
+          // className: `${!isConnection && style.carIcon}`,
 
         })
       }
@@ -102,9 +102,9 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
         </div>
 
       </Tooltip>}
-      <Popup autoPan={true}>
+      {/* <Popup autoPan={true}>
         <p>{car.angle}</p>
-      </Popup>
+      </Popup> */}
     </LeafletMarker>
   )
 }
