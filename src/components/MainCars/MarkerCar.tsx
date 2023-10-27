@@ -1,13 +1,15 @@
-import React, { FC, useState, useEffect, useRef } from 'react';
-import { Marker as LeafletMarker, Popup, Tooltip } from 'react-leaflet';
+import React, { FC, useState, useEffect, useRef, ForwardRefExoticComponent } from 'react';
+import { Marker as LeafletMarker, Popup, Tooltip, useMap } from 'react-leaflet';
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
+import carsPageconfig from './lib/config';
+
 import { ICars } from '../../types/carsTypes';
 import NoConnection from './SvgIcon';
+import CustomPopup from './CustomPopup';
 import style from './style.module.css';
-import carsPageconfig from './lib/config';
 interface CarProps {
   car: ICars
 }
@@ -15,12 +17,19 @@ interface IiconImageSize {
   width: number;
   height: number;
 }
-const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
 
-  const tooltipRef = useRef<any>(null)
+const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
+  console.log("---Render Marker");
+
   // Что бы изменть размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
 
+  const map = useMap()
+  const tooltipRef = useRef(null)
+
+
+
+  // console.log("▶ ⇛ map:", map);
   function timeDifference(dateString: string) {
     const lastTrack = new Date(dateString)
     const dif = Date.now() - lastTrack.getTime()
@@ -56,6 +65,12 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
   }
   const onLoadTooltip = () => {
   }
+
+  // useEffect(() => {
+  //   if (refReady && true) {
+  //     popupRef.openOn(map);
+  //   }
+  // }, [isActive, refReady, map]);
 
   return (
     <LeafletMarker
@@ -102,9 +117,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
         </div>
 
       </Tooltip>}
-      {/* <Popup autoPan={true}>
-        <p>{car.angle}</p>
-      </Popup> */}
+      <CustomPopup speed={String(car.speed)} key={car.car_id}></CustomPopup>
     </LeafletMarker>
   )
 }
