@@ -38,7 +38,8 @@ const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
   // </Popup>)
 
   return (isMobile ?
-    (<Popup autoPan={true}
+    (<Popup
+      autoPan={false}
       // ref={popupRef}
       ref={(r) => {
         console.log("REF", r);
