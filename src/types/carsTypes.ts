@@ -11,7 +11,7 @@ export interface ICars {
   lng: string | number,
   angle: string | number,
   altitude: string | number,
-  speed: string | number,
+  speed: string,
   pic: string,
   last_track: string | number
 }

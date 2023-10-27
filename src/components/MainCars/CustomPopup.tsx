@@ -1,14 +1,8 @@
-import React, { FC, useState, useEffect, useRef, useMemo } from 'react';
-import { Marker as LeafletMarker, Popup, Tooltip, useMap } from 'react-leaflet';
+import React, { FC } from 'react';
+import { Popup } from 'react-leaflet';
 
-import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
-import { ICars } from '../../types/carsTypes';
-import NoConnection from './SvgIcon';
-import style from './style.module.css';
-import carsPageconfig from './lib/config';
-import { Interface } from 'readline';
 import isHasToushScreen from './lib/isMobile';
 
 interface ICustomPopup {
@@ -16,34 +10,17 @@ interface ICustomPopup {
 }
 const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
   const isMobile = isHasToushScreen()
-  console.log("▶ ⇛ isMobile:", isMobile);
-  console.log("---Render Popup");
-
-  console.log("▶ ⇛ speed:", speed);
 
 
-  const [refReady, setRefReady] = useState(false);
-  let popupRef = useRef(null)
-
-
-  // return (<Popup autoPan={true}
-  //     // ref={popupRef}
-  //     ref={(r) => {
-  //       console.log("REF", r);
-
-  //       // setRefReady(true);
-  //     }}
-  //   >
-  //     <p>{`скорость ${speed} км/ч`}</p>
-  // </Popup>)
+  // Если использовать action handler для авто открытия popup
+  // const [refReady, setRefReady] = useState(false);
+  // let popupRef = useRef(null)
 
   return (isMobile ?
     (<Popup
       autoPan={false}
       // ref={popupRef}
       ref={(r) => {
-        console.log("REF", r);
-
         // setRefReady(true);
       }}
     >

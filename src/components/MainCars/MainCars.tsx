@@ -6,7 +6,6 @@ import { Box, Stack, CircularProgress } from '@mui/material';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
-
 import PainCars from './PainCars';
 import getCarsFetch from './lib/fetchGetCars';
 import style from './style.module.css'
@@ -15,7 +14,6 @@ export default function MainCars() {
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [carsData, setCarsData] = useState<[] | any>()
-  console.log("---Render MAP");
 
   useEffect(() => {
     const carsData = getCarsFetch()
@@ -39,7 +37,7 @@ export default function MainCars() {
         </Stack>
         :
         <MapContainer
-          whenReady={() => { console.log("MAP READY") }}
+          // whenReady={() => { console.log("MAP READY") }}
           zoomSnap={0.5}
           zoomDelta={0.5}
           // bounds={[[54.8936466, 28.795824667646446], [53.943055, 27.4350899]]}

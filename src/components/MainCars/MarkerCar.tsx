@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect, useRef, ForwardRefExoticComponent } from 'react';
-import { Marker as LeafletMarker, Popup, Tooltip, useMap } from 'react-leaflet';
+import React, { FC, useState, useEffect } from 'react';
+import { Marker as LeafletMarker, Tooltip } from 'react-leaflet';
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
@@ -19,15 +19,9 @@ interface IiconImageSize {
 }
 
 const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
-  console.log("---Render Marker");
 
   // Что бы изменть размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
-
-  const map = useMap()
-  const tooltipRef = useRef(null)
-
-
 
   // console.log("▶ ⇛ map:", map);
   function timeDifference(dateString: string) {
@@ -37,6 +31,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
 
     return dif < oneHour // Если с последнего track прошло меньше часа - true иначе false
   }
+
   const isConnection = timeDifference(String(car.last_track))
 
   function getImgUrl(id: number) {
@@ -48,7 +43,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
 
   useEffect(() => {
     var img = new Image();
-    img.src = getImgUrl(car.car_id)//car.pic;
+    img.src = getImgUrl(car.car_id)
 
     img.onload = function () {
       var width = img.width;
@@ -57,31 +52,18 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
       setImageSize({ ...imageSize, height: imageSize.width * proportions })
     };
 
-
-  }, [car, imageSize])
-
-
-  const onLoadMarker = () => {
-  }
-  const onLoadTooltip = () => {
-  }
-
-  // useEffect(() => {
-  //   if (refReady && true) {
-  //     popupRef.openOn(map);
-  //   }
-  // }, [isActive, refReady, map]);
+  }, [car])
 
   return (
     <LeafletMarker
       eventHandlers={{
-        add: () => onLoadMarker(),
+        // add: () => onLoadMarker(),
         // loading: () => { console.log("MARKER READY") }
 
       }}
       // data={`markerKey-${item.unicKey}`}
       pane={"myPane"}
-      ref={tooltipRef}
+      // ref={tooltipRef}
       title={`скорость ${car.speed} км/ч`}
       position={[Number(car.lat), Number(car.lng)]}
       rotationAngle={Number(car.angle)}
@@ -89,7 +71,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
       riseOnHover
       icon={
         new L.Icon({
-          iconUrl: getImgUrl(car.car_id),//iconUrlCar,//car.pic,
+          iconUrl: getImgUrl(car.car_id),
           iconSize: [imageSize.width, imageSize.height],
           // iconAnchor: [16, 32],
           popupAnchor: [0, 0],
@@ -102,7 +84,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
     >
       {imageSize.height && <Tooltip
         eventHandlers={{
-          add: () => onLoadTooltip()
+          // add: () => onLoadTooltip()
 
         }}
         permanent={true}
@@ -117,7 +99,7 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
         </div>
 
       </Tooltip>}
-      <CustomPopup speed={String(car.speed)} key={car.car_id}></CustomPopup>
+      <CustomPopup speed={car.speed} key={car.car_id}></CustomPopup>
     </LeafletMarker>
   )
 }
