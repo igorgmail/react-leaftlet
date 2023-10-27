@@ -1,15 +1,6 @@
-import React, { useState, useEffect, FC } from 'react';
-import ReactDOM from 'react-dom';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import { Marker, Popup, Pane } from 'react-leaflet';
+import { useMap } from 'react-leaflet';
 
-import { Box } from '@mui/material';
-import L from 'leaflet';
 import 'leaflet-rotatedmarker';
-
-
-import { ReactElementType } from 'react-window';
-
 
 function useTooltipHeight() {
 
@@ -26,8 +17,6 @@ function useTooltipHeight() {
       }, 10);
     });
   }
-
-
 
   return { getTooltipHeight }
 }
