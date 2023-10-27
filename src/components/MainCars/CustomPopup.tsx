@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useRef, ForwardRefExoticComponent } from 'react';
+import React, { FC, useState, useEffect, useRef, useMemo } from 'react';
 import { Marker as LeafletMarker, Popup, Tooltip, useMap } from 'react-leaflet';
 
 import L from 'leaflet';
@@ -9,12 +9,14 @@ import NoConnection from './SvgIcon';
 import style from './style.module.css';
 import carsPageconfig from './lib/config';
 import { Interface } from 'readline';
+import isHasToushScreen from './lib/isMobile';
 
 interface ICustomPopup {
   speed: string,
-  key: number
 }
-const CustomPopup: FC<ICustomPopup> = React.memo(({ speed, key }) => {
+const CustomPopup: FC<ICustomPopup> = React.memo(({ speed }) => {
+  const isMobile = useMemo(() => isHasToushScreen(), [])
+  console.log("▶ ⇛ isMobile:", isMobile);
   console.log("---Render Popup");
 
   console.log("▶ ⇛ speed:", speed);
@@ -24,8 +26,8 @@ const CustomPopup: FC<ICustomPopup> = React.memo(({ speed, key }) => {
   let popupRef = useRef(null)
 
 
-  return (
-    <Popup autoPan={true}
+  return (isMobile ?
+    (<Popup autoPan={true}
       // ref={popupRef}
       ref={(r) => {
         console.log("REF", r);
@@ -34,8 +36,12 @@ const CustomPopup: FC<ICustomPopup> = React.memo(({ speed, key }) => {
       }}
     >
       <p>{`скорость ${speed} км/ч`}</p>
-    </Popup>
+    </Popup>) : null
+
   )
+
+
+
 })
 
 export default CustomPopup;
