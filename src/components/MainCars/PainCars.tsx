@@ -13,6 +13,7 @@ import carsPageconfig from './lib/config';
 import isHasToushScreen from './lib/isMobile';
 
 import CustomLayerControl from '../MenuCars/CustomLayerControl';
+// import TestControl from '../MenuCars/TestControl';
 import MenuItemCar from '../MenuCars/MenuItemCar';
 
 type IPainCars = L.LatLngBoundsExpression | [][] | any
@@ -58,43 +59,11 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     return dataCarsForMenuItems;
   };
 
-  // Формируем массив обьектов для передачи в state Filter // {id : true}
-
-  // const makeFilterObject = () => {
-
-  // }
-
-
-
-  // // Формируем массив обьектов для передачи в MenuItem
-  // const getdataForMenuItem = (company: ICompanyData) => {
-
-  //   const dataCarsForMenuItems = {
-  //     company_name: company.company_name,
-  //     company_id: company.company_id,
-
-  //     cars: company.cars.map((car: ICarObject) => ({
-  //       car_id: car.car_id,
-  //       car_name: car.car_name,
-  //       checked: true,
-  //       disconnect: false,
-  //     })),
-  //   };
-
-
-  //   return dataCarsForMenuItems;
-  // };
-
   // Фильтр для передачи в Marker (принимает маасив объектов Cars и возвращает все где checked true)
 
   const filterForMarkers = dataCarsForMarrkers.filter((el: ICarObject) => {
     if (carsFilterObject && carsFilterObject[el.car_id] === true) return el
   })
-  // const filterForMarkers = (dataForMarkers: ICarObject[]) => {
-  //   const filterMarkersData = dataForMarkers.filter((el) => {
-
-  //   })
-  // }
 
   const makeFilterObject = (carsData: any) => {
     const dataObj: any = {}
@@ -124,7 +93,6 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // Получение данных с сервера
   useEffect(() => {
     const interval = setInterval(() => {
-
       getCarsFetch()
         .then(data => {
           setCompanyData(data)
@@ -139,14 +107,6 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     dispatch(carsMapActions.setCarsDataForMenu(dataForMenuItem))
     dispatch(carsMapActions.setCarsFilterMarkers(makeFilterObject(carsDataStart.cars)))
   }, [carsDataStart, dispatch])
-  // Меняем state чекбоксов 
-  // useEffect(() => {
-  //   setCarsDataForMenu(dataForMenuItem)
-  //   console.log("▶ ⇛ dataForMenuItem:", dataForMenuItem);
-  // }, [])
-  // const filterCarsArray = (arr) => {
-  //   const
-  // }
 
   // // Подписываемся на событие изменения масштаба
   // useLayoutEffect(() => {
@@ -181,7 +141,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
           )}
 
         </CustomLayerControl>}
-
+      {/* <TestControl></TestControl> */}
     <Pane name="myPane" style={{ zIndex: 500, width: '100vh', }}>
 
         {companyData && filterForMarkers.map((el: any) => {

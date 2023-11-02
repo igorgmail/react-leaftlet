@@ -1,14 +1,13 @@
-import React, { useState, useEffect, FC, ReactComponentElement } from 'react'
+import React, { useState, useEffect, FC } from 'react'
 
 // import L from 'leaflet';
 import Control from 'react-leaflet-custom-control'
 
 import style from './style.module.css'
-import { ICarObject, ICompanyData, ICompanyName } from '../../types/carsTypes';
+import { ICompanyName } from '../../types/carsTypes';
 
 import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import MenuItemsCars from './MenuItemCar';
 
 
 interface ICustomLayerControl {
@@ -17,7 +16,6 @@ interface ICustomLayerControl {
 }
 const CustomLayerControl: FC<ICustomLayerControl> = ({ menuHeaderData, children }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [carDataForMenu, setCarDataForMenu] = useState({})
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,11 +25,6 @@ const CustomLayerControl: FC<ICustomLayerControl> = ({ menuHeaderData, children 
     setAnchorEl(null);
   };
 
-
-  useEffect(() => {
-    console.log("▶ ⇛ companyData:", menuHeaderData);
-
-  }, [])
   return (
     <React.Fragment>
       <Control position='topleft'>
