@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
 import { Box, Stack, CircularProgress } from '@mui/material';
 
@@ -21,7 +21,6 @@ export default function MainCars() {
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
-
   useEffect(() => {
     const companyData = getCarsFetch()
     companyData
@@ -30,6 +29,8 @@ export default function MainCars() {
         return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
       })
         setCompanyData(data)
+        L.control.zoom({ position: 'topright' })
+
       return setCarsBounds(carBoundsArray)
       })
       .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
@@ -56,9 +57,11 @@ export default function MainCars() {
           bounds={carsBounds}
           // bounds={[[53.943055, 27.4350899], [54.8936466, 27.5305566], [54.2314030446825, 28.795824667646446], [54.786238, 32.006855]]}
           // center={[53.943055, 27.4350899]}
-          // zoom={8.5} 
+        // zoom={8.5}
+        zoomControl={false}
         style={{ width: '100%', height: '100%' }}
       >
+        <ZoomControl position="topleft" />
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"

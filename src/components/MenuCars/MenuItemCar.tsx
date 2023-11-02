@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, FC } from 'react';
-import { Stack, Checkbox, FormControlLabel } from '@mui/material';
+import { Stack, Checkbox, Box, FormControlLabel } from '@mui/material';
 import { ICarObject, IOneCarForMenu } from '../../types/carsTypes';
+import { IconDisconnect } from '../MainCars/IconDisconnect';
 
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 
@@ -16,6 +17,8 @@ const MenuItemCar: FC<IMenuItems> = React.memo(({ carData }) => {
 
   const dispatch = useAppDispatch()
   const carsForMenuFromStore = useAppSelector((state) => state.carsMap?.forMenu);
+  const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
+
 
   const [isChecked, setIsChecked] = useState(true);
 
@@ -27,14 +30,12 @@ const MenuItemCar: FC<IMenuItems> = React.memo(({ carData }) => {
     setIsChecked((prev) => !prev); // Используйте функциональное обновление состояния
     const carChoose_id: number = Number(e.target.id)
     const carChoose_value: boolean = e.target.checked
-    console.log('Check Change', e.target.id);
-    console.log('IS Checked', e.target.checked);
     dispatch(carsMapActions.setChooseCheckbox({ carChoose_id, carChoose_value }))
     dispatch(carsMapActions.setCarsFilterMarkers({ [carChoose_id]: carChoose_value }))
   }
 
   return (
-    <Stack>
+    <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
       <FormControlLabel
         control={
           <Checkbox
@@ -47,6 +48,15 @@ const MenuItemCar: FC<IMenuItems> = React.memo(({ carData }) => {
         onClick={handleClose}
         className={style.carsMenuLable}
       />
+      {carsIsConnectFilter &&
+        // carsIsConnectFilter[carData.car_id] &&
+        <Box className={style.menuDisconnectBox}>
+          <IconDisconnect
+            color={'black'}
+            className={!carsIsConnectFilter[carData.car_id] ? style.menuDisconnectIcon : style.menuIconNoneVisible}
+          ></IconDisconnect>
+        </Box>
+      }
     </Stack>
   );
 });

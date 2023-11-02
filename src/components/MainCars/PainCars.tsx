@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { ICarObject, ICompanyData, ICompanyName } from '../../types/carsTypes';
-import { MapContainer, LayersControl, LayerGroup } from 'react-leaflet';
 
 import MarkerCar from './MarkerCar';
 import getCarsFetch from './lib/fetchGetCars';
@@ -22,8 +21,6 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // mapBounds - массив массивов координат для определения расположения видимой карты
   // carsDataStart - массив объектов с данными cars для первого рендере
 
-  console.log("---Render PainCars");
-
   const dispatch = useAppDispatch()
   const carsForMenuFromStore = useAppSelector((state) => state.carsMap?.forMenu);
   const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
@@ -33,10 +30,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   const [companyData, setCompanyData] = useState<ICompanyData>(carsDataStart)
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
-  const [carsDataForMenu, setCarsDataForMenu] = useState<any | undefined>()
-
   const map = useMap();
-
 
   // Формируем массив для передачи в Marker перед фильтром
   // Обновляется каждую секунду
