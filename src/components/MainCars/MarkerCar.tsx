@@ -6,19 +6,19 @@ import 'leaflet-rotatedmarker';
 
 import carsPageconfig from './lib/config';
 
-import { ICars } from '../../types/carsTypes';
+import { ICarObject } from '../../types/carsTypes';
 import NoConnection from './SvgIcon';
 import CustomPopup from './CustomPopup';
 import style from './style.module.css';
 interface CarProps {
-  car: ICars
+  car: ICarObject
 }
 interface IiconImageSize {
   width: number;
   height: number;
 }
 
-const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
+const MarkerCar: FC<CarProps> = ({ car }) => {
 
   // Что бы изменть размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
@@ -103,6 +103,5 @@ const MarkerCar: FC<CarProps> = React.memo(({ car }) => {
     </LeafletMarker>
   )
 }
-)
 
 export default MarkerCar
