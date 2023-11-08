@@ -119,7 +119,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   //     map.off('moveend', updateMapWhenNoUser);
   //   };
   // }, [map, updateMapWhenNoUser]);
-
+  // leaflet-marker-icon leaflet-zoom-animated leaflet-interactive
 
 
   // Смещение карты при первой загрузке на велечину тултипа
@@ -149,6 +149,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
         }
         )}
 
+      </Pane>
+      <Pane name="historyPane" style={{ zIndex: 700, width: '100vh', }}>
     </Pane>
     </>
   )
