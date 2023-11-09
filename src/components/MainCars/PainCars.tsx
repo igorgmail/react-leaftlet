@@ -141,17 +141,16 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
           )}
 
         </CustomLayerControl>}
-      {/* <TestControl></TestControl> */}
-    <Pane name="myPane" style={{ zIndex: 500, width: '100vh', }}>
 
+      <Pane name="myPane" style={{ zIndex: 500, width: '100vh', }}>
         {companyData && filterForMarkers.map((el: any) => {
           return <MarkerCar car={el} key={`${el.car_id}-${el.last_track}`} />
         }
         )}
-
       </Pane>
-      <Pane name="historyPane" style={{ zIndex: 700, width: '100vh', }}>
-    </Pane>
+
+      <Pane name="historyTooltipsPane" style={{ zIndex: 700, width: '100vh', }}>
+      </Pane>
     </>
   )
 }

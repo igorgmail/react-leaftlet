@@ -12,7 +12,8 @@ import { ICarObject } from '../../types/carsTypes';
 import { IconDisconnect } from './IconDisconnect';
 import { IconHistory } from '../HistoryComponents/IconHistory';
 import CustomPopup from './CustomPopup';
-
+import { render } from 'react-dom';
+import { HistoryMenu } from '../HistoryComponents/HistoryMenu';
 import isHasToushScreen from './lib/isMobile';
 
 import style from './style.module.css';
@@ -38,16 +39,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
   const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
 
-  const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const handleMenuOpen = () => {
-    setMenuOpen(true);
-  };
-
-  const handleMenuClose = () => {
-    setMenuOpen(false);
-  };
-
   function timeDifference(dateString: string) {
     const lastTrack = new Date(dateString)
     const dif = Date.now() - lastTrack.getTime()
@@ -59,6 +50,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   // Обработка событий мыши на маркере
 
   const mouseOverMarkerHandler = () => {
+    console.log("Mouse IN Marker");
     if (!isMobile) {
       addNewTooltip()
       addHistoryTooltip()
@@ -66,7 +58,9 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   }
 
   const mouseOutMarkerHandler = () => {
+    console.log("Mouse Out Marker");
     removeNewTooltip()
+
   }
 
   const mouseClickMarkerHandler = () => {
@@ -102,7 +96,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
     console.log("IN addHistiry");
 
-    const allTooltip: any = map.getPane('historyPane')?.children;
+    const allTooltip: any = map.getPane('historyTooltipsPane')?.children;
 
     if (allTooltip) {
       Array.from(allTooltip).forEach((element: any) => {
@@ -112,13 +106,19 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       });
     }
 
-    // allTooltip[0]?.getTooltip()
-    // console.log("▶ ⇛  allTooltip[0]?.getTooltip():", allTooltip[0]?.getTooltip());
-
     setTooltipHistoryOpen(true)
+
+    // Создаем div для портала
+    const portalContainer = document.createElement('div');
+    document.body.appendChild(portalContainer);
+
+    // Рендерим JSX-компонент внутри портала
+    render(<HistoryMenu />, portalContainer);
+
+
     // Создаем tooltip для отображения скорости маркера
     const tooltipHistory = L.tooltip({
-      pane: 'historyPane',
+      pane: 'historyTooltipsPane',
       direction: 'left',
       className: [style.leafBorder, style.historyTooltip].join(' '),
       offset: [-10, -10],
@@ -126,7 +126,8 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       permanent: true
     })
       .setLatLng([Number(car.lat), Number(car.lng)])
-      .setContent(renderToString(<IconHistory />))
+      .setContent(portalContainer);
+    // .setContent(renderToString(<IconHistory />))
 
 
     tooltipHistoryRef.current = tooltipHistory
@@ -138,7 +139,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     el?.addEventListener('click', function (e) {
       console.log("click History");
       console.log(car.car_id);
-      handleMenuOpen()
     });
 
     tooltipHistory.on('click', function (e) {
@@ -195,21 +195,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     dispatch(carsMapActions.setCarsIsConnectFilter({ [Number(car.car_id)]: isConnection }))
   })
 
-  map.on('click', useCallback((e: any) => {
-    const target = e.originalEvent.target as Element
-    // L.DomEvent.disableClickPropagation(target)
-    if (!target.classList.contains('leaflet-marker-icon')
-      && !target.closest('.leaflet-tooltip')) {
-      // Обработка клика за пределами маркера и tooltip(не в попапе)
-      if (tooltipHistoryOpen && tooltipHistoryRef.current) {
-        console.log("▶ ⇛ tooltipHistoryOpen:", tooltipHistoryOpen);
-        removeHistoryTooltip()
-        console.log("Click MAP");
-      }
-
-      // map.closePopup();
-    }
-  }, [tooltipHistoryOpen]));
+  // слушаем событие клик на карте если tooltip открыт
   map.on('click', useCallback((e: any) => {
     const target = e.originalEvent.target as Element
     // L.DomEvent.disableClickPropagation(target)
@@ -242,11 +228,11 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       pane={"myPane"}
       // ref={tooltipRef}
       // title={`скорость ${car.speed} км/ч`}
-      // title={`скорость ${car.speed} км/ч`}
       position={[Number(car.lat), Number(car.lng)]}
       rotationAngle={Number(car.angle)}
       rotationOrigin={'center'}
       riseOnHover
+
       icon={
         new L.Icon({
           iconUrl: getImgUrl(car.car_id),
@@ -260,9 +246,10 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
         })
       }
     >
-      {/* Tooltip названия(имя) авто */}
+
       {/* Tooltip названия(имя) авто */}
       {imageSize.height && <Tooltip
+        pane='myPane'
         eventHandlers={{
           // add: () => onLoadTooltip()
 
@@ -281,17 +268,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
       {/* Если mobile то будет рендер popup */}
       {/* <CustomPopup speed={car.speed} key={car.car_id}></CustomPopup> */}
-      {/* <HistoryBox
-        isMenuOpen={isMenuOpen}
-        onMenuClose={handleMenuClose}
-      ></HistoryBox> */}
-
-      {/* Если mobile то будет рендер popup */}
-      {/* <CustomPopup speed={car.speed} key={car.car_id}></CustomPopup> */}
-      {/* <HistoryBox
-        isMenuOpen={isMenuOpen}
-        onMenuClose={handleMenuClose}
-      ></HistoryBox> */}
     </LeafletMarker>
   )
 }
