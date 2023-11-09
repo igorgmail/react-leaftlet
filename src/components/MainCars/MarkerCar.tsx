@@ -1,9 +1,6 @@
 import React, { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Marker as LeafletMarker, Tooltip, useMap } from 'react-leaflet';
 import { renderToString } from 'react-dom/server'
-import React, { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Marker as LeafletMarker, Tooltip, useMap } from 'react-leaflet';
-import { renderToString } from 'react-dom/server'
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
@@ -11,10 +8,8 @@ import 'leaflet-rotatedmarker';
 import carsPageconfig from './lib/config';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import useMapClick from '../../hooks/useMapClick';
-import useMapClick from '../../hooks/useMapClick';
 import { ICarObject } from '../../types/carsTypes';
 import { IconDisconnect } from './IconDisconnect';
-import { IconHistory } from '../HistoryComponents/IconHistory';
 import { IconHistory } from '../HistoryComponents/IconHistory';
 import CustomPopup from './CustomPopup';
 
@@ -31,31 +26,16 @@ interface IiconImageSize {
 
 const MarkerCar: FC<CarProps> = ({ car }) => {
   const map = useMap()
-  const map = useMap()
   const dispatch = useAppDispatch()
   let tooltipRef = useRef<any>(null)
   let tooltipHistoryRef = useRef<any>(null)
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
-  let tooltipRef = useRef<any>(null)
-  let tooltipHistoryRef = useRef<any>(null)
 
-  const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
   // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
 
   // Что бы изменить размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
-  const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
-
-  const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const handleMenuOpen = () => {
-    setMenuOpen(true);
-  };
-
-  const handleMenuClose = () => {
-    setMenuOpen(false);
-  };
   const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
 
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -82,13 +62,13 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     if (!isMobile) {
       addNewTooltip()
       addHistoryTooltip()
-
-
     }
   }
+
   const mouseOutMarkerHandler = () => {
     removeNewTooltip()
   }
+
   const mouseClickMarkerHandler = () => {
 
     console.log("▶ ⇛ isMobile:", isMobile);
@@ -165,7 +145,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       console.log("click History In EventOn");
       console.log(car.car_id);
 
-
       e.originalEvent.stopPropagation(); // Остановить событие клика
     });
 
@@ -175,6 +154,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     tooltipRef.current.remove()
     tooltipRef.current = null
   }
+
   const removeHistoryTooltip = () => {
     console.log("In Remove History");
 
@@ -184,116 +164,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     tooltipHistoryRef.current = null
 
   } 
-  }
 
-  // Обработка событий мыши на маркере
-
-  const mouseOverMarkerHandler = () => {
-    if (!isMobile) {
-      addNewTooltip()
-      addHistoryTooltip()
-
-
-    }
-  }
-  const mouseOutMarkerHandler = () => {
-    removeNewTooltip()
-  }
-  const mouseClickMarkerHandler = () => {
-
-    console.log("▶ ⇛ isMobile:", isMobile);
-    // Если mobile
-    if (isMobile) {
-
-      addNewTooltip()
-      addHistoryTooltip()
-
-    }
-  }
-
-  // Добавляем / Удаляем tooltip
-  const addNewTooltip = () => {
-    // Создаем tooltip для отображения скорости маркера
-    var tooltip = L.tooltip({
-      direction: 'right',
-      className: style.leafBorder,
-      offset: [10, -10],
-      interactive: true
-    })
-      .setLatLng([Number(car.lat), Number(car.lng)])
-      .setContent(`скорость ${car.speed} км/ч`)
-
-    tooltipRef.current = tooltip
-    tooltip.addTo(map)
-
-  }
-
-  const addHistoryTooltip = () => {
-    // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
-    console.log("IN addHistiry");
-
-    const allTooltip: any = map.getPane('historyPane')?.children;
-
-    if (allTooltip) {
-      Array.from(allTooltip).forEach((element: any) => {
-        console.log("▶ ⇛ element:", element);
-        element.remove()
-        // Ваши операции с элементом
-      });
-    }
-
-    // allTooltip[0]?.getTooltip()
-    // console.log("▶ ⇛  allTooltip[0]?.getTooltip():", allTooltip[0]?.getTooltip());
-
-    setTooltipHistoryOpen(true)
-    // Создаем tooltip для отображения скорости маркера
-    const tooltipHistory = L.tooltip({
-      pane: 'historyPane',
-      direction: 'left',
-      className: [style.leafBorder, style.historyTooltip].join(' '),
-      offset: [-10, -10],
-      interactive: true,
-      permanent: true
-    })
-      .setLatLng([Number(car.lat), Number(car.lng)])
-      .setContent(renderToString(<IconHistory />))
-
-
-    tooltipHistoryRef.current = tooltipHistory
-    tooltipHistory.addTo(map)
-
-    var el = tooltipHistory.getElement();
-
-    tooltipHistory.options.permanent = true
-    el?.addEventListener('click', function (e) {
-      console.log("click History");
-      console.log(car.car_id);
-      handleMenuOpen()
-    });
-
-    tooltipHistory.on('click', function (e) {
-      console.log("click History In EventOn");
-      console.log(car.car_id);
-
-
-      e.originalEvent.stopPropagation(); // Остановить событие клика
-    });
-
-  }
-
-  const removeNewTooltip = () => {
-    tooltipRef.current.remove()
-    tooltipRef.current = null
-  }
-  const removeHistoryTooltip = () => {
-    console.log("In Remove History");
-
-    console.log("▶ ⇛ tooltipHistoryRef.current:", tooltipHistoryRef.current);
-    setTooltipHistoryOpen(false)
-    tooltipHistoryRef.current.remove()
-    tooltipHistoryRef.current = null
-
-  } 
 
   // Если true значит авто "в сети"
   const isConnection = timeDifference(String(car.last_track))
@@ -360,12 +231,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       eventHandlers={{
         // add: () => onLoadMarker(),
         // loading: () => { console.log("MARKER READY") }
-        mouseover: (e) => mouseOverMarkerHandler(),
-        mouseout: (e) => mouseOutMarkerHandler(),
-        click: (e) => {
-          mouseClickMarkerHandler()
-          console.log("CLICK")
-        }
         mouseover: (e) => mouseOverMarkerHandler(),
         mouseout: (e) => mouseOutMarkerHandler(),
         click: (e) => {
