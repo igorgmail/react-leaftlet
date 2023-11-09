@@ -7,11 +7,8 @@ import 'leaflet-rotatedmarker';
 
 import carsPageconfig from './lib/config';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
-import useMapClick from '../../hooks/useMapClick';
 import { ICarObject } from '../../types/carsTypes';
 import { IconDisconnect } from './IconDisconnect';
-import { IconHistory } from '../HistoryComponents/IconHistory';
-import CustomPopup from './CustomPopup';
 import { render } from 'react-dom';
 import { HistoryMenu } from '../HistoryComponents/HistoryMenu';
 import isHasToushScreen from './lib/isMobile';
@@ -34,6 +31,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
   // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
+  const carsFilter = useAppSelector((state) => state.carsMap.carsFilter);
 
   // Что бы изменить размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
@@ -92,19 +90,24 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
   }
 
-  const addHistoryTooltip = () => {
-    // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
-    console.log("IN addHistiry");
+  // Удаляем все открытые(все) tooltip с пано "historyTooltipsPane"
 
+  const removeAllTooltips = () => {
     const allTooltip: any = map.getPane('historyTooltipsPane')?.children;
 
     if (allTooltip) {
       Array.from(allTooltip).forEach((element: any) => {
-        console.log("▶ ⇛ element:", element);
         element.remove()
         // Ваши операции с элементом
       });
     }
+
+  }
+
+  const addHistoryTooltip = () => {
+    // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
+    console.log("IN addHistiry");
+    removeAllTooltips()
 
     setTooltipHistoryOpen(true)
 
@@ -113,7 +116,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     document.body.appendChild(portalContainer);
 
     // Рендерим JSX-компонент внутри портала
-    render(<HistoryMenu />, portalContainer);
+    render(<HistoryMenu car={car} />, portalContainer);
 
 
     // Создаем tooltip для отображения скорости маркера
@@ -151,7 +154,9 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   }
 
   const removeNewTooltip = () => {
-    tooltipRef.current.remove()
+    if (tooltipRef.current) {
+      tooltipRef.current.remove()
+    }
     tooltipRef.current = null
   }
 
@@ -211,6 +216,12 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       // map.closePopup();
     }
   }, [tooltipHistoryOpen]));
+
+  // Отслеживаем именения checkbox выбора авто
+  // Если меняется то удаляем все tootltips из pane: 'historyTooltipsPane'
+  useEffect(() => {
+    removeAllTooltips()
+  }, [carsFilter]);
 
   return (
     <LeafletMarker
