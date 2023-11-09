@@ -8,9 +8,6 @@
 .inputHead {
   font-family: 'Roboto';
   font-weight: 500;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .inputField {

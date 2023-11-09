@@ -125,8 +125,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
         </form> */}
         <Stack display={'flex'} flexDirection={'row'} gap={'25px'} m={'10px'}>
           {/* <Item> */}
-          <Stack className={style.inputHead}>
-            От :
+          <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+            От
           </Stack>
 
           <TextField
@@ -152,8 +152,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
 
         <Stack display={'flex'} flexDirection={'row'} gap={'25px'} m={'10px'}>
           {/* <Item> */}
-          <Stack className={style.inputHead}>
-            От :
+          <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+            До
           </Stack>
 
           <TextField
