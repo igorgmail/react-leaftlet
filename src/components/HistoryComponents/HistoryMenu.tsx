@@ -129,7 +129,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Дата"
             InputLabelProps={{ shrink: true, required: true }}
             type="date"
-            defaultValue={'30-1-1980'}
+            defaultValue={'2023-11-10'}
             className={style.inputField}
             size="small"
 
@@ -139,7 +139,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Время"
             InputLabelProps={{ shrink: true, required: true }}
             type="time"
-            defaultValue={'00-00'}
+            defaultValue={'00:00'}
             size="small"
           />
           {/* </Item> */}
@@ -156,7 +156,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Дата"
             InputLabelProps={{ shrink: true, required: true }}
             type="date"
-            defaultValue={'30-1-1980'}
+            defaultValue={'2023-11-10'}
             className={style.inputField}
             size="small"
 
@@ -166,7 +166,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Время"
             InputLabelProps={{ shrink: true, required: true }}
             type="time"
-            defaultValue={'00-00'}
+            defaultValue={'00:00'}
             size="small"
           />
           {/* </Item> */}
