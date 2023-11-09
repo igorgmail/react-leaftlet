@@ -78,12 +78,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             overflow: 'visible',
             filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
+            width: { xs: "90%", sm: "auto", md: "auto" },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -123,7 +118,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             </Box>
         </Stack>
         </form> */}
-        <Stack display={'flex'} flexDirection={'row'} gap={'25px'} m={'10px'}>
+        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} m={'10px'}>
           {/* <Item> */}
           <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
             От
@@ -150,7 +145,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
           {/* </Item> */}
         </Stack>
 
-        <Stack display={'flex'} flexDirection={'row'} gap={'25px'} m={'10px'}>
+        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} m={'10px'}>
           {/* <Item> */}
           <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
             До
