@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import style from './style.module.css'
 
 import { ICarObject } from '../../types/carsTypes';
+import dateServices from './lib/dateHandler' 
 
 interface CarProps {
   car: ICarObject
@@ -15,7 +16,7 @@ interface CarProps {
 
 const HistoryMenu: FC<CarProps> = ({ car }) => {
   console.log("---Render HistoryMenu");
-  console.log("▶ ⇛ car: In HIStory", car);
+  // console.log("▶ ⇛ car: In HIStory", car);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -36,12 +37,24 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
 
   }
 
-  const handleChooseDateFor = (event: React.FormEvent) => {
+  const handleChooseDateFor = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     event.stopPropagation()
 
-    console.log("handleChooseDateFor");
-    console.log(event);
+    const selectedDate = event.target.value;
+    console.log("Selected Date:", selectedDate);
+    console.log("Selected Date:", new Date(selectedDate).getTime());
+
+  }
+  const handleChooseTimeFor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const selectedDate = event.target.value;
+    console.log("▶ ⇛ event.target:", event);
+    console.log("▶ ⇛ event.valueAsNumber:", event.target.valueAsNumber);
+    console.log("Selected Date:", selectedDate);
+    console.log("Selected Date:", new Date(selectedDate).getTime());
 
   }
 
@@ -52,7 +65,6 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
-
 
   return (
     <div>
@@ -118,7 +130,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             </Box>
         </Stack>
         </form> */}
-        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} m={'10px'}>
+        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} gap={'5px'} m={'10px'} >
           {/* <Item> */}
           <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
             От
@@ -128,20 +140,28 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             name="someDate"
             label="Дата"
             InputLabelProps={{ shrink: true, required: true }}
-            type="date"
-            defaultValue={'2023-11-10'}
+            type="datetime-local"
+            // defaultValue={dateServices.getDateToday()}
+            defaultValue={'2023-11-10T19:30'}
+            inputProps={{ max: dateServices.getDateToday() }}
             className={style.inputField}
             size="small"
+            onChange={handleChooseDateFor}
+
 
           />
-          <TextField
+          {/* <TextField
+            error
             name="someDate"
             label="Время"
             InputLabelProps={{ shrink: true, required: true }}
             type="time"
             defaultValue={'00:00'}
+            inputProps={{ max: '16:00' }}
+            // inputProps={{ max: dateServices.getTimeNow() }}
             size="small"
-          />
+            onChange={handleChooseTimeFor}
+          /> */}
           {/* </Item> */}
         </Stack>
 
@@ -156,9 +176,11 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Дата"
             InputLabelProps={{ shrink: true, required: true }}
             type="date"
-            defaultValue={'2023-11-10'}
+            // defaultValue={'2023-11-10'}
+            defaultValue={dateServices.getDateToday()}
             className={style.inputField}
             size="small"
+            inputProps={{ max: dateServices.getDateToday() }}
 
           />
           <TextField
@@ -166,7 +188,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
             label="Время"
             InputLabelProps={{ shrink: true, required: true }}
             type="time"
-            defaultValue={'00:00'}
+            // defaultValue={'00:00'}
+            defaultValue={dateServices.getTimeNow()}
             size="small"
           />
           {/* </Item> */}
