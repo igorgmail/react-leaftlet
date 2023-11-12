@@ -1,83 +1,145 @@
-import React, { FC } from 'react';
-import { IconButton, Menu, MenuItem, Typography, Divider, Stack, Paper, Button, Box } from '@mui/material/';
+import React, { FC, useState } from 'react';
+import { IconButton, Menu, Typography, Divider, Stack, Button } from '@mui/material/';
 import { TextField } from '@mui/material/';
 import { IconHistory } from './IconHistory';
 import { IconCar } from '../HistoryComponents/IconCar';
-import { styled } from '@mui/material/styles';
+import { DateTime } from "luxon";
 
-import style from './style.module.css'
-
+import carsPageconfig from '../MainCars/lib/config';
 import { ICarObject } from '../../types/carsTypes';
-import dateServices from './lib/dateHandler' 
 
 interface CarProps {
   car: ICarObject
 }
 
+interface IDataFromDateForm {
+  carId: string | number,
+  dataFromIso: string,
+  dataToIso: string,
+  localOffset: number,
+}
+
 const HistoryMenu: FC<CarProps> = ({ car }) => {
   console.log("---Render HistoryMenu");
-  // console.log("▶ ⇛ car: In HIStory", car);
+
+  // console.log("DateTime.local()", DateTime.local());
+  // console.log("DateTime.local().toISO()", DateTime.local().toISO());
+  // console.log("DateTime.local().toISO()", DateTime.local().toISO());
+  // console.log("DateTime.now().toUnixInteger()", DateTime.now().toUnixInteger());
+  // console.log("DateTime.local().toISO().slice", DateTime.local().toISO()?.slice(0, 16));
+  // console.log("DateTime.local().toMillis", DateTime.local().toMillis());
+  // console.log("DateTime.local().startOf", DateTime.local().startOf('day'));
+  // console.log("DateTime.local().startOf().toISO() Midnight", DateTime.local().startOf('day').toISO()?.slice(0, 16));
+  // console.log("DateTime.local().startOf().toMillis()", DateTime.local().startOf('day').toMillis());
+  // console.log("DateTime.local().offset", DateTime.local().offset);
+  // console.log("DateTime.fromISO .toMillis()", DateTime.fromISO('2023-11-12T15:00').toMillis());
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const [dateMsForState, setDateMsForState] = useState<string>('')
+  const [datMsToState, setDateMsToState] = useState<string>('')
+
+  const [validDateCompare, setValidDateCompare] = useState(true)
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    // Получаем объект Дата и устанавливаем в state
+    // формат '2023-11-12T00:00'
+    const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
+    // формат '2023-11-12T23:15'
+    const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
+    setDateMsForState(dataMidnight)
+    setDateMsToState(dataTo)
+
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const handleChooseMenu = (event: React.FormEvent) => {
-    event.preventDefault()
-    event.stopPropagation()
-
-    console.log("Вы выбрали меню");
-    console.log(event);
-
+  const compareDate = (dateOne: string, dateTwo: string) => {
+    // '2023-11-12T00:00'
+    const dateFor = DateTime.fromISO(dateOne).toMillis()
+    const dateTo = DateTime.fromISO(dateTwo).toMillis()
+    return (dateTo - dateFor) >= carsPageconfig.dateCompareTime
   }
 
   const handleChooseDateFor = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    event.stopPropagation()
 
-    const selectedDate = event.target.value;
-    console.log("Selected Date:", selectedDate);
-    console.log("Selected Date:", new Date(selectedDate).getTime());
+    const selectedDateFor = event.target.value;
+
+    setDateMsForState((current: any) => current = selectedDateFor)
+    setValidDateCompare(compareDate(selectedDateFor, datMsToState))
 
   }
-  const handleChooseTimeFor = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChooseDateTo = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
-    event.stopPropagation()
-
-    const selectedDate = event.target.value;
-    console.log("▶ ⇛ event.target:", event);
-    console.log("▶ ⇛ event.valueAsNumber:", event.target.valueAsNumber);
-    console.log("Selected Date:", selectedDate);
-    console.log("Selected Date:", new Date(selectedDate).getTime());
-
+    const selectedDateTo = event.target.value;
+    setDateMsToState((current: string) => selectedDateTo)
+    setValidDateCompare(compareDate(dateMsForState, selectedDateTo))
   }
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
+  const onSubmitHandler = (e: any) => {
+    e.preventDefault()
+    // Формируем даты по местному времени(которое указали в input)
+    // с присвоением часового пояса, в формате ISO
+    const dataFromDateForm: IDataFromDateForm = {
+      carId: e.target.dataset.carid,
+      dataFromIso: DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
+      dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
+      localOffset: DateTime.local().offset
+    }
+    console.log("formData", dataFromDateForm);
+  }
+
+  const textField_from = () => {
+    return (
+      <TextField
+        name="dateFrom"
+        label="Дата от"
+        InputLabelProps={{ shrink: true, required: true }}
+        type="datetime-local"
+        // defaultValue={dateServices.getTimeForDefaultValueInput(dateServices.getMsMidnight())}
+        value={dateMsForState}
+        inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
+        size="small"
+        onChange={handleChooseDateFor}
+        error={!validDateCompare}
+      />
+    )
+  }
+  const textField_to = () => {
+    return (
+      <TextField
+        name="dateTo"
+        label="Дата до"
+        InputLabelProps={{ shrink: true, required: true }}
+        type="datetime-local"
+        // defaultValue={dateServices.getTimeForDefaultValueInput(Date.now())}
+        value={datMsToState}
+        size="small"
+        inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
+        onChange={handleChooseDateTo}
+        error={!validDateCompare}
+
+      />
+    )
+  }
 
   return (
     <div>
       <IconButton
         onClick={handleClick}
         size="small"
-        // sx={{ ml: 2 }}
         aria-controls={open ? 'account-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
         <IconHistory />
       </IconButton>
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -113,92 +175,34 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
         </Stack>
 
         <Divider />
-
-        {/* <form onSubmit={handleChooseMenu}>
-          <Stack display={'flex'} flexDirection={'column'} gap={'25px'} m={'10px'}>
-            <Item>
-              <label htmlFor="timeFrom">От :</label>
-              <input className={style.input} type="datetime-local" id="timeFrom" name="timeFrom" onChange={handleChooseDateFor} />
-            </Item>
-
-            <Item>
-              <label htmlFor="timeTo">До :</label>
-              <input className={style.input} type="datetime-local" id="timeTo" name="timeTo" />
-            </Item>
-            <Box>
-              <Button type="submit" variant="outlined" style={{ width: '60%', margin: 'auto' }}>Показать</Button>
-            </Box>
-        </Stack>
-        </form> */}
-        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} gap={'5px'} m={'10px'} >
-          {/* <Item> */}
-          <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-            От
+        <Stack display={'flex'} flexDirection={'column'} gap={'5px'} m={'10px'} >
+          <form name={'dateForm'} action='/cars' onSubmit={onSubmitHandler} data-carid={car.car_id}>
+            <Stack display={'flex'} flexDirection={'row'} gap={'20px'} m={'10px'}
+              sx={{
+                justifyContent: { xs: 'center', sm: 'space-between' }
+              }}
+            >
+              <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                От
+              </Stack>
+              {textField_from()}
+            </Stack>
+            <Stack display={'flex'} flexDirection={'row'} gap={'20px'} m={'10px'}
+              sx={{
+                justifyContent: { xs: 'center', sm: 'space-between' }
+              }}
+            >
+              <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                До
           </Stack>
-
-          <TextField
-            name="someDate"
-            label="Дата"
-            InputLabelProps={{ shrink: true, required: true }}
-            type="datetime-local"
-            // defaultValue={dateServices.getDateToday()}
-            defaultValue={'2023-11-10T19:30'}
-            inputProps={{ max: dateServices.getDateToday() }}
-            className={style.inputField}
-            size="small"
-            onChange={handleChooseDateFor}
-
-
-          />
-          {/* <TextField
-            error
-            name="someDate"
-            label="Время"
-            InputLabelProps={{ shrink: true, required: true }}
-            type="time"
-            defaultValue={'00:00'}
-            inputProps={{ max: '16:00' }}
-            // inputProps={{ max: dateServices.getTimeNow() }}
-            size="small"
-            onChange={handleChooseTimeFor}
-          /> */}
-          {/* </Item> */}
+              {textField_to()}
+            </Stack>
+            <Stack>
+              <Button disabled={!validDateCompare}
+                type="submit" variant="outlined" style={{ width: '60%', margin: 'auto' }}>Показать</Button>
+            </Stack>
+          </form>
         </Stack>
-
-        <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'} m={'10px'}>
-          {/* <Item> */}
-          <Stack className={style.inputHead} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-            До
-          </Stack>
-
-          <TextField
-            name="someDate"
-            label="Дата"
-            InputLabelProps={{ shrink: true, required: true }}
-            type="date"
-            // defaultValue={'2023-11-10'}
-            defaultValue={dateServices.getDateToday()}
-            className={style.inputField}
-            size="small"
-            inputProps={{ max: dateServices.getDateToday() }}
-
-          />
-          <TextField
-            name="someDate"
-            label="Время"
-            InputLabelProps={{ shrink: true, required: true }}
-            type="time"
-            // defaultValue={'00:00'}
-            defaultValue={dateServices.getTimeNow()}
-            size="small"
-          />
-          {/* </Item> */}
-        </Stack>
-        <Stack>
-          <Button type="submit" variant="outlined" style={{ width: '60%', margin: 'auto' }}>Показать</Button>
-
-        </Stack>
-
       </Menu>
     </div>
   );
