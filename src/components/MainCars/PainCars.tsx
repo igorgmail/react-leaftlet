@@ -111,6 +111,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     map.whenReady(() => {
       if (isMobile) map.zoomOut()
       // map.panBy([0, 28], { animate: true });
+      map.fitBounds(mapBounds)
     })
 
     return () => {

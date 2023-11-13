@@ -19,9 +19,9 @@ export default function MainCars() {
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
-
+  const [boundsForMap, setBoundsForMap] = useState()
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapVariant);
-  console.log("▶ ⇛ carsMapVariant:", carsMapVariant);
+
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
@@ -34,7 +34,7 @@ export default function MainCars() {
         return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
       })
         setCompanyData(data)
-        L.control.zoom({ position: 'topright' })
+        // L.control.zoom({ position: 'topright' })
 
       return setCarsBounds(carBoundsArray)
       })

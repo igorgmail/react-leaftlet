@@ -1,17 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IDataAllCarsForMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsFilter } from "../../types/carsTypes";
+import { IDataAllCarsForMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsFilter, IDataFromDateForm } from "../../types/carsTypes";
 
 type TypeCarsFilter = { [key: number]: boolean } | null;
 
 type TypeCarsMapVariant = {
   variant: 'all' | 'history'
 }
-type TCarMapItem = {
-  carId: string | number,
-  dataFromIso: string | '',
-  dataToIso: string | '',
-  localOffset: number,
-}
+// type TCarMapItem = {
+//   car_id: string | number,
+//   carName: string,
+//   dataFromIso: string | '',
+//   dataToIso: string | '',
+//   localOffset: number,
+// }
 
 interface TypeInitialState {
   companyName: ICompanyName | null,
@@ -19,18 +20,17 @@ interface TypeInitialState {
   carsFilter: TypeCarsFilter,
   isConnectFilter: TypeCarsFilter,
   carsMapVariant: TypeCarsMapVariant,
-  carsMapHistotyItem: TCarMapItem | {}
+  carsMapHistotyItem: IDataFromDateForm | null
 }
 
 
 const initialState: TypeInitialState = {
-
   companyName: null,
   forMenu: null,
   carsFilter: null,
   isConnectFilter: null,
   carsMapVariant: { variant: 'all' },
-  carsMapHistotyItem: {}
+  carsMapHistotyItem: null
 }
 
 export const carsMapSlice = createSlice({
@@ -65,7 +65,7 @@ export const carsMapSlice = createSlice({
       state.carsMapVariant = { ...state.carsMapVariant, ...action.payload }
       // return state
     },
-    setCarsMapHistoryItem: (state: any, action: PayloadAction<TCarMapItem>) => {
+    setCarsMapHistoryItem: (state: any, action: PayloadAction<IDataFromDateForm>) => {
       state.carsMapHistotyItem = { ...state.carsMapHistotyItem, ...action.payload }
       // return state
     },

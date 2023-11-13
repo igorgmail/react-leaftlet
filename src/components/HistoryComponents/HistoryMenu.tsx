@@ -8,18 +8,12 @@ import { connect } from 'react-redux'
 import { store } from '../../store'
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
-import { ICarObject } from '../../types/carsTypes';
-import { Provider } from 'react-redux/es/exports';
+import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
+
 interface CarProps {
   car: ICarObject
 }
 
-interface IDataFromDateForm {
-  carId: string | number,
-  dataFromIso: string,
-  dataToIso: string,
-  localOffset: number,
-}
 
 const HistoryMenu: FC<CarProps> = ({ car }) => {
   console.log("---Render HistoryMenu");
@@ -89,7 +83,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
     // Формируем даты по местному времени(которое указали в input)
     // с присвоением часового пояса, в формате ISO
     const dataFromDateForm: IDataFromDateForm = {
-      carId: e.target.dataset.carid,
+      car_id: e.target.dataset.carid,
+      carName: e.target.dataset.carname,
       dataFromIso: DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
       dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
       localOffset: DateTime.local().offset
@@ -97,6 +92,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
     dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
     dispatch(carsMapActions.setCarsMapHistoryItem(dataFromDateForm))
     console.log("Здесь Fetrch для запроса к истории");
+
     handleClose()
   }
 
@@ -185,7 +181,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
 
         <Divider />
         <Stack display={'flex'} flexDirection={'column'} gap={'5px'} m={'10px'} >
-          <form name={'dateForm'} action='/cars' onSubmit={onSubmitHandler} data-carid={car.car_id}>
+          <form name={'dateForm'} action='/cars' onSubmit={onSubmitHandler} data-carid={car.car_id} data-carName={car.car_name}>
             <Stack display={'flex'} flexDirection={'row'} gap={'20px'} m={'10px'}
               sx={{
                 justifyContent: { xs: 'center', sm: 'space-between' }
