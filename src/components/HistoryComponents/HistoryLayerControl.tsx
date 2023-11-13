@@ -8,7 +8,7 @@ import style from './style.module.css'
 
 import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { IconHistory } from './IconHistory';
+import { IconHistory } from './IconComponent/IconHistory';
 
 interface ICustomLayerControl {
   // menuHeaderData?: ICompanyName,

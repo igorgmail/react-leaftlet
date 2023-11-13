@@ -7,7 +7,7 @@ import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
 import PainCars from './PainCars';
-import PaneHistory from '../HistoryComponents/PaneHistory';
+import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
 import getCarsFetch from './lib/fetchGetCars';
 import style from './style.module.css'
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
@@ -73,7 +73,7 @@ export default function MainCars() {
         />
         {/* <PainCars mapBounds={carsBounds} carsDataStart={companyData} /> */}
         {String(carsMapVariant.variant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
-        {String(carsMapVariant.variant) === 'history' && <PaneHistory />}
+        {String(carsMapVariant.variant) === 'history' && <PaneHistoryMap />}
         </MapContainer>
     </Box>)
 

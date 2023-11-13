@@ -97,7 +97,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   // Удаляем все открытые(все) tooltip с пано "historyTooltipsPane"
 
   const removeAllTooltips = () => {
-    const allTooltip: any = map.getPane('historyTooltipsPane')?.children;
+    const allTooltip: any = map.getPane('historyIconTooltipsPane')?.children;
 
     if (allTooltip) {
       Array.from(allTooltip).forEach((element: any) => {
@@ -126,7 +126,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
     // Создаем tooltip для отображения скорости маркера
     const tooltipHistory = L.tooltip({
-      pane: 'historyTooltipsPane',
+      pane: 'historyIconTooltipsPane',
       direction: 'left',
       className: [style.leafBorder, style.historyTooltip].join(' '),
       offset: [-10, -10],
@@ -213,7 +213,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       && !target.closest('.leaflet-tooltip')) {
       // Обработка клика за пределами маркера и tooltip(не в попапе)
       if (tooltipHistoryOpen && tooltipHistoryRef.current) {
-        console.log("▶ ⇛ tooltipHistoryOpen:", tooltipHistoryOpen);
         removeHistoryTooltip()
         console.log("Click MAP");
       }

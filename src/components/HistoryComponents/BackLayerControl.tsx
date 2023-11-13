@@ -8,7 +8,7 @@ import style from './style.module.css'
 
 import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { IconHistory } from './IconHistory';
+import { IconHistory } from './IconComponent/IconHistory';
 
 
 const BackLayerControl = () => {

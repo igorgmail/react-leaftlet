@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import { IconButton, Menu, Typography, Divider, Stack, Button } from '@mui/material/';
 import { TextField } from '@mui/material/';
-import { IconHistory } from './IconHistory';
-import { IconCar } from '../HistoryComponents/IconCar';
+import { IconHistory } from './IconComponent/IconHistory';
+import { IconCar } from './IconComponent/IconCar';
 import { DateTime } from "luxon";
 import { connect } from 'react-redux'
 import { store } from '../../store'

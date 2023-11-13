@@ -17,6 +17,7 @@ import CarsLayerControl from '../MenuCars/CarsLayerControl';
 type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
+  console.log("▶ ⇛ mapBounds:", mapBounds);
   // mapBounds - массив массивов координат для определения расположения видимой карты
   // carsDataStart - массив объектов с данными cars для первого рендере
 
@@ -137,7 +138,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
         )}
       </Pane>
 
-      <Pane name="historyTooltipsPane" style={{ zIndex: 700, width: '100vh', }}>
+      <Pane name="historyIconTooltipsPane" style={{ zIndex: 700, width: '100vh', }}>
       </Pane>
     </div>
   )
