@@ -4,14 +4,16 @@ import { renderToString } from 'react-dom/server'
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
-
+import { store } from '../../store'
 import carsPageconfig from './lib/config';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import { ICarObject } from '../../types/carsTypes';
 import { IconDisconnect } from './IconDisconnect';
 import { render } from 'react-dom';
-import { HistoryMenu } from '../HistoryComponents/HistoryMenu';
+import { connect } from 'react-redux'
+import HistoryMenu from '../HistoryComponents/HistoryMenu';
 import isHasToushScreen from './lib/isMobile';
+import { Provider } from 'react-redux/es/exports';
 
 import style from './style.module.css';
 interface CarProps {
@@ -29,6 +31,8 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   let tooltipHistoryRef = useRef<any>(null)
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
+
+  // const ConnectedHistoryMenu = connect((state) => state)(HistoryMenu);
 
   // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
   const carsFilter = useAppSelector((state) => state.carsMap.carsFilter);
@@ -112,11 +116,12 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     setTooltipHistoryOpen(true)
 
     // Создаем div для портала
+    const rootEl = document.getElementById('root')!;
     const portalContainer = document.createElement('div');
-    document.body.appendChild(portalContainer);
+    rootEl.appendChild(portalContainer);
 
     // Рендерим JSX-компонент внутри портала
-    render(<HistoryMenu car={car} />, portalContainer);
+    render(<Provider store={store}><HistoryMenu car={car} /></Provider>, portalContainer);
 
 
     // Создаем tooltip для отображения скорости маркера
@@ -236,7 +241,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
         }
       }}
       // data={`markerKey-${item.unicKey}`}
-      pane={"myPane"}
+      pane={"carsMapPane"}
       // ref={tooltipRef}
       // title={`скорость ${car.speed} км/ч`}
       position={[Number(car.lat), Number(car.lng)]}
@@ -260,7 +265,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
       {/* Tooltip названия(имя) авто */}
       {imageSize.height && <Tooltip
-        pane='myPane'
+        pane='carsMapPane'
         eventHandlers={{
           // add: () => onLoadTooltip()
 

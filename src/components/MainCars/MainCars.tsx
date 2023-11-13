@@ -7,16 +7,21 @@ import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
 import PainCars from './PainCars';
+import PaneHistory from '../HistoryComponents/PaneHistory';
 import getCarsFetch from './lib/fetchGetCars';
 import style from './style.module.css'
+import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
 
 export default function MainCars() {
+  console.log("--Render MainsCar");
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
 
+  const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapVariant);
+  console.log("▶ ⇛ carsMapVariant:", carsMapVariant);
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
@@ -66,7 +71,9 @@ export default function MainCars() {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         />
-        <PainCars mapBounds={carsBounds} carsDataStart={companyData} />
+        {/* <PainCars mapBounds={carsBounds} carsDataStart={companyData} /> */}
+        {String(carsMapVariant.variant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
+        {String(carsMapVariant.variant) === 'history' && <PaneHistory />}
         </MapContainer>
     </Box>)
 

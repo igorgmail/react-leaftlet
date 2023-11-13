@@ -4,10 +4,12 @@ import { TextField } from '@mui/material/';
 import { IconHistory } from './IconHistory';
 import { IconCar } from '../HistoryComponents/IconCar';
 import { DateTime } from "luxon";
-
+import { connect } from 'react-redux'
+import { store } from '../../store'
+import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
 import { ICarObject } from '../../types/carsTypes';
-
+import { Provider } from 'react-redux/es/exports';
 interface CarProps {
   car: ICarObject
 }
@@ -21,6 +23,7 @@ interface IDataFromDateForm {
 
 const HistoryMenu: FC<CarProps> = ({ car }) => {
   console.log("---Render HistoryMenu");
+  const dispatch = useAppDispatch()
 
   // console.log("DateTime.local()", DateTime.local());
   // console.log("DateTime.local().toISO()", DateTime.local().toISO());
@@ -91,11 +94,16 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
       dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
       localOffset: DateTime.local().offset
     }
-    console.log("formData", dataFromDateForm);
+    dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
+    dispatch(carsMapActions.setCarsMapHistoryItem(dataFromDateForm))
+    console.log("Здесь Fetrch для запроса к истории");
+    handleClose()
   }
 
   const textField_from = () => {
     return (
+
+
       <TextField
         name="dateFrom"
         label="Дата от"
@@ -129,6 +137,7 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
   }
 
   return (
+
     <div>
       <IconButton
         onClick={handleClick}
@@ -208,5 +217,5 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
   );
 }
 
-
-export { HistoryMenu }
+// export default connect((store: any) => store.carsMapVariant)(HistoryMenu)
+export default HistoryMenu 

@@ -12,9 +12,7 @@ import getCarsFetch from './lib/fetchGetCars';
 import carsPageconfig from './lib/config';
 import isHasToushScreen from './lib/isMobile';
 
-import CustomLayerControl from '../MenuCars/CustomLayerControl';
-// import TestControl from '../MenuCars/TestControl';
-import MenuItemCar from '../MenuCars/MenuItemCar';
+import CarsLayerControl from '../MenuCars/CarsLayerControl';
 
 type IPainCars = L.LatLngBoundsExpression | [][] | any
 
@@ -23,14 +21,12 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // carsDataStart - массив объектов с данными cars для первого рендере
 
   const dispatch = useAppDispatch()
-  const carsForMenuFromStore = useAppSelector((state) => state.carsMap?.forMenu);
   const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
 
   // console.log("▶ ⇛ carsForMenuFromStore:", carsForMenuFromStore);
 
   const [companyData, setCompanyData] = useState<ICompanyData>(carsDataStart)
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
-
   const map = useMap();
 
   // Формируем массив для передачи в Marker перед фильтром
@@ -74,21 +70,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     return dataObj
   }
 
+  // Данные для меню 
   const dataForMenuItem = useMemo(() => getdataForMenuItem(companyData), [carsDataStart])
-
-  // const updateMap = useCallback(() => {
-  //   const actualBounds: IPainCars = getBoundsFromCarsData(carsData)
-  //   map.panInsideBounds(actualBounds)
-  //   // map.fitBounds(actualBounds)
-  //   // setTimeout(() => {
-  //   //   if (isMobile) map.zoomOut()
-  //   //   map.panBy([0, carsPageconfig.offsetMapPan], { animate: true });
-  //   // }, 300)
-  // }, [map])
-
-  // const updateMapWhenNoUser = useMemo(() => {
-  //   return debounce(updateMap, carsPageconfig.updatePosMap)
-  // }, [updateMap])
 
   // Получение данных с сервера
   useEffect(() => {
@@ -99,6 +82,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
         })
 
     }, carsPageconfig.updateDelay);
+
     return () => clearInterval(interval);
   }, [map, mapBounds]);
 
@@ -126,23 +110,26 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   useEffect(() => {
     map.whenReady(() => {
       if (isMobile) map.zoomOut()
-      map.panBy([0, 28], { animate: true });
+      // map.panBy([0, 28], { animate: true });
     })
+
+    return () => {
+      const menuElement = document.querySelector('[aria-label="Map settings"]')?.closest('.leaflet-control');
+      menuElement?.remove()
+    }
   }, [map])
 
   return (
-    <>
-      {companyData &&
+    <div>
 
-        <CustomLayerControl menuHeaderData={menuHeaderData} key={menuHeaderData.company_id}>
-
-          {carsForMenuFromStore && carsForMenuFromStore.map((carData) =>
+      <CarsLayerControl key={menuHeaderData.company_id}>
+        {/* carsForMenuFromStore бурем из store он меняется изи menuItem при выборе checkbox */}
+        {/* {isMenuOpen && carsForMenuFromStore?.map((carData) =>
             (<MenuItemCar carData={carData} key={`menuItem` + carData.car_id}></MenuItemCar>)
-          )}
+          )} */}
+      </CarsLayerControl>
 
-        </CustomLayerControl>}
-
-      <Pane name="myPane" style={{ zIndex: 500, width: '100vh', }}>
+      <Pane name="carsMapPane" style={{ zIndex: 500, width: '100vh', }}>
         {companyData && filterForMarkers.map((el: any) => {
           return <MarkerCar car={el} key={`${el.car_id}-${el.last_track}`} />
         }
@@ -151,7 +138,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
       <Pane name="historyTooltipsPane" style={{ zIndex: 700, width: '100vh', }}>
       </Pane>
-    </>
+    </div>
   )
 }
 

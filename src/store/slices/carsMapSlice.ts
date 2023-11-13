@@ -3,12 +3,25 @@ import { IDataAllCarsForMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsF
 
 type TypeCarsFilter = { [key: number]: boolean } | null;
 
-type TypeInitialState = {
+type TypeCarsMapVariant = {
+  variant: 'all' | 'history'
+}
+type TCarMapItem = {
+  carId: string | number,
+  dataFromIso: string | '',
+  dataToIso: string | '',
+  localOffset: number,
+}
+
+interface TypeInitialState {
   companyName: ICompanyName | null,
   forMenu: IOneCarForMenu[] | null | undefined,
   carsFilter: TypeCarsFilter,
   isConnectFilter: TypeCarsFilter,
+  carsMapVariant: TypeCarsMapVariant,
+  carsMapHistotyItem: TCarMapItem | {}
 }
+
 
 const initialState: TypeInitialState = {
 
@@ -16,6 +29,8 @@ const initialState: TypeInitialState = {
   forMenu: null,
   carsFilter: null,
   isConnectFilter: null,
+  carsMapVariant: { variant: 'all' },
+  carsMapHistotyItem: {}
 }
 
 export const carsMapSlice = createSlice({
@@ -46,12 +61,15 @@ export const carsMapSlice = createSlice({
       state.isConnectFilter = { ...state.isConnectFilter, ...action.payload }
       // return state
     },
+    setCarsMapVariant: (state: any, action: PayloadAction<TypeCarsMapVariant>) => {
+      state.carsMapVariant = { ...state.carsMapVariant, ...action.payload }
+      // return state
+    },
+    setCarsMapHistoryItem: (state: any, action: PayloadAction<TCarMapItem>) => {
+      state.carsMapHistotyItem = { ...state.carsMapHistotyItem, ...action.payload }
+      // return state
+    },
   }
 })
 
 export const { actions: carsMapActions, reducer: carsMapReducer } = carsMapSlice;
-// // Два export !!
-// export default carsMapSlice.reducer
-
-// // Экспортируем экшены
-// export const { setCarsData } = carsMapSlice.actions
