@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo, FC } from 'react';
-import { Pane, useMap, LayerGroup, Circle } from 'react-leaflet';
+import { useState, useEffect, useMemo } from 'react';
+import { Pane, useMap, LayerGroup } from 'react-leaflet';
 import { v4 as uuidv4 } from 'uuid';
-import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
-import { ICarObject, ICompanyData, IHistoryDataFromServer, IHistoryPoints } from '../../types/carsTypes';
+import { IHistoryDataFromServer, IHistoryPoints } from '../../types/carsTypes';
 import { Spinner } from '../MainCars/Spinner';
 import { IDataFromDateForm } from '../../types/carsTypes';
 
@@ -125,34 +125,6 @@ const PaneHistoryMap = () => {
   }, [carsItemFromHistoryForm])
 
 
-  // useEffect(() => {
-  //   if (dataFromServer) {
-  //     let boundsArray: any = []
-
-  //     if (dataFromServer.history.length > 0) {
-  //       boundsArray = dataFromServer.history.map((item) => {
-  //         return [Number(item.lat), Number(item.lng)]
-  //       })
-  //     }
-  //     if (pointsBounds.length > 0) {
-  //       pointsBounds.map((pointItem) => {
-  //         boundsArray.push([Number(pointItem.lat), Number(pointItem.lng)])
-  //       })
-  //     }
-  //     console.log("▶ ⇛ boundsArrayLength:", boundsArray.length);
-  //     console.log("▶ ⇛ boundsArray:", boundsArray);
-  //     console.log("▶ ⇛ pointsBounds:", pointsBounds);
-  //     if (boundsArray.length > 0) {
-  //       // setBoundsForSetMap(boundsArray)
-  //       setHistoryDataLoad(true)
-  //       // map.fitBounds(boundsArray).zoomOut()
-  //     }
-  //   }
-
-
-  // }, [dataFromServer])
-
-
   useEffect(() => {
     return () => {
       // Удаляем кнопки control
@@ -163,21 +135,6 @@ const PaneHistoryMap = () => {
     }
   }, [map]);
 
-  // useEffect(() => {
-  //   setBoundsForSetMap((curr: any) => {
-
-  //     // console.log("▶ ⇛ boundsForSetMap:", curr);
-  //   })
-  //   // map.fitBounds(boundsForSetMap).zoomOut()
-
-  // }, [boundsForSetMap])
-
-  // // Смещение карты при первой загрузке на велечину тултипа
-  // map.whenReady(() => {
-  //   if (isMobile) map.zoomOut()
-  //   // map.panBy([0, 28], { animate: true });
-  //   map.fitBounds(boundsForSetMap)
-  // })
   useEffect(() => {
     // После отрисовки всех компонентов истории
     map.whenReady(() => {
@@ -185,6 +142,7 @@ const PaneHistoryMap = () => {
       if (forFitBounds && forFitBounds.length > 0) {
         console.log("▶ ⇛ forFitBoundsError:", forFitBounds);
         map.fitBounds(forFitBounds)
+        map.zoomOut()
         setHistoryDataLoad(true)
       }
 
