@@ -20,7 +20,7 @@ interface TypeInitialState {
   carsFilter: TypeCarsFilter,
   isConnectFilter: TypeCarsFilter,
   carsMapVariant: TypeCarsMapVariant,
-  carsMapHistotyItem: IDataFromDateForm | null
+  carsItemFromHistoryForm: IDataFromDateForm | null
 }
 
 
@@ -30,7 +30,7 @@ const initialState: TypeInitialState = {
   carsFilter: null,
   isConnectFilter: null,
   carsMapVariant: { variant: 'all' },
-  carsMapHistotyItem: null
+  carsItemFromHistoryForm: null
 }
 
 export const carsMapSlice = createSlice({
@@ -65,8 +65,8 @@ export const carsMapSlice = createSlice({
       state.carsMapVariant = { ...state.carsMapVariant, ...action.payload }
       // return state
     },
-    setCarsMapHistoryItem: (state: any, action: PayloadAction<IDataFromDateForm>) => {
-      state.carsMapHistotyItem = { ...state.carsMapHistotyItem, ...action.payload }
+    setCarsItemFromHistoryForm: (state: any, action: PayloadAction<IDataFromDateForm>) => {
+      state.carsItemFromHistoryForm = { ...state.carsItemFromHistoryForm, ...action.payload }
       // return state
     },
   }

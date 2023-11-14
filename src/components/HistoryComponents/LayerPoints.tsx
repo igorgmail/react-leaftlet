@@ -30,8 +30,6 @@ const LayerPoints: FC<TLayerPointsProps> = ({ pointItem }) => {
 
   return (
     <div>
-
-
       <Circle
         center={[Number(pointItem.lat), Number(pointItem.lng)]}
         pathOptions={{ color: 'blue' }}
@@ -39,7 +37,6 @@ const LayerPoints: FC<TLayerPointsProps> = ({ pointItem }) => {
         fillOpacity={0.2}
         weight={2}
       >
-
         <Tooltip
           position={[Number(pointItem.lat), Number(pointItem.lng)]}
           pane='historyMapPane-circleTooltip'
@@ -49,8 +46,6 @@ const LayerPoints: FC<TLayerPointsProps> = ({ pointItem }) => {
           opacity={0.8}
         >{pointItem.name}</Tooltip>
       </Circle>
-
-
     </div>
   )
 }

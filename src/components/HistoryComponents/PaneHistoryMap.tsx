@@ -6,7 +6,8 @@ import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { ICarObject, ICompanyData, IHistoryDataFromServer, IHistoryPoints } from '../../types/carsTypes';
-
+import { Spinner } from '../MainCars/Spinner';
+import { IDataFromDateForm } from '../../types/carsTypes';
 
 import isHasToushScreen from '../MainCars/lib/isMobile';
 import getHistoryFetch from './lib/getHistoryFetch';
@@ -17,21 +18,18 @@ import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
 // type IPainCars = L.LatLngBoundsExpression | [][] | any
 
-
 const PaneHistoryMap = () => {
 
   console.log("'--Render PainHistory");
 
-  const [historyBounds, setHistoruBounds] = useState()
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
-  const [boundsForSetMap, setBoundsForSetMap] = useState<L.LatLngBoundsExpression | [][] | any>(null)
+  const [forFitBounds, setForFitBounds] = useState<L.LatLngBoundsExpression | [][] | any>(null)
+
+  const [historyDataLoad, setHistoryDataLoad] = useState(false)
 
   const dispatch = useAppDispatch()
-  const carsMapHistotyItem = useAppSelector((state) => state.carsMap?.carsMapHistotyItem);
-  // const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
-
-  // console.log("▶ ⇛ carsForMenuFromStore:", carsForMenuFromStore);
+  const carsItemFromHistoryForm = useAppSelector((state) => state.carsMap?.carsItemFromHistoryForm);
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
@@ -45,53 +43,115 @@ const PaneHistoryMap = () => {
   // dataFromIso: "2023-11-13T18:10:00.000+07:00"
   // dataToIso: "2023-11-13T18:17:00.000+07:00"
   // localOffset: 420}
+  // ---------------------------
+  // С сервера приходят массивы объектов history :
+  //
+  // {altitude: "231"
+  // angle: "232"
+  // lat: "53.8827183"
+  // lng: "27.5219233"
+  // speed: "0"
+  // timestamp: "2023-11-13 00:30:19"}
+  //
+  //
+  // массивы points  :[[],[]]
+  // {lat: "53.882645"
+  // lng: "27.5217466"
+  // name: "home"
+  // radius: "100"}
+
+  async function historyFetchHandler(data: IDataFromDateForm) {
+    // получаем данные с сервера оправляем данные с формы из store
+    // Получим либо данные либо пустой объект сформированный в getHistoryFetch
+    const historyServerData = await getHistoryFetch(data)
+
+    if (!historyServerData.car_id) {
+      // ошибка нет car_id в ответе с сервера
+      errorHandler("Нет car_id")
+    }
+    if (historyServerData.history.length === 0 && historyServerData.points.length === 0) {
+      // нет данных 
+      errorHandler("оба массива (history и points) пусты")
+    }
+    const coordHistoryToFitBounds = arrayPointsForBoundsSort(historyServerData.history)
+    const coordPointsToFitBounds = arrayPointsForBoundsSort(historyServerData.points)
+    coordHistoryToFitBounds.push(...coordPointsToFitBounds)
+
+    setForFitBounds(coordHistoryToFitBounds)
+    setPointsBounds(historyServerData.points)
+    setDataFromServer(historyServerData)
+
+  }
+
+  function errorHandler(msg: string) {
+    console.warn("ERROR -->", msg);
+
+  }
+
+  function arrayPointsForBoundsSort(arr: any) {
+    // let result : number[][] = []
+    if (arr.length === 0) return []
+    const result = arr.reduce(
+      (acc: number[][], obj: any) => {
+        const lat = parseFloat(obj.lat);
+        const lng = parseFloat(obj.lng);
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+          // Находим максимальные значения
+          acc[0][0] = Math.max(acc[0][0], lat);
+          acc[0][1] = Math.max(acc[0][1], lng);
+
+          // Находим минимальные значения
+          acc[1][0] = Math.min(acc[1][0], lat);
+          acc[1][1] = Math.min(acc[1][1], lng);
+        }
+
+        return acc;
+      },
+      [
+        [-Infinity, -Infinity], // Максимальные значения lat и lng
+        [Infinity, Infinity]   // Минимальные значения lat и lng
+      ]
+    );
+
+    return result
+  }
 
   useEffect(() => {
-    if (dataFromServer) {
-      let boundsArray: any = []
-
-      if (dataFromServer.history.length > 0) {
-        boundsArray = dataFromServer.history.map((item) => {
-          return [Number(item.lat), Number(item.lng)]
-        })
-      }
-      if (pointsBounds.length > 0) {
-        pointsBounds.map((pointItem) => {
-          boundsArray.push([Number(pointItem.lat), Number(pointItem.lng)])
-        })
-      }
-      if (boundsArray.length > 0) {
-        setBoundsForSetMap(boundsArray)
-        map.fitBounds(boundsArray)
-      }
-    }
-
-
-  }, [dataFromServer])
-
-
-  useEffect(() => {
-    if (carsMapHistotyItem) {
-      try {
-        const interval = getHistoryFetch(carsMapHistotyItem)
-        interval.then((data) => {
-          console.log("Получили с сервера");
-          console.log("-----------------");
-          console.log(data);
-          console.log("-----------------");
-
-          setPointsBounds(data.points)
-
-
-          setDataFromServer(data)
-        })
-      } catch (error) {
-        console.log("Ошибка при запросе к истории", error);
-
-      }
+    if (carsItemFromHistoryForm) {
+      historyFetchHandler(carsItemFromHistoryForm)
 
     }
-  }, [map]);
+  }, [carsItemFromHistoryForm])
+
+
+  // useEffect(() => {
+  //   if (dataFromServer) {
+  //     let boundsArray: any = []
+
+  //     if (dataFromServer.history.length > 0) {
+  //       boundsArray = dataFromServer.history.map((item) => {
+  //         return [Number(item.lat), Number(item.lng)]
+  //       })
+  //     }
+  //     if (pointsBounds.length > 0) {
+  //       pointsBounds.map((pointItem) => {
+  //         boundsArray.push([Number(pointItem.lat), Number(pointItem.lng)])
+  //       })
+  //     }
+  //     console.log("▶ ⇛ boundsArrayLength:", boundsArray.length);
+  //     console.log("▶ ⇛ boundsArray:", boundsArray);
+  //     console.log("▶ ⇛ pointsBounds:", pointsBounds);
+  //     if (boundsArray.length > 0) {
+  //       // setBoundsForSetMap(boundsArray)
+  //       setHistoryDataLoad(true)
+  //       // map.fitBounds(boundsArray).zoomOut()
+  //     }
+  //   }
+
+
+  // }, [dataFromServer])
+
 
   useEffect(() => {
     return () => {
@@ -101,7 +161,16 @@ const PaneHistoryMap = () => {
       backElement?.remove()
       historyElement?.remove()
     }
-  }, [map])
+  }, [map]);
+
+  // useEffect(() => {
+  //   setBoundsForSetMap((curr: any) => {
+
+  //     // console.log("▶ ⇛ boundsForSetMap:", curr);
+  //   })
+  //   // map.fitBounds(boundsForSetMap).zoomOut()
+
+  // }, [boundsForSetMap])
 
   // // Смещение карты при первой загрузке на велечину тултипа
   // map.whenReady(() => {
@@ -109,13 +178,29 @@ const PaneHistoryMap = () => {
   //   // map.panBy([0, 28], { animate: true });
   //   map.fitBounds(boundsForSetMap)
   // })
+  useEffect(() => {
+    // После отрисовки всех компонентов истории
+    map.whenReady(() => {
+      console.log("--Render Useeffect PaneHistoryMap");
+      if (forFitBounds && forFitBounds.length > 0) {
+        console.log("▶ ⇛ forFitBoundsError:", forFitBounds);
+        map.fitBounds(forFitBounds)
+        setHistoryDataLoad(true)
+      }
+
+    })
+
+  }, [forFitBounds])
 
   return (
     <div>
       <BackLayerControl></BackLayerControl>
       <HistoryLayerControl></HistoryLayerControl>
 
+      {!historyDataLoad && <Spinner />}
+      <>
       <Pane name="historyMapPane-circleTooltip" style={{ zIndex: 500, width: '100vh', }} />
+
       <LayerGroup pane='historyMapPane-circleTooltip'>
         {pointsBounds.length && pointsBounds.map((pointItem) => (
           <LayerPoints key={pointItem.name} pointItem={pointItem}></LayerPoints>
@@ -124,11 +209,12 @@ const PaneHistoryMap = () => {
 
       <Pane name="historyMapPane" style={{ zIndex: 300, width: '100vh', }}>
         <LayerGroup pane='historyMapPane'>
-          {dataFromServer?.history.length && dataFromServer.history.map((historyItem) => (
+            {dataFromServer?.history.length! > 0 && dataFromServer?.history.map((historyItem) => (
             <LayersHistoryMarkers key={uuidv4()} historyFromServer={historyItem}></LayersHistoryMarkers>
           ))}
         </LayerGroup>
       </Pane>
+      </>
 
     </div>
   )

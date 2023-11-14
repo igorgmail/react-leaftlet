@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
 import { Box, Stack, CircularProgress } from '@mui/material';
-
+import { Spinner } from './Spinner';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
@@ -10,22 +10,29 @@ import PainCars from './PainCars';
 import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
 import getCarsFetch from './lib/fetchGetCars';
 import style from './style.module.css'
-import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
+import { useAppDispatch, useAppSelector, carsMapActions, dataActions } from '../../store';
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
 
-export default function MainCars() {
+
+
+
+function MainCars() {
   console.log("--Render MainsCar");
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
   const [boundsForMap, setBoundsForMap] = useState()
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapVariant);
+  console.log("▶ ⇛ carsMapVariant:", carsMapVariant);
 
+  const mapRef = useRef<L.Map | null>(null)
+  const dispatch = useAppDispatch()
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
+
   useEffect(() => {
     const companyData = getCarsFetch()
     companyData
@@ -41,19 +48,22 @@ export default function MainCars() {
       .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
     )
 
+    // Очищаем store data 
+    dispatch(dataActions.reset())
   }, [])
 
+  // useEffect(() => {
+  //   if (mapRef.current) {
+  //     mapRef.current.remove();
+  //   }
+  // }, []);
+
   return !carsBounds ?
-    (<Box display="flex" width="100%" height="100vh">
-        <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} margin={'auto'}>
-
-          <CircularProgress color="inherit" className={style.carSpinner} />
-        </Stack>
-    </Box>)
-        :
-
+    (<Spinner />)
+    :
     (<Box display="flex" width="100%" height="100vh">
         <MapContainer
+        ref={mapRef}
           // whenReady={() => { console.log("MAP READY") }}
           zoomSnap={0.5}
           zoomDelta={0.5}
@@ -71,10 +81,14 @@ export default function MainCars() {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         />
-        {/* <PainCars mapBounds={carsBounds} carsDataStart={companyData} /> */}
+
         {String(carsMapVariant.variant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
+
         {String(carsMapVariant.variant) === 'history' && <PaneHistoryMap />}
+
         </MapContainer>
     </Box>)
 
 }
+
+export default MainCars;

@@ -17,7 +17,6 @@ import CarsLayerControl from '../MenuCars/CarsLayerControl';
 type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
-  console.log("▶ ⇛ mapBounds:", mapBounds);
   // mapBounds - массив массивов координат для определения расположения видимой карты
   // carsDataStart - массив объектов с данными cars для первого рендере
 
@@ -110,7 +109,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // Смещение карты при первой загрузке на велечину тултипа
   useEffect(() => {
     map.whenReady(() => {
-      if (isMobile) map.zoomOut()
+      if (isMobile)
+        map.zoomOut()
       // map.panBy([0, 28], { animate: true });
       map.fitBounds(mapBounds)
     })

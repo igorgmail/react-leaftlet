@@ -40,9 +40,9 @@ async function getHistoryFetch(carData: IDataFromDateForm): Promise<IHistoryData
       console.error('Ошибка при получении данных:', response.statusText);
       // Вернуть пустой объект или выбросить ошибку в зависимости от ваших потребностей
       return {
-        from: '',
-        to: '',
-        car_id: '',
+        from: null,
+        to: null,
+        car_id: null,
         history: [],
         points: []
       }

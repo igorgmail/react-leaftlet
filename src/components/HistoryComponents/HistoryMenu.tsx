@@ -4,8 +4,6 @@ import { TextField } from '@mui/material/';
 import { IconHistory } from './IconComponent/IconHistory';
 import { IconCar } from './IconComponent/IconCar';
 import { DateTime } from "luxon";
-import { connect } from 'react-redux'
-import { store } from '../../store'
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
 import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
@@ -90,8 +88,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
       localOffset: DateTime.local().offset
     }
     dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
-    dispatch(carsMapActions.setCarsMapHistoryItem(dataFromDateForm))
-    console.log("Здесь Fetrch для запроса к истории");
+    dispatch(carsMapActions.setCarsItemFromHistoryForm(dataFromDateForm))
+    console.log("Здесь Fetch для запроса к истории");
 
     handleClose()
   }
@@ -213,5 +211,8 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
   );
 }
 
-// export default connect((store: any) => store.carsMapVariant)(HistoryMenu)
+// export default connect(mapStateToProps)(MainCars);
+
+
+
 export default HistoryMenu 

@@ -20,7 +20,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
   const [historyBounds, setHistoruBounds] = useState()
   // const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
-  // console.log("▶ ⇛ pointsBounds:", pointsBounds);
+  console.log("---Render LayersHistoryMarkers");
 
   const dispatch = useAppDispatch()
   // const carsMapHistotyItem = useAppSelector((state) => state.carsMap?.carsMapHistotyItem);

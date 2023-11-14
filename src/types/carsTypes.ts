@@ -43,9 +43,9 @@ export interface ICarsFilter {
 }
 // Данные приходят с сервера - история 
 export interface IHistoryDataFromServer {
-  from: string,
-  to: string,
-  car_id: string,
+  from: string | null,
+  to: string | null,
+  car_id: string | null,
   history: IHistoryCar[],
   points: IHistoryPoints[]
 }
