@@ -139,12 +139,32 @@ const PaneHistoryMap = () => {
 
   useEffect(() => {
     // После отрисовки всех компонентов истории
+    const bound: L.LatLngBoundsLiteral = [
+      [53.982645, 27.2217466],
+      [53.653464, 27.494312]
+      // [53.653464, 27.2217466],
+      // [53.982645, 27.494312]
+
+    ]
     map.whenReady(() => {
       console.log("--Render Useeffect PaneHistoryMap");
       if (forFitBounds && forFitBounds.length > 0) {
         console.log("▶ ⇛ forFitBoundsError:", forFitBounds);
-        map.fitBounds(forFitBounds)
-        map.zoomOut()
+        setTimeout(() => {
+          // map.fitBounds(forFitBounds)
+          map.options.zoomSnap = 0.5
+          map.options.zoomDelta = 0.5
+          console.log("Zoom Min", map.getMinZoom());
+          console.log("Zoom Max", map.getMaxZoom());
+          console.log("getBoundsZoom", map.getBoundsZoom(bound));
+          console.log("getCenter()", map.getCenter());
+
+          map.fitBounds(bound)
+          map.setView(map.getCenter())
+          // map.setZoom(9.5)
+          // map.zoomOut()
+        })
+
         setHistoryDataLoad(true)
       }
 

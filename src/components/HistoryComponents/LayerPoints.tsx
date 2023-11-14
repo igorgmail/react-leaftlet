@@ -12,6 +12,7 @@ type TLayerPointsProps = {
 }
 
 const LayerPoints: FC<TLayerPointsProps> = ({ pointItem }) => {
+  console.log("▶ ⇛ pointItem:", pointItem);
 
   const [historyBounds, setHistoruBounds] = useState()
   // const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
