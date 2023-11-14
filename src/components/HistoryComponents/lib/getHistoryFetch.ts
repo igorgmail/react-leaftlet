@@ -5,7 +5,7 @@ async function getHistoryFetch(carData: IDataFromDateForm): Promise<IHistoryData
 
   const parc_id = 1
   const { car_id, carName, dataFromIso, dataToIso, localOffset } = { ...carData }
-  const url = 'http://localhost:3002/history'
+  const url = 'https://user-headers.onrender.com/history'
 
   // Формируем дату без учета часового пояса то есть если по местному 20-00
   // то и на сервер отправляем 20-00

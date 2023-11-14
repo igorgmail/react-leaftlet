@@ -68,10 +68,12 @@ const PaneHistoryMap = () => {
     if (!historyServerData.car_id) {
       // ошибка нет car_id в ответе с сервера
       errorHandler("Нет car_id")
+      setHistoryDataLoad(true)
     }
     if (historyServerData.history.length === 0 && historyServerData.points.length === 0) {
       // нет данных 
       errorHandler("оба массива (history и points) пусты")
+      setHistoryDataLoad(true)
     }
     const coordHistoryToFitBounds = arrayPointsForBoundsSort(historyServerData.history)
     const coordPointsToFitBounds = arrayPointsForBoundsSort(historyServerData.points)
