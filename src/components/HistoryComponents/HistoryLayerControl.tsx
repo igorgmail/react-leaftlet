@@ -9,7 +9,7 @@ import style from './style.module.css'
 import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconHistory } from './IconComponent/IconHistory';
-
+import HistoryMenu from './HistoryMenu';
 interface ICustomLayerControl {
   // menuHeaderData?: ICompanyName,
   children?: React.ReactNode,
@@ -43,6 +43,7 @@ const HistoryLayerControl = () => {
             className={style.menuIconButton}
           >
             <IconHistory className={style.menuIcon} sx={{ width: 20, height: 20 }} />
+            {/* <HistoryMenu></HistoryMenu> */}
           </IconButton>
         </Tooltip>
       </Control>

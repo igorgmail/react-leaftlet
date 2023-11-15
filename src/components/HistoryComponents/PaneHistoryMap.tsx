@@ -77,7 +77,6 @@ const PaneHistoryMap = () => {
     if (historyServerData.history.length === 0 && historyServerData.points.length === 0) {
       // нет данных 
       errorHandler("оба массива (history и points) пусты")
-      //! Посмотреть ??
       setHistoryDataLoad(true)
       return
     }
@@ -182,7 +181,7 @@ const PaneHistoryMap = () => {
           setHistoryDataLoad(true)
         }, 300)
         polilineRef.current?.addTo(map)
-        polilineRef.current = null
+
       }
 
     })
@@ -199,6 +198,7 @@ const PaneHistoryMap = () => {
       backElement?.remove()
       historyElement?.remove()
       polilineRef.current?.remove()
+      polilineRef.current = null
     }
   }, [map]);
 
