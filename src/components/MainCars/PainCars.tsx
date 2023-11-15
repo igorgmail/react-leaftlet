@@ -114,10 +114,13 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // Смещение карты при первой загрузке на велечину тултипа
   useEffect(() => {
     map.whenReady(() => {
-      if (isMobile)
-        map.zoomOut()
-      // map.panBy([0, 28], { animate: true });
+      // if (isMobile)
+      // map.zoomOut()
       map.fitBounds(mapBounds)
+      const zoomOut: HTMLButtonElement | null = document.querySelector('.leaflet-control-zoom-out')
+      setTimeout(() => {
+        zoomOut?.click()
+      }, 300)
     })
 
     return () => {

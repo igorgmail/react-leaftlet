@@ -98,17 +98,18 @@ const PaneHistoryMap = () => {
         const lat = parseFloat(obj.lat);
         const lng = parseFloat(obj.lng);
 
-        if (!isNaN(lat) && !isNaN(lng)) {
-          // Находим максимальные значения
-          acc[0][0] = Math.max(acc[0][0], lat);
-          acc[0][1] = Math.max(acc[0][1], lng);
-
+        if (lat > 0 && lng > 0) {
+          if (!isNaN(lat) && !isNaN(lng)) {
+            // Находим максимальные значения
+            acc[0][0] = Math.max(acc[0][0], lat);
+            acc[0][1] = Math.max(acc[0][1], lng);
           // Находим минимальные значения
-          acc[1][0] = Math.min(acc[1][0], lat);
-          acc[1][1] = Math.min(acc[1][1], lng);
+            acc[1][0] = Math.min(acc[1][0], lat);
+            acc[1][1] = Math.min(acc[1][1], lng);
+          }
         }
 
-        return acc;
+        return acc
       },
       [
         [-Infinity, -Infinity], // Максимальные значения lat и lng

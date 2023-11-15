@@ -35,6 +35,8 @@ function MainCars() {
 
   useEffect(() => {
     if (carsMapVariant.variant === 'all') {
+      console.log("MainCARS USEEFFECT");
+
       const abortController = new AbortController();
       const companyData = getCarsFetch(abortController)
       companyData
@@ -57,7 +59,7 @@ function MainCars() {
 
   },
 
-    [])
+    [carsMapVariant, dispatch])
 
   // useEffect(() => {
   //   if (mapRef.current) {
