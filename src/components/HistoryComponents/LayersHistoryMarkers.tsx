@@ -50,7 +50,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     }
   }, [map])
 
-  const r = carsPageconfig.historyMarkerRadius
+  const r = 6//carsPageconfig.historyMarkerRadius
   const createPointIcon = () => {
     return new L.DivIcon({
       className: 'custom-point-icon',
@@ -68,16 +68,17 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     // riseOnHover
     >
 
-      {/* <Tooltip
+      <Tooltip
         pane='historyMapPane'
         eventHandlers={{
           // add: () => onLoadTooltip()
 
         }}
-        permanent={true}
-        direction="bottom" opacity={1}
+        // permanent={true}
+        direction="top" opacity={1}
       >
-      </Tooltip> */}
+        {historyFromServer.timestamp}
+      </Tooltip>
     </PointMarker>
   )
 }

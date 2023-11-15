@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Pane, useMap, LayerGroup } from 'react-leaflet';
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -27,6 +27,8 @@ const PaneHistoryMap = () => {
   const [forFitBounds, setForFitBounds] = useState<L.LatLngBoundsExpression | [][] | any>(null)
 
   const [historyDataLoad, setHistoryDataLoad] = useState(false)
+
+  const polilineRef = useRef<L.Polyline | null>(null)
 
   const dispatch = useAppDispatch()
   const carsItemFromHistoryForm = useAppSelector((state) => state.carsMap?.carsItemFromHistoryForm);
@@ -92,18 +94,24 @@ const PaneHistoryMap = () => {
         // массив отфилтрованных объектов Истории передвижения(исключили объекты с нулевыми координатами)
         historyServerData.history = [...filterArrayExcludeZero(historyServerData.history)]
 
+        // Создаем линии
+        const lineArray: L.LatLngExpression[] = historyServerData?.history.map((el) => [Number(el.lat), Number(el.lng)])!
+        const polyline = L.polyline(lineArray, { color: 'red', weight: 2, lineCap: 'square' })
+        polilineRef.current = polyline
+
       } catch (error) {
-        console.log("Ошибка при удалении нудевыч координат в .history[]", error);
+        console.log("Ошибка при удалении нулевых координат в .history[]");
+        console.log("Или при создании полилиний");
+        console.log(error);
 
       }
     }
-    setForFitBounds(coordHistoryToFitBounds)
     setPointsBounds(historyServerData.points)
     setDataFromServer(historyServerData)
-
-
+    setForFitBounds(coordHistoryToFitBounds)
 
   }
+
 
   function errorHandler(msg: string) {
     console.warn("ERROR -->", msg);
@@ -148,30 +156,19 @@ const PaneHistoryMap = () => {
   }, [carsItemFromHistoryForm])
 
 
-  useEffect(() => {
-    return () => {
-      // Удаляем кнопки control
-      const backElement = document.querySelector('[aria-label="Back"]')?.closest('.leaflet-control');
-      const historyElement = document.querySelector('[aria-label="History"]')?.closest('.leaflet-control');
-      backElement?.remove()
-      historyElement?.remove()
-    }
-  }, [map]);
 
+  // Когда(если) обновился state forFitBounds
   useEffect(() => {
     // После отрисовки всех компонентов истории
     map.whenReady(() => {
-      console.log("--Render Useeffect PaneHistoryMap");
       if (forFitBounds && forFitBounds.length > 0) {
-        console.log("▶ ⇛ forFitBoundsError:", forFitBounds);
-
           // map.fitBounds(forFitBounds)
           map.options.zoomSnap = 0.5
           map.options.zoomDelta = 0.5
         // console.log("Zoom Min", map.getMinZoom());
         // console.log("Zoom Max", map.getMaxZoom());
-        console.log("getBoundsZoom", map.getBoundsZoom(forFitBounds));
-          console.log("getCenter()", map.getCenter());
+        // console.log("getBoundsZoom", map.getBoundsZoom(forFitBounds));
+        //   console.log("getCenter()", map.getCenter());
 
         map.fitBounds(forFitBounds)
         // map.setView(map.getCenter())
@@ -181,31 +178,29 @@ const PaneHistoryMap = () => {
         const zoomOut: HTMLButtonElement | null = document.querySelector('.leaflet-control-zoom-out')
         setTimeout(() => {
           zoomOut?.click()
-
+          setHistoryDataLoad(true)
         }, 300)
-        // const testPoint = L.circleMarker(map.getCenter(), { color: '#3388ff', weight: 3, radius: 5 })
-        // testPoint.addTo(map);
-
-
-        // Вызовите функцию zoomOut изнутри блока
-
-        setHistoryDataLoad(true)
-
-        var latlngs: L.LatLngExpression[] = [
-          [45.51, -122.68],
-          [37.77, -122.43],
-          [34.04, -118.2]
-        ];
-
-        // var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
-
-        // zoom the map to the polyline
-        // map.fitBounds(polyline.getBounds());
+        polilineRef.current?.addTo(map)
+        polilineRef.current = null
       }
 
     })
 
   }, [forFitBounds])
+
+
+  // Удаляем Control
+  useEffect(() => {
+    return () => {
+      // Удаляем кнопки control
+      const backElement = document.querySelector('[aria-label="Back"]')?.closest('.leaflet-control');
+      const historyElement = document.querySelector('[aria-label="History"]')?.closest('.leaflet-control');
+      backElement?.remove()
+      historyElement?.remove()
+      polilineRef.current?.remove()
+    }
+  }, [map]);
+
 
   return (
     <div>
