@@ -27,22 +27,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
 
   const map = useMap();
 
-  // Создаем div для портала
-  // const rootEl = document.getElementById('root')!;
-  // const iconContainer = document.createElement('div');
-  // rootEl.appendChild(portalContainer);
-
-  // Рендерим JSX-компонент внутри портала
-  // render(<Provider store={store}><IconPoint /></Provider>, iconContainer);
-
-  const mapRef = useRef(null);
-
   useEffect(() => {
-    map.whenReady(() => {
-      if (isMobile) map.zoomOut()
-      // map.panBy([0, 28], { animate: true });
-      // map.fitBounds(mapBounds)
-    })
 
     return () => {
       const menuElement = document.querySelector('[aria-label="Map settings"]')?.closest('.leaflet-control');
@@ -50,7 +35,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     }
   }, [map])
 
-  const r = 6//carsPageconfig.historyMarkerRadius
+  const r = carsPageconfig.historyMarkerRadius
   const createPointIcon = () => {
     return new L.DivIcon({
       className: 'custom-point-icon',

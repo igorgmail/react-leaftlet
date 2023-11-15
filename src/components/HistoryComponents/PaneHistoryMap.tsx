@@ -16,6 +16,7 @@ import LayerPoints from './LayerPoints';
 import LayersHistoryMarkers from './LayersHistoryMarkers';
 import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
+import carsPageconfig from '../MainCars/lib/config';
 // type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PaneHistoryMap = () => {
@@ -96,7 +97,7 @@ const PaneHistoryMap = () => {
 
         // Создаем линии
         const lineArray: L.LatLngExpression[] = historyServerData?.history.map((el) => [Number(el.lat), Number(el.lng)])!
-        const polyline = L.polyline(lineArray, { color: 'red', weight: 2, lineCap: 'square' })
+        const polyline = L.polyline(lineArray, { color: 'red', weight: carsPageconfig.historyLineWeight, lineCap: 'square' })
         polilineRef.current = polyline
 
       } catch (error) {
