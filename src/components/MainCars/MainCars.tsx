@@ -34,23 +34,30 @@ function MainCars() {
   // компонентов
 
   useEffect(() => {
-    const companyData = getCarsFetch()
-    companyData
-      .then((data) => {
-        const carBoundsArray = data.cars.map((car: ICarObject) => {
-        return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
-      })
-        setCompanyData(data)
-        // L.control.zoom({ position: 'topright' })
+    if (carsMapVariant.variant === 'all') {
+      const abortController = new AbortController();
+      const companyData = getCarsFetch(abortController)
+      companyData
+        .then((data) => {
+          const carBoundsArray = data.cars.map((car: ICarObject) => {
+            return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
+          })
+          setCompanyData(data)
+    // L.control.zoom({ position: 'topright' })
 
-      return setCarsBounds(carBoundsArray)
-      })
-      .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
-    )
+          return setCarsBounds(carBoundsArray)
+        })
+        .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
+        )
 
-    // Очищаем store data 
-    dispatch(dataActions.reset())
-  }, [])
+      // Очищаем store data 
+      dispatch(dataActions.reset())
+      return () => abortController.abort();
+    }
+
+  },
+
+    [])
 
   // useEffect(() => {
   //   if (mapRef.current) {
@@ -76,7 +83,9 @@ function MainCars() {
         zoomControl={false}
         style={{ width: '100%', height: '100%' }}
       >
-        <ZoomControl position="topleft" />
+        <ZoomControl position="topleft"
+
+        />
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"

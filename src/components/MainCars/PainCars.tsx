@@ -19,6 +19,7 @@ type IPainCars = L.LatLngBoundsExpression | [][] | any
 const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // mapBounds - массив массивов координат для определения расположения видимой карты
   // carsDataStart - массив объектов с данными cars для первого рендере
+  console.log("--Render PainsCars");
 
   const dispatch = useAppDispatch()
   const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
@@ -75,15 +76,19 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
   // Получение данных с сервера
   useEffect(() => {
+    const abortController = new AbortController();
     const interval = setInterval(() => {
-      getCarsFetch()
+      getCarsFetch(abortController)
         .then(data => {
           setCompanyData(data)
         })
 
     }, carsPageconfig.updateDelay);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval)
+      abortController.abort();
+    };
   }, [map, mapBounds]);
 
   useEffect(() => {
@@ -119,7 +124,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
       const menuElement = document.querySelector('[aria-label="Map settings"]')?.closest('.leaflet-control');
       menuElement?.remove()
     }
-  }, [map])
+  }, [])
 
   return (
     <div>

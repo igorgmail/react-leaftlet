@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, FC } from 'react';
 import ReactDOMServer, { render } from 'react-dom';
-import { Pane, useMap, LayerGroup, Circle, Tooltip } from 'react-leaflet';
+import { Pane, useMap, LayerGroup, Circle, Tooltip, Polyline } from 'react-leaflet';
 import { Marker as PointMarker } from 'react-leaflet';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import { Provider } from 'react-redux/es/exports';
@@ -11,7 +11,7 @@ import 'leaflet-rotatedmarker';
 import { IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
 import { IconPoint } from './IconComponent/IconPoint'
 import isHasToushScreen from '../MainCars/lib/isMobile';
-
+import carsPageconfig from '../MainCars/lib/config';
 type TLayerHistoryMarkersProps = {
   historyFromServer: IHistoryCar
 }
@@ -50,10 +50,11 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     }
   }, [map])
 
+  const r = carsPageconfig.historyMarkerRadius
   const createPointIcon = () => {
     return new L.DivIcon({
       className: 'custom-point-icon',
-      html: '<svg width="10" height="10"><circle cx="5" cy="5" r="5" fill="red" /></svg>',
+      html: `<svg width="${r * 2}" height="${r * 2}}"><circle cx="${r}" cy="${r}" r="${r}" fill="red" /></svg>`,
       iconSize: [10, 10],
     });
   };

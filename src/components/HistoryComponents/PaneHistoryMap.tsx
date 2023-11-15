@@ -142,33 +142,73 @@ const PaneHistoryMap = () => {
     const bound: L.LatLngBoundsLiteral = [
       [53.982645, 27.2217466],
       [53.653464, 27.494312]
-      // [53.653464, 27.2217466],
-      // [53.982645, 27.494312]
-
     ]
+
+    // Получите текущий уровень масштаба карты
+    var currentZoom = map.getZoom();
+    // Уменьшите масштаб поэтапно
+    var targetZoom = currentZoom - 1;
+    var zoomStep = 0.1; // Регулируйте этот параметр по вашему усмотрению
+
+    // Объявите функцию zoomOut вне блока кода
+    function zoomOut() {
+      if (map.getZoom() > targetZoom) {
+        map.zoomOut(zoomStep);
+        requestAnimationFrame(zoomOut);
+      }
+    }
+
     map.whenReady(() => {
       console.log("--Render Useeffect PaneHistoryMap");
       if (forFitBounds && forFitBounds.length > 0) {
         console.log("▶ ⇛ forFitBoundsError:", forFitBounds);
-        setTimeout(() => {
+
           // map.fitBounds(forFitBounds)
           map.options.zoomSnap = 0.5
           map.options.zoomDelta = 0.5
-          console.log("Zoom Min", map.getMinZoom());
-          console.log("Zoom Max", map.getMaxZoom());
+        // console.log("Zoom Min", map.getMinZoom());
+        // console.log("Zoom Max", map.getMaxZoom());
           console.log("getBoundsZoom", map.getBoundsZoom(bound));
           console.log("getCenter()", map.getCenter());
 
-          map.fitBounds(bound)
-          map.setView(map.getCenter())
+        map.fitBounds(forFitBounds)
+        // map.setView(map.getCenter())
           // map.setZoom(9.5)
-          // map.zoomOut()
-        })
+        // map.zoomOut(-1)
+        // map.setZoomAround(map.getCenter(), 9.5)
+        const zoomOut: HTMLButtonElement | null = document.querySelector('.leaflet-control-zoom-out')
+        setTimeout(() => {
+          zoomOut?.click()
+
+        }, 300)
+        // const testPoint = L.circleMarker(map.getCenter(), { color: '#3388ff', weight: 3, radius: 5 })
+        // testPoint.addTo(map);
+
+
+        // Вызовите функцию zoomOut изнутри блока
 
         setHistoryDataLoad(true)
+
+
+
+        var latlngs: L.LatLngExpression[] = [
+          [45.51, -122.68],
+          [37.77, -122.43],
+          [34.04, -118.2]
+        ];
+
+        var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
+
+        // zoom the map to the polyline
+        // map.fitBounds(polyline.getBounds());
       }
 
     })
+
+
+
+
+
 
   }, [forFitBounds])
 
