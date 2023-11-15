@@ -54,7 +54,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
   const createPointIcon = () => {
     return new L.DivIcon({
       className: 'custom-point-icon',
-      html: `<svg width="${r * 2}" height="${r * 2}}"><circle cx="${r}" cy="${r}" r="${r}" fill="red" /></svg>`,
+      html: `<svg width="${r * 2}" height="${r * 2}"><circle cx="${r}" cy="${r}" r="${r}" fill="red" /></svg>`,
       iconSize: [10, 10],
     });
   };
