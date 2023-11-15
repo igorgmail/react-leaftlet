@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
-import { IHistoryDataFromServer, IHistoryPoints } from '../../types/carsTypes';
+import { IHistoryDataFromServer, IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
 import { Spinner } from '../MainCars/Spinner';
 import { IDataFromDateForm } from '../../types/carsTypes';
 
@@ -69,19 +69,39 @@ const PaneHistoryMap = () => {
       // ошибка нет car_id в ответе с сервера
       errorHandler("Нет car_id")
       setHistoryDataLoad(true)
+      return
     }
     if (historyServerData.history.length === 0 && historyServerData.points.length === 0) {
       // нет данных 
       errorHandler("оба массива (history и points) пусты")
+      //! Посмотреть ??
       setHistoryDataLoad(true)
+      return
     }
+    // формируем координаты границ панораммы карты (min max)
     const coordHistoryToFitBounds = arrayPointsForBoundsSort(historyServerData.history)
     const coordPointsToFitBounds = arrayPointsForBoundsSort(historyServerData.points)
     coordHistoryToFitBounds.push(...coordPointsToFitBounds)
 
+    const filterArrayExcludeZero = (array: IHistoryCar[]) => array.filter((el) => {
+      if (Number(el.lat) > 0 && Number(el.lng) > 0) return el
+    })
+
+    if (historyServerData.history.length > 0) {
+      try {
+        // массив отфилтрованных объектов Истории передвижения(исключили объекты с нулевыми координатами)
+        historyServerData.history = [...filterArrayExcludeZero(historyServerData.history)]
+
+      } catch (error) {
+        console.log("Ошибка при удалении нудевыч координат в .history[]", error);
+
+      }
+    }
     setForFitBounds(coordHistoryToFitBounds)
     setPointsBounds(historyServerData.points)
     setDataFromServer(historyServerData)
+
+
 
   }
 
@@ -140,25 +160,6 @@ const PaneHistoryMap = () => {
 
   useEffect(() => {
     // После отрисовки всех компонентов истории
-    const bound: L.LatLngBoundsLiteral = [
-      [53.982645, 27.2217466],
-      [53.653464, 27.494312]
-    ]
-
-    // Получите текущий уровень масштаба карты
-    var currentZoom = map.getZoom();
-    // Уменьшите масштаб поэтапно
-    var targetZoom = currentZoom - 1;
-    var zoomStep = 0.1; // Регулируйте этот параметр по вашему усмотрению
-
-    // Объявите функцию zoomOut вне блока кода
-    function zoomOut() {
-      if (map.getZoom() > targetZoom) {
-        map.zoomOut(zoomStep);
-        requestAnimationFrame(zoomOut);
-      }
-    }
-
     map.whenReady(() => {
       console.log("--Render Useeffect PaneHistoryMap");
       if (forFitBounds && forFitBounds.length > 0) {
@@ -169,7 +170,7 @@ const PaneHistoryMap = () => {
           map.options.zoomDelta = 0.5
         // console.log("Zoom Min", map.getMinZoom());
         // console.log("Zoom Max", map.getMaxZoom());
-          console.log("getBoundsZoom", map.getBoundsZoom(bound));
+        console.log("getBoundsZoom", map.getBoundsZoom(forFitBounds));
           console.log("getCenter()", map.getCenter());
 
         map.fitBounds(forFitBounds)
@@ -190,26 +191,19 @@ const PaneHistoryMap = () => {
 
         setHistoryDataLoad(true)
 
-
-
         var latlngs: L.LatLngExpression[] = [
           [45.51, -122.68],
           [37.77, -122.43],
           [34.04, -118.2]
         ];
 
-        var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
+        // var polyline = L.polyline(latlngs, { color: 'red' }).addTo(map);
 
         // zoom the map to the polyline
         // map.fitBounds(polyline.getBounds());
       }
 
     })
-
-
-
-
-
 
   }, [forFitBounds])
 
