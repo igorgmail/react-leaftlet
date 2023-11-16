@@ -8,12 +8,13 @@ import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
 import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
 
-interface CarProps {
+interface IHistoryMenu {
   car: ICarObject
 }
 
 
-const HistoryMenu: FC<CarProps> = ({ car }) => {
+const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
+  console.log("▶ ⇛HistoryMenu car:", car);
   console.log("---Render HistoryMenu");
   const dispatch = useAppDispatch()
 
@@ -89,7 +90,6 @@ const HistoryMenu: FC<CarProps> = ({ car }) => {
     }
     dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
     dispatch(carsMapActions.setCarsItemFromHistoryForm(dataFromDateForm))
-    console.log("Здесь Fetch для запроса к истории");
 
     handleClose()
   }

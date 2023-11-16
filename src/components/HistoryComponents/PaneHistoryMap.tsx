@@ -63,6 +63,15 @@ const PaneHistoryMap = () => {
   // name: "home"
   // radius: "100"}
 
+  function dilutionArrayPoints(arr: IHistoryCar[], num: number) { // num на сколько "разбавляем" 
+
+    return arr.filter((el: IHistoryCar, ind: number, arr) => {
+      if (ind === 0 || ind === arr.length) return el
+      if (ind % num === 0) return el
+    })
+  }
+
+
   async function historyFetchHandler(data: IDataFromDateForm) {
     // получаем данные с сервера оправляем данные с формы из store
     // Получим либо данные либо пустой объект сформированный в getHistoryFetch
@@ -93,6 +102,10 @@ const PaneHistoryMap = () => {
       try {
         // массив отфилтрованных объектов Истории передвижения(исключили объекты с нулевыми координатами)
         historyServerData.history = [...filterArrayExcludeZero(historyServerData.history)]
+
+        // ? Здесь возможно разбавление массива координат
+        if (isMobile) historyServerData.history = [...dilutionArrayPoints(historyServerData.history, carsPageconfig.dilutionArrayCount)]
+
 
         // Создаем линии
         const lineArray: L.LatLngExpression[] = historyServerData?.history.map((el) => [Number(el.lat), Number(el.lng)])!

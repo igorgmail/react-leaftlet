@@ -5,7 +5,8 @@ const carsPageconfig = {
   differentTime: 10 * 60 * 60 * 1000, // 5 часов разница при которой состояние car - disconnect
   dateCompareTime: 60 * 1000, // Разница времени от и до, если меньше то форма disable, сейчас 1 минута
   historyMarkerRadius: 6, // Радиус точки маршрута авто на карте история
-  historyLineWeight: 3 // Толщина линий маршрута авто на карте история
+  historyLineWeight: 3, // Толщина линий маршрута авто на карте история
+  dilutionArrayCount: 4 // На сколько "разбавляем" точки истории авто (например сейчас отобразиться первая, последняя, и каждая четвертая координата)
 }
 
 export default carsPageconfig;

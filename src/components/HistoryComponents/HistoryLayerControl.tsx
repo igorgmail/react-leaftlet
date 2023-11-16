@@ -18,7 +18,7 @@ const HistoryLayerControl = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
-
+  const dataFromDateForm = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -47,7 +47,6 @@ const HistoryLayerControl = () => {
           </IconButton>
         </Tooltip>
       </Control>
-
 
       <Menu
         anchorEl={anchorEl}

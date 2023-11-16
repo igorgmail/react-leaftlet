@@ -6,7 +6,7 @@ export interface ICompanyData {
 }
 
 // Объект car приходит с сервера
-export interface ICarObject {
+export type ICarObject = {
   car_id: number,
   car_name: string,
   lat: string | number,
@@ -18,7 +18,7 @@ export interface ICarObject {
   last_track: string | number
 }
 // Для store
-export interface ICompanyName {
+export type ICompanyName = {
   company_name: string,
   company_id: string | number,
 }
@@ -30,19 +30,19 @@ export interface IDataAllCarsForMenu {
   cars: IOneCarForMenu[]
 }
 // данные одного car для store и carMenu
-export interface IOneCarForMenu {
+export type IOneCarForMenu = {
   car_id: number,
   car_name: string,
   checked: boolean,
   disconnect: boolean,
 }
 // Для store
-export interface ICarsFilter {
+export type ICarsFilter = {
   carChoose_id: number,
   carChoose_value: boolean,
 }
 // Данные приходят с сервера - история 
-export interface IHistoryDataFromServer {
+export type IHistoryDataFromServer = {
   from: string | null,
   to: string | null,
   car_id: string | null,
@@ -50,7 +50,7 @@ export interface IHistoryDataFromServer {
   points: IHistoryPoints[]
 }
 // приходит с сервера массив таких объектов
-export interface IHistoryCar {
+export type IHistoryCar = {
   timestamp: string,
   lat: string,
   lng: string,
@@ -59,17 +59,19 @@ export interface IHistoryCar {
   speed: string
 }
 // приходит с сервера массив таких объектов
-export interface IHistoryPoints {
+export type IHistoryPoints = {
   name: string,
   lat: string,
   lng: string,
   radius: string
 }
 // Данные которые получаем с формы date history
-export interface IDataFromDateForm {
+export type IDataFromDateForm = {
   car_id: string | number,
   carName: string,
   dataFromIso: string,
   dataToIso: string,
-  localOffset: number,
+  localOffset: number, //Разница местного часового пояса с мировым в минутах(3 часа -> 180)
 }
+
+// 
