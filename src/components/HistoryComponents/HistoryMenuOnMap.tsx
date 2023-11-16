@@ -8,16 +8,19 @@ import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
 import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
 
-interface IHistoryMenu {
-  car: ICarObject
+import style from './style.module.css'
+
+
+interface IHistoryMenuFromOnMapProps {
+  car_history: IDataFromDateForm
 }
 
 
-const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
-  console.log("▶ ⇛HistoryMenu car:", car);
+const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
+  console.log("▶ ⇛HistoryMenu car:", car_history);
   console.log("---Render HistoryMenu");
   const dispatch = useAppDispatch()
-  const parcId = useAppSelector((store) => store.carsMap.companyName?.company_id)
+  const dataFromDateForm = useAppSelector((store) => store.carsMap.carsItemFromHistoryForm)
   // console.log("DateTime.local()", DateTime.local());
   // console.log("DateTime.local().toISO()", DateTime.local().toISO());
   // console.log("DateTime.local().toISO()", DateTime.local().toISO());
@@ -65,6 +68,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
     event.preventDefault()
 
     const selectedDateFor = event.target.value;
+    console.log("▶ ⇛ selectedDateFor:", selectedDateFor);
 
     setDateMsForState((current: any) => current = selectedDateFor)
     setValidDateCompare(compareDate(selectedDateFor, datMsToState))
@@ -107,7 +111,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         InputLabelProps={{ shrink: true, required: true }}
         type="datetime-local"
         // defaultValue={dateServices.getTimeForDefaultValueInput(dateServices.getMsMidnight())}
-        value={dateMsForState}
+        value={car_history.dataFromIso.slice(0, 16) || ''}
         inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
         size="small"
         onChange={handleChooseDateFor}
@@ -123,7 +127,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         InputLabelProps={{ shrink: true, required: true }}
         type="datetime-local"
         // defaultValue={dateServices.getTimeForDefaultValueInput(Date.now())}
-        value={datMsToState}
+        value={car_history.dataToIso.slice(0, 16) || ''}
         size="small"
         inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
         onChange={handleChooseDateTo}
@@ -142,6 +146,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         aria-controls={open ? 'account-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
+        className={style.menuIcon} sx={{ width: 20, height: 20 }}
       >
         <IconHistory />
       </IconButton>
@@ -174,7 +179,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
 
           <Stack display={'flex'} flexDirection={'row'} justifyContent={'center'}
             gap={'20px'} alignItems={'center'}>
-            <Typography variant="subtitle2">{car.car_name}</Typography>
+            <Typography variant="subtitle2">{car_history.carName}</Typography>
             <IconCar size='20px'></IconCar>
           </Stack>
 
@@ -184,9 +189,9 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         <Stack display={'flex'} flexDirection={'column'} gap={'5px'} m={'10px'} >
           <form name={'dateForm'} action='/cars'
             onSubmit={onSubmitHandler}
-            data-parcId={parcId}
-            data-carid={car.car_id}
-            data-carName={car.car_name}
+            data-parcId={car_history.park_id}
+            data-carid={car_history.car_id}
+            data-carName={car_history.carName}
           >
             <Stack display={'flex'} flexDirection={'row'} gap={'20px'} m={'10px'}
               sx={{
@@ -205,7 +210,7 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
             >
               <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
                 До
-          </Stack>
+              </Stack>
               {textField_to()}
             </Stack>
             <Stack>
@@ -223,4 +228,4 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
 
 
 
-export default HistoryMenu 
+export default HistoryMenuOnMap  

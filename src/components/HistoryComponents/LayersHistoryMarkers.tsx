@@ -21,7 +21,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
   const [historyBounds, setHistoruBounds] = useState()
   // const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
   console.log("---Render LayersHistoryMarkers");
-
+  const [iconRadius, setIconRadius] = useState(carsPageconfig.historyMarkerRadius) // defualt 6
   const dispatch = useAppDispatch()
   // const carsMapHistotyItem = useAppSelector((state) => state.carsMap?.carsMapHistotyItem);
 
@@ -35,12 +35,19 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     }
   }, [map])
 
-  const r = carsPageconfig.historyMarkerRadius
+  map.on('zoom', function () {
+    const carMapZoom = map.getZoom()
+    if (carMapZoom > 15) setIconRadius(6)
+    if (carMapZoom < 15) setIconRadius(3)
+  });
+
   const createPointIcon = () => {
     return new L.DivIcon({
       className: 'custom-point-icon',
-      html: `<svg width="${r * 2}" height="${r * 2}"><circle cx="${r}" cy="${r}" r="${r}" fill="red" /></svg>`,
-      iconSize: [10, 10],
+      html: `<svg width="${iconRadius * 4}" height="${iconRadius * 4}"><circle cx="${iconRadius}" cy="${iconRadius}" r="${iconRadius}" fill="red" /></svg>`,
+      // iconSize: [8, 8],
+      iconAnchor: [iconRadius, iconRadius]
+
     });
   };
 
@@ -49,7 +56,8 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
     <PointMarker
       pane={"historyMapPane"}
       position={[Number(historyFromServer.lat), Number(historyFromServer.lng)]}
-      icon={createPointIcon()}
+      icon={createPointIcon()
+      }
     // riseOnHover
     >
 

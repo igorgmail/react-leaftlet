@@ -67,6 +67,7 @@ export type IHistoryPoints = {
 }
 // Данные которые получаем с формы date history
 export type IDataFromDateForm = {
+  park_id: string | number
   car_id: string | number,
   carName: string,
   dataFromIso: string,

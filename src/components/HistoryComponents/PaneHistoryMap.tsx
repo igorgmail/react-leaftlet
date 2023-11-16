@@ -66,7 +66,7 @@ const PaneHistoryMap = () => {
   function dilutionArrayPoints(arr: IHistoryCar[], num: number) { // num на сколько "разбавляем" 
 
     return arr.filter((el: IHistoryCar, ind: number, arr) => {
-      if (ind === 0 || ind === arr.length) return el
+      if (ind === 0 || ind === arr.length - 1) return el
       if (ind % num === 0) return el
     })
   }
@@ -109,7 +109,12 @@ const PaneHistoryMap = () => {
 
         // Создаем линии
         const lineArray: L.LatLngExpression[] = historyServerData?.history.map((el) => [Number(el.lat), Number(el.lng)])!
-        const polyline = L.polyline(lineArray, { color: 'red', weight: carsPageconfig.historyLineWeight, lineCap: 'square' })
+        const polyline = L.polyline(lineArray, {
+          color: 'red',
+          weight: carsPageconfig.historyLineWeight,
+          lineCap: 'square',
+          // dashArray: '20, 5' // пунктир
+        })
         polilineRef.current = polyline
 
       } catch (error) {
@@ -200,6 +205,12 @@ const PaneHistoryMap = () => {
     })
 
   }, [forFitBounds])
+
+  // map.on('zoom', function () {
+  //   const carMapZoom = map.getZoom()
+  //   console.log('Zoom', map.getZoom());
+  //   if (carMapZoom > 16) carsPageconfig.historyMarkerRadius = 6
+  // });
 
 
   // Удаляем Control
