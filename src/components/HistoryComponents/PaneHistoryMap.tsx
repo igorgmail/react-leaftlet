@@ -174,6 +174,7 @@ const PaneHistoryMap = () => {
     return () => {
       polilineRef.current?.remove()
       polilineRef.current = null
+      setHistoryDataLoad(false)
     }
   }, [carsItemFromHistoryForm])
 
