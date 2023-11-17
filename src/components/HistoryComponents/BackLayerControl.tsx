@@ -13,6 +13,7 @@ import { IconHistory } from './IconComponent/IconHistory';
 
 const BackLayerControl = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  console.log("--Render Control Back");
 
   const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
   const dispatch = useAppDispatch()
@@ -45,4 +46,4 @@ const BackLayerControl = () => {
   );
 }
 
-export default React.memo(BackLayerControl);
+export default BackLayerControl;

@@ -1,16 +1,16 @@
 import React, { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Marker as LeafletMarker, Tooltip, useMap } from 'react-leaflet';
 import { renderToString } from 'react-dom/server'
+import { DateTime } from "luxon";
 
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { store } from '../../store'
 import carsPageconfig from './lib/config';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
-import { ICarObject } from '../../types/carsTypes';
+import { ICarObject, IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 import { IconDisconnect } from './IconDisconnect';
 import { render } from 'react-dom';
-import { connect } from 'react-redux'
 import HistoryMenu from '../HistoryComponents/HistoryMenu';
 import isHasToushScreen from './lib/isMobile';
 import { Provider } from 'react-redux/es/exports';
@@ -36,7 +36,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
   // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
   const carsFilter = useAppSelector((state) => state.carsMap.carsFilter);
-
+  const carCompanyData = useAppSelector((state) => state.carsMap.companyName)
   // Что бы изменить размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
   const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
@@ -120,8 +120,22 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     const portalContainer = document.createElement('div');
     rootEl.appendChild(portalContainer);
 
+    // Создаем объект с данными об авто для передачи в HistoryMenu
+    // TODO Оптимизировать, возможно вынести в Pane
+    const dataAboutCar: TDataAboutCarForHistoryMenu = {
+      company_id: carCompanyData?.company_id || '0',
+      company_name: carCompanyData?.company_name || 'noname',
+      car_id: car.car_id,
+      car_name: car.car_name,
+      // полночь по местному
+      dataFromIso: DateTime.local().startOf('day').toISO()?.slice(0, 16) || '',
+      // местное время
+      dataToIso: DateTime.local().toISO()?.slice(0, 16) || '',
+      // местное смещение часовогот пояса в минутах
+      localOffset: carsPageconfig.defaultLocaloffset,
+    }
     // Рендерим JSX-компонент внутри портала
-    render(<Provider store={store}><HistoryMenu car={car} /></Provider>, portalContainer);
+    render(<Provider store={store}><HistoryMenu car={dataAboutCar} /></Provider>, portalContainer);
 
 
     // Создаем tooltip для отображения скорости маркера
@@ -206,6 +220,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   })
 
   // слушаем событие клик на карте если tooltip открыт
+  // For mobile 
   map.on('click', useCallback((e: any) => {
     const target = e.originalEvent.target as Element
     // L.DomEvent.disableClickPropagation(target)
@@ -216,7 +231,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
         removeHistoryTooltip()
         console.log("Click MAP");
       }
-
       // map.closePopup();
     }
   }, [tooltipHistoryOpen]));

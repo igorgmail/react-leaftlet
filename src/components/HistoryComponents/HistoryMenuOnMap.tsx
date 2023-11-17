@@ -6,18 +6,18 @@ import { IconCar } from './IconComponent/IconCar';
 import { DateTime } from "luxon";
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
-import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
+import { ICarObject, IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
 import style from './style.module.css'
 
 
 interface IHistoryMenuFromOnMapProps {
-  car_history: IDataFromDateForm
+  carData: TDataAboutCarForHistoryMenu
 }
 
 
-const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
-  console.log("▶ ⇛HistoryMenu car:", car_history);
+const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ carData }) => {
+  console.log("▶ ⇛HistoryMenu car:", carData);
   console.log("---Render HistoryMenu");
   const dispatch = useAppDispatch()
   const dataFromDateForm = useAppSelector((store) => store.carsMap.carsItemFromHistoryForm)
@@ -36,8 +36,9 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const [dateMsForState, setDateMsForState] = useState<string>('')
-  const [datMsToState, setDateMsToState] = useState<string>('')
+  //В state строка формат '2023-11-12T23:15'
+  const [dateMsForState, setDateMsForState] = useState<string>(carData.dataFromIso.slice(0, 16) || '')
+  const [dateMsToState, setDateMsToState] = useState<string>(carData.dataToIso.slice(0, 16) || '')
 
   const [validDateCompare, setValidDateCompare] = useState(true)
 
@@ -48,8 +49,8 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
     const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
     // формат '2023-11-12T23:15'
     const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
-    setDateMsForState(dataMidnight)
-    setDateMsToState(dataTo)
+    setDateMsForState(dateMsForState)
+    setDateMsToState(dateMsToState)
 
   };
   const handleClose = () => {
@@ -59,6 +60,7 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
   // Сравнение дат от и до по умолчанию (60 * 1000 - 1 минута)
   const compareDate = (dateOne: string, dateTwo: string) => {
     // '2023-11-12T00:00'
+    // преобразовываем в миллисекунды и сравниваем
     const dateFor = DateTime.fromISO(dateOne).toMillis()
     const dateTo = DateTime.fromISO(dateTwo).toMillis()
     return (dateTo - dateFor) >= carsPageconfig.dateCompareTime
@@ -71,7 +73,7 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
     console.log("▶ ⇛ selectedDateFor:", selectedDateFor);
 
     setDateMsForState((current: any) => current = selectedDateFor)
-    setValidDateCompare(compareDate(selectedDateFor, datMsToState))
+    setValidDateCompare(compareDate(selectedDateFor, dateMsToState))
 
   }
 
@@ -86,12 +88,13 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
     e.preventDefault()
     // Формируем даты по местному времени(которое указали в input)
     // с присвоением часового пояса, в формате ISO
-    const dataFromDateForm: IDataFromDateForm = {
-      park_id: e.target.dataset.parcid,
+    const dataFromDateForm: TDataAboutCarForHistoryMenu = {
+      company_id: e.target.dataset.parcid,
+      company_name: e.target.dataset.parkName,
       car_id: e.target.dataset.carid,
-      carName: e.target.dataset.carname,
-      dataFromIso: DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
-      dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
+      car_name: e.target.dataset.carname,
+      dataFromIso: dateMsForState,// DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
+      dataToIso: dateMsToState, //DateTime.fromISO(e.target.dateTo.value).toISO() || '',
       localOffset: DateTime.local().offset
     }
     console.log("▶ ⇛ dataFromDateForm:!!!", dataFromDateForm);
@@ -111,7 +114,7 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
         InputLabelProps={{ shrink: true, required: true }}
         type="datetime-local"
         // defaultValue={dateServices.getTimeForDefaultValueInput(dateServices.getMsMidnight())}
-        value={car_history.dataFromIso.slice(0, 16) || ''}
+        value={dateMsForState}
         inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
         size="small"
         onChange={handleChooseDateFor}
@@ -127,7 +130,7 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
         InputLabelProps={{ shrink: true, required: true }}
         type="datetime-local"
         // defaultValue={dateServices.getTimeForDefaultValueInput(Date.now())}
-        value={car_history.dataToIso.slice(0, 16) || ''}
+        value={dateMsToState}
         size="small"
         inputProps={{ max: DateTime.local().toISO()?.slice(0, 16) }}
         onChange={handleChooseDateTo}
@@ -169,6 +172,10 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        <Stack display={'flex'} flexDirection={'row'} justifyContent={'start'}>
+          <Typography variant="subtitle2" marginLeft={'10px'}>{carData.company_name}</Typography>
+        </Stack>
+        <Divider />
         <Stack
           display={'flex'} flexDirection={'row'} justifyContent={'space-between'}
           sx={{
@@ -179,7 +186,7 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
 
           <Stack display={'flex'} flexDirection={'row'} justifyContent={'center'}
             gap={'20px'} alignItems={'center'}>
-            <Typography variant="subtitle2">{car_history.carName}</Typography>
+            <Typography variant="subtitle2">{carData.car_name}</Typography>
             <IconCar size='20px'></IconCar>
           </Stack>
 
@@ -189,9 +196,9 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ car_history }) => {
         <Stack display={'flex'} flexDirection={'column'} gap={'5px'} m={'10px'} >
           <form name={'dateForm'} action='/cars'
             onSubmit={onSubmitHandler}
-            data-parcId={car_history.park_id}
-            data-carid={car_history.car_id}
-            data-carName={car_history.carName}
+            data-parcId={carData.company_id}
+            data-carid={carData.car_id}
+            data-carName={carData.car_name}
           >
             <Stack display={'flex'} flexDirection={'row'} gap={'20px'} m={'10px'}
               sx={{

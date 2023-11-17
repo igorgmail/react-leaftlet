@@ -18,9 +18,11 @@ interface ICustomLayerControl {
 }
 const HistoryLayerControl = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  console.log("--Render Contrlo History");
 
   const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
-  const dataFromDateForm = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm)!;
+  const dataFromDateForm = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm);
+  console.log("▶ ⇛ dataFromDateForm:In COntrol", dataFromDateForm);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,7 +47,9 @@ const HistoryLayerControl = () => {
             className={style.menuIconButton}
           >
             {/* <IconHistory className={style.menuIcon} sx={{ width: 20, height: 20 }} /> */}
-            <HistoryMenuOnMap car_history={dataFromDateForm}></HistoryMenuOnMap>
+            {dataFromDateForm &&
+              <HistoryMenuOnMap carData={dataFromDateForm}></HistoryMenuOnMap>
+            }
           </IconButton>
         </Tooltip>
       </Control>
@@ -54,4 +58,4 @@ const HistoryLayerControl = () => {
   );
 }
 
-export default React.memo(HistoryLayerControl);
+export default HistoryLayerControl;

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IDataAllCarsForMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsFilter, IDataFromDateForm } from "../../types/carsTypes";
+import { TDataAboutCarForHistoryMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsFilter, IDataFromDateForm } from "../../types/carsTypes";
 
 type TypeCarsFilter = { [key: number]: boolean } | null;
 
@@ -20,7 +20,7 @@ interface TypeInitialState {
   carsFilter: TypeCarsFilter,
   isConnectFilter: TypeCarsFilter,
   carsMapVariant: TypeCarsMapVariant,
-  carsItemFromHistoryForm: IDataFromDateForm | null
+  carsItemFromHistoryForm: TDataAboutCarForHistoryMenu | null
 }
 
 
@@ -65,7 +65,7 @@ export const carsMapSlice = createSlice({
       state.carsMapVariant = { ...state.carsMapVariant, ...action.payload }
       // return state
     },
-    setCarsItemFromHistoryForm: (state: any, action: PayloadAction<IDataFromDateForm>) => {
+    setCarsItemFromHistoryForm: (state: any, action: PayloadAction<TDataAboutCarForHistoryMenu>) => {
       state.carsItemFromHistoryForm = { ...state.carsItemFromHistoryForm, ...action.payload }
       // return state
     },

@@ -7,7 +7,7 @@ import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { IHistoryDataFromServer, IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
 import { Spinner } from '../MainCars/Spinner';
-import { IDataFromDateForm } from '../../types/carsTypes';
+import { IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
 import isHasToushScreen from '../MainCars/lib/isMobile';
 import getHistoryFetch from './lib/getHistoryFetch';
@@ -72,7 +72,7 @@ const PaneHistoryMap = () => {
   }
 
 
-  async function historyFetchHandler(data: IDataFromDateForm) {
+  async function historyFetchHandler(data: TDataAboutCarForHistoryMenu) {
     // получаем данные с сервера оправляем данные с формы из store
     // Получим либо данные либо пустой объект сформированный в getHistoryFetch
     const historyServerData = await getHistoryFetch(data)
@@ -171,6 +171,10 @@ const PaneHistoryMap = () => {
       historyFetchHandler(carsItemFromHistoryForm)
 
     }
+    return () => {
+      polilineRef.current?.remove()
+      polilineRef.current = null
+    }
   }, [carsItemFromHistoryForm])
 
 
@@ -216,15 +220,17 @@ const PaneHistoryMap = () => {
   // Удаляем Control
   useEffect(() => {
     return () => {
+      console.log("UNMOUNT PAneHIstory");
+
       // Удаляем кнопки control
       const backElement = document.querySelector('[aria-label="Back"]')?.closest('.leaflet-control');
       const historyElement = document.querySelector('[aria-label="History"]')?.closest('.leaflet-control');
       backElement?.remove()
       historyElement?.remove()
-      polilineRef.current?.remove()
-      polilineRef.current = null
+      // polilineRef.current?.remove()
+      // polilineRef.current = null
     }
-  }, [map]);
+  }, [map, carsItemFromHistoryForm]);
 
 
   return (

@@ -23,7 +23,7 @@ async function getCarsFetch(abortController: any): Promise<ICompanyData> {
       console.error('Ошибка при получении данных:', response.statusText);
       // Вернуть пустой объект или выбросить ошибку в зависимости от ваших потребностей
       return {
-        company_name: '',
+        company_name: 'noname',
         company_id: 0,
         cars: []
       };
@@ -33,7 +33,7 @@ async function getCarsFetch(abortController: any): Promise<ICompanyData> {
     // Вернуть пустой объект или выбросить ошибку в зависимости от ваших потребностей
     abortController.abort();
     return {
-      company_name: '',
+      company_name: 'noname',
       company_id: 0,
       cars: []
     };

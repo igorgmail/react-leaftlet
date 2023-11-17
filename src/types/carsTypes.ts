@@ -68,6 +68,7 @@ export type IHistoryPoints = {
 // Данные которые получаем с формы date history
 export type IDataFromDateForm = {
   park_id: string | number
+  park_name: string
   car_id: string | number,
   carName: string,
   dataFromIso: string,
@@ -75,4 +76,13 @@ export type IDataFromDateForm = {
   localOffset: number, //Разница местного часового пояса с мировым в минутах(3 часа -> 180)
 }
 
+export type TDataAboutCarForHistoryMenu = {
+  company_name: string,
+  company_id: string | number,
+  car_id: string | number,
+  car_name: string,
+  dataFromIso: string,
+  dataToIso: string,
+  localOffset: number,
+}
 // 

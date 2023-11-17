@@ -1,23 +1,23 @@
 import React, { FC, useState } from 'react';
-import { IconButton, Menu, Typography, Divider, Stack, Button } from '@mui/material/';
+import { IconButton, Menu, Typography, Divider, Stack, Button, Paper } from '@mui/material/';
 import { TextField } from '@mui/material/';
 import { IconHistory } from './IconComponent/IconHistory';
 import { IconCar } from './IconComponent/IconCar';
 import { DateTime } from "luxon";
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import carsPageconfig from '../MainCars/lib/config';
-import { ICarObject, IDataFromDateForm } from '../../types/carsTypes';
+import { ICarObject, IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
-interface IHistoryMenu {
-  car: ICarObject
+interface IHistoryMenuProps {
+  car: TDataAboutCarForHistoryMenu
 }
 
 
-const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
+const HistoryMenu: FC<IHistoryMenuProps> = ({ car }) => {
   console.log("▶ ⇛HistoryMenu car:", car);
   console.log("---Render HistoryMenu");
   const dispatch = useAppDispatch()
-  const parcId = useAppSelector((store) => store.carsMap.companyName?.company_id)
+  // const parcId = useAppSelector((store) => store.carsMap.companyName?.company_id)
   // console.log("DateTime.local()", DateTime.local());
   // console.log("DateTime.local().toISO()", DateTime.local().toISO());
   // console.log("DateTime.local().toISO()", DateTime.local().toISO());
@@ -40,13 +40,13 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    // Получаем объект Дата и устанавливаем в state
+    // Получаем время и устанавливаем в state
     // формат '2023-11-12T00:00'
-    const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
+    // const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
     // формат '2023-11-12T23:15'
-    const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
-    setDateMsForState(dataMidnight)
-    setDateMsToState(dataTo)
+    // const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
+    setDateMsForState(car.dataFromIso)
+    setDateMsToState(car.dataToIso)
 
   };
   const handleClose = () => {
@@ -82,10 +82,11 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
     e.preventDefault()
     // Формируем даты по местному времени(которое указали в input)
     // с присвоением часового пояса, в формате ISO
-    const dataFromDateForm: IDataFromDateForm = {
-      park_id: e.target.dataset.parcid,
+    const dataFromDateForm: TDataAboutCarForHistoryMenu = {
+      company_id: e.target.dataset.parcid,
+      company_name: e.target.dataset.parcname,
       car_id: e.target.dataset.carid,
-      carName: e.target.dataset.carname,
+      car_name: e.target.dataset.carname,
       dataFromIso: DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
       dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
       localOffset: DateTime.local().offset
@@ -164,6 +165,11 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        <Stack display={'flex'} flexDirection={'row'} justifyContent={'start'}>
+          <Typography variant="subtitle2" marginLeft={'10px'}>{car.company_name}</Typography>
+        </Stack>
+        <Divider />
+
         <Stack
           display={'flex'} flexDirection={'row'} justifyContent={'space-between'}
           sx={{
@@ -184,7 +190,8 @@ const HistoryMenu: FC<IHistoryMenu> = ({ car }) => {
         <Stack display={'flex'} flexDirection={'column'} gap={'5px'} m={'10px'} >
           <form name={'dateForm'} action='/cars'
             onSubmit={onSubmitHandler}
-            data-parcId={parcId}
+            data-parcId={car.company_id}
+            data-parcName={car.company_name}
             data-carid={car.car_id}
             data-carName={car.car_name}
           >

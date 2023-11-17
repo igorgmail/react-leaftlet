@@ -1,10 +1,10 @@
-import { IHistoryDataFromServer, IDataFromDateForm } from "../../../types/carsTypes";
+import { IHistoryDataFromServer, TDataAboutCarForHistoryMenu } from "../../../types/carsTypes";
 import { DateTime } from "luxon";
 
-async function getHistoryFetch(carData: IDataFromDateForm): Promise<IHistoryDataFromServer> {
+async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu): Promise<IHistoryDataFromServer> {
 
   const parc_id = 1
-  const { car_id, carName, dataFromIso, dataToIso, localOffset } = { ...carData }
+  const { car_id, car_name, dataFromIso, dataToIso, localOffset } = { ...carData }
   const url = 'https://user-headers.onrender.com/history'
 
   // Формируем дату без учета часового пояса то есть если по местному 20-00
