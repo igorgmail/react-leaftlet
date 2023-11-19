@@ -21,7 +21,7 @@ function MainCars() {
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
-  const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapVariant);
+  const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
   const mapRef = useRef<L.Map | null>(null)
   const dispatch = useAppDispatch()
@@ -32,7 +32,7 @@ function MainCars() {
   // компонентов
   // window.history.pushState(22, "SOme")
   useEffect(() => {
-    if (carsMapVariant.variant === 'all') {
+    if (carsMapVariant === 'all') {
 
       const abortController = new AbortController();
       const companyData = getCarsFetch(abortController)
@@ -90,9 +90,9 @@ function MainCars() {
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         />
 
-        {String(carsMapVariant.variant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
+        {String(carsMapVariant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
 
-        {String(carsMapVariant.variant) === 'history' && <PaneHistoryMap />}
+        {String(carsMapVariant) === 'history' && <PaneHistoryMap />}
 
         </MapContainer>
     </Box>)

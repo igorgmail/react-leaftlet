@@ -17,7 +17,7 @@ const BackLayerControl = () => {
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    dispatch(carsMapActions.setCarsMapVariant({ variant: 'all' }))
+    dispatch(carsMapActions.setCarsMapConfig({ variant: 'all' }))
   };
 
 

@@ -1,7 +1,9 @@
-import React, { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { DateTime } from "luxon";
+
+
 import { render } from 'react-dom';
 import { Provider } from 'react-redux/es/exports';
-import { DateTime } from "luxon";
 import { renderToString } from 'react-dom/server'
 
 
@@ -47,17 +49,27 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
 
   function timeDifference(dateString: string) {
-    const lastTrack = new Date(dateString)
-    const dif = Date.now() - lastTrack.getTime()
+    // Получаем время (с сервера) в миллисекундах по UTC (last_track: "2023-11-19 13:45:10")
+    const timeLastTrack = DateTime.fromFormat(dateString, "yyyy-MM-dd HH:mm:ss").toUTC()
+    const timeLocalNow = DateTime.now().toUTC()
+    const different = timeLocalNow < timeLastTrack.plus({ hour: 10 })
+    // console.log("---------2--------");
+    // console.log(date);
+    // console.log(DateTime.fromISO(date));
+
+    const timeLastTrackMillis = DateTime.fromFormat(dateString, "yyyy-MM-dd HH:mm:ss").toUTC().toMillis();
+    // Получаем текущее время в миллисекундах по UTC
+    const timeLocalNowMillis = DateTime.now().toUTC().toMillis()
+    // const lastTrack = new Date(dateString)
+    const dif = timeLocalNowMillis - timeLastTrackMillis
     const oneHour = carsPageconfig.differentTime // Значение в config.js
 
-    return dif < oneHour // Если с последнего track прошло меньше [часа] - true иначе false
+    return different // Если с последнего track прошло меньше [часа] - true иначе false
   }
 
   // Обработка событий мыши на маркере
 
   const mouseOverMarkerHandler = () => {
-    console.log("Mouse IN Marker");
     if (!isMobile) {
       addNewTooltip()
       addHistoryTooltip()
@@ -65,14 +77,12 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   }
 
   const mouseOutMarkerHandler = () => {
-    console.log("Mouse Out Marker");
     removeNewTooltip()
 
   }
 
   const mouseClickMarkerHandler = () => {
 
-    console.log("▶ ⇛ isMobile:", isMobile);
     // Если mobile
     if (isMobile) {
 
@@ -136,7 +146,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       // местное время
       dataToIso: DateTime.local().toISO()?.slice(0, 16) || '',
       // местное смещение часовогот пояса в минутах
-      localOffset: carsPageconfig.defaultLocaloffset,
+      localOffset: carsPageconfig.defaultTimeLocaloffset,
     }
     // Рендерим JSX-компонент внутри портала
     render(<Provider store={store}><HistoryMenu carData={dataAboutCar} /></Provider>, portalContainer);

@@ -1,10 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import carsPageconfig from '../../components/MainCars/lib/config';
 import { TDataAboutCarForHistoryMenu, ICompanyData, IOneCarForMenu, ICompanyName, ICarsFilter, IDataFromDateForm } from "../../types/carsTypes";
 
 type TypeCarsFilter = { [key: number]: boolean } | null;
 
-type TypeCarsMapVariant = {
-  variant: 'all' | 'history'
+type TypeCarsMapConfig = {
+  variant: 'all' | 'history',
+  userTimeOffset?: string,
 }
 // type TCarMapItem = {
 //   car_id: string | number,
@@ -19,7 +21,7 @@ interface TypeInitialState {
   forMenu: IOneCarForMenu[] | null | undefined,
   carsFilter: TypeCarsFilter,
   isConnectFilter: TypeCarsFilter,
-  carsMapVariant: TypeCarsMapVariant,
+  carsMapConfig: TypeCarsMapConfig,
   carsItemFromHistoryForm: TDataAboutCarForHistoryMenu | null
 }
 
@@ -29,7 +31,7 @@ const initialState: TypeInitialState = {
   forMenu: null,
   carsFilter: null,
   isConnectFilter: null,
-  carsMapVariant: { variant: 'all' },
+  carsMapConfig: { variant: 'all', userTimeOffset: carsPageconfig.defaultTimeLocaloffset },
   carsItemFromHistoryForm: null
 }
 
@@ -61,8 +63,8 @@ export const carsMapSlice = createSlice({
       state.isConnectFilter = { ...state.isConnectFilter, ...action.payload }
       // return state
     },
-    setCarsMapVariant: (state: any, action: PayloadAction<TypeCarsMapVariant>) => {
-      state.carsMapVariant = { ...state.carsMapVariant, ...action.payload }
+    setCarsMapConfig: (state: any, action: PayloadAction<TypeCarsMapConfig>) => {
+      state.carsMapConfig = { ...state.carsMapConfig, ...action.payload }
       // return state
     },
     setCarsItemFromHistoryForm: (state: any, action: PayloadAction<TDataAboutCarForHistoryMenu>) => {

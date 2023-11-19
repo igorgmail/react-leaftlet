@@ -101,7 +101,7 @@ const PaneHistoryMap = () => {
         historyServerData.history = [...filterArrayExcludeZero(historyServerData.history)]
 
         // ? Здесь возможно разбавление массива координат
-        if (isMobile) historyServerData.history = [...dilutionArrayPoints(historyServerData.history, carsPageconfig.dilutionArrayCount)]
+        if (isMobile && carsPageconfig.isdilution) historyServerData.history = [...dilutionArrayPoints(historyServerData.history, carsPageconfig.dilutionArrayCount)]
 
 
         // Создаем линии
@@ -218,7 +218,6 @@ const PaneHistoryMap = () => {
   // Удаляем Control
   useEffect(() => {
     return () => {
-      console.log("UNMOUNT PAneHIstory");
 
       // Удаляем кнопки control
       const backElement = document.querySelector('[aria-label="Back"]')?.closest('.leaflet-control');

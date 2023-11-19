@@ -83,6 +83,6 @@ export type TDataAboutCarForHistoryMenu = {
   car_name: string,
   dataFromIso: string,
   dataToIso: string,
-  localOffset: number,
+  localOffset: string,
 }
 // 

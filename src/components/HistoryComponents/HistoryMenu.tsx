@@ -91,9 +91,9 @@ const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
       car_name: e.target.dataset.carname,
       dataFromIso: DateTime.fromISO(e.target.dateFrom.value).toISO() || '',
       dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
-      localOffset: DateTime.local().offset
+      localOffset: String(DateTime.local().offset)
     }
-    dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
+    dispatch(carsMapActions.setCarsMapConfig({ variant: 'history' }))
     dispatch(carsMapActions.setCarsItemFromHistoryForm(dataFromDateForm))
 
     handleClose()

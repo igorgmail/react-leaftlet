@@ -25,7 +25,7 @@ const HistoryLayerControl = () => {
     dataToIso: dataFromDateForm!.dataToIso.slice(0, 16),
     car_id: dataFromDateForm?.car_id || '0',
     car_name: dataFromDateForm?.car_name || '',
-    localOffset: dataFromDateForm?.localOffset || 0,
+    localOffset: dataFromDateForm?.localOffset || '0',
 
   }
 
