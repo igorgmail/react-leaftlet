@@ -56,8 +56,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
       }
     // riseOnHover
     >
-
-      <Tooltip
+      {/* <Tooltip
         pane='historyMapPane'
         eventHandlers={{
           // add: () => onLoadTooltip()
@@ -67,7 +66,7 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
         direction="top" opacity={1}
       >
         {historyFromServer.timestamp}
-      </Tooltip>
+      </Tooltip> */}
     </PointMarker>
   )
 }
