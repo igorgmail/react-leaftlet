@@ -24,7 +24,7 @@ async function getCarsFetch(abortController: any): Promise<ICompanyData> {
       // Вернуть пустой объект или выбросить ошибку в зависимости от ваших потребностей
       return {
         company_name: 'noname',
-        company_id: 0,
+        company_id: '0',
         cars: []
       };
     }
@@ -34,7 +34,7 @@ async function getCarsFetch(abortController: any): Promise<ICompanyData> {
     abortController.abort();
     return {
       company_name: 'noname',
-      company_id: 0,
+      company_id: '0',
       cars: []
     };
   }

@@ -46,9 +46,9 @@ const HistoryMenuOnMap: FC<IHistoryMenuFromOnMapProps> = ({ carData }) => {
     setAnchorEl(event.currentTarget);
     // Получаем объект Дата и устанавливаем в state
     // формат '2023-11-12T00:00'
-    const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
+    // const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
     // формат '2023-11-12T23:15'
-    const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
+    // const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
     setDateMsForState(dateMsForState)
     setDateMsToState(dateMsToState)
 

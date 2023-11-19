@@ -123,7 +123,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     // Создаем объект с данными об авто для передачи в HistoryMenu
     // TODO Оптимизировать, возможно вынести в Pane
     const dataAboutCar: TDataAboutCarForHistoryMenu = {
-      company_id: carCompanyData?.company_id || '0',
+      company_id: carCompanyData?.company_id,
       company_name: carCompanyData?.company_name || 'noname',
       car_id: car.car_id,
       car_name: car.car_name,
@@ -135,7 +135,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       localOffset: carsPageconfig.defaultLocaloffset,
     }
     // Рендерим JSX-компонент внутри портала
-    render(<Provider store={store}><HistoryMenu car={dataAboutCar} /></Provider>, portalContainer);
+    render(<Provider store={store}><HistoryMenu carData={dataAboutCar} /></Provider>, portalContainer);
 
 
     // Создаем tooltip для отображения скорости маркера

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-
+import { useLocation } from 'react-router-dom';
 import { Box, Stack, CircularProgress } from '@mui/material';
 import { Spinner } from './Spinner';
 import L from 'leaflet';
@@ -28,11 +28,12 @@ function MainCars() {
 
   const mapRef = useRef<L.Map | null>(null)
   const dispatch = useAppDispatch()
+  const location = useLocation();
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
-
+  window.history.pushState(22, "SOme")
   useEffect(() => {
     if (carsMapVariant.variant === 'all') {
       console.log("MainCARS USEEFFECT");

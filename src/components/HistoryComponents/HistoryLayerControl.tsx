@@ -10,7 +10,6 @@ import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconHistory } from './IconComponent/IconHistory';
 import HistoryMenu from './HistoryMenu';
-import HistoryMenuOnMap from './HistoryMenuOnMap';
 
 interface ICustomLayerControl {
   // menuHeaderData?: ICompanyName,
@@ -28,7 +27,18 @@ const HistoryLayerControl = () => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const newDataFromDateForm = {
+    ...dataFromDateForm,
+    company_id: dataFromDateForm?.company_id || '0',
+    company_name: dataFromDateForm?.company_name || 'noname',
+    dataFromIso: dataFromDateForm!.dataFromIso.slice(0, 16),
+    dataToIso: dataFromDateForm!.dataToIso.slice(0, 16),
+    car_id: dataFromDateForm?.car_id || '0',
+    car_name: dataFromDateForm?.car_name || '',
+    localOffset: dataFromDateForm?.localOffset || 0,
 
+  }
+  console.log("▶ ⇛ newDataFromDateForm:", newDataFromDateForm);
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -48,7 +58,7 @@ const HistoryLayerControl = () => {
           >
             {/* <IconHistory className={style.menuIcon} sx={{ width: 20, height: 20 }} /> */}
             {dataFromDateForm &&
-              <HistoryMenuOnMap carData={dataFromDateForm}></HistoryMenuOnMap>
+              <HistoryMenu carData={newDataFromDateForm}></HistoryMenu>
             }
           </IconButton>
         </Tooltip>

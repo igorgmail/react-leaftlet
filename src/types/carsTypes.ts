@@ -1,7 +1,7 @@
 // Данные приходят с сервера 
 export interface ICompanyData {
   company_name: string,
-  company_id: string | number,
+  company_id: string | undefined,
   cars: ICarObject[]
 }
 
@@ -20,13 +20,13 @@ export type ICarObject = {
 // Для store
 export type ICompanyName = {
   company_name: string,
-  company_id: string | number,
+  company_id: string | undefined,
 }
 
 // Для store для меню cars
 export interface IDataAllCarsForMenu {
   company_name: string,
-  company_id: string | number,
+  company_id: string | undefined,
   cars: IOneCarForMenu[]
 }
 // данные одного car для store и carMenu
@@ -78,7 +78,7 @@ export type IDataFromDateForm = {
 
 export type TDataAboutCarForHistoryMenu = {
   company_name: string,
-  company_id: string | number,
+  company_id: string | undefined,
   car_id: string | number,
   car_name: string,
   dataFromIso: string,
