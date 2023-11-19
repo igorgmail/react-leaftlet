@@ -1,42 +1,38 @@
 import { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import { useLocation } from 'react-router-dom';
-import { Box, Stack, CircularProgress } from '@mui/material';
-import { Spinner } from './Spinner';
-import L from 'leaflet';
-import 'leaflet-rotatedmarker';
+// import { useLocation } from 'react-router-dom';
 
-import PainCars from './PainCars';
-import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import 'leaflet-rotatedmarker';
+import L from 'leaflet';
+
+import { useAppDispatch, useAppSelector, dataActions } from '../../store';
 import getCarsFetch from './lib/fetchGetCars';
-import style from './style.module.css'
-import { useAppDispatch, useAppSelector, carsMapActions, dataActions } from '../../store';
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
 
+import { Box } from '@mui/material';
+import { Spinner } from '../HistoryComponents/IconComponent/Spinner';
+import PainCars from './PainCars';
+import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
 
 
 
 function MainCars() {
-  console.log("--Render MainsCar");
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
-  const [boundsForMap, setBoundsForMap] = useState()
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapVariant);
-  console.log("▶ ⇛ carsMapVariant:", carsMapVariant);
 
   const mapRef = useRef<L.Map | null>(null)
   const dispatch = useAppDispatch()
-  const location = useLocation();
-  //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
+  // const location = useLocation();
+  //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars>
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
-  window.history.pushState(22, "SOme")
+  // window.history.pushState(22, "SOme")
   useEffect(() => {
     if (carsMapVariant.variant === 'all') {
-      console.log("MainCARS USEEFFECT");
 
       const abortController = new AbortController();
       const companyData = getCarsFetch(abortController)

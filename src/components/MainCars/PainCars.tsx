@@ -1,17 +1,17 @@
 import { useState, useEffect, useMemo, FC } from 'react';
+
 import { Pane, useMap } from 'react-leaflet';
+import 'leaflet-rotatedmarker';
+import L from 'leaflet';
 
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
+import getCarsFetch from './lib/fetchGetCars';
+import isHasToushScreen from './lib/isMobile';
+import carsPageconfig from './lib/config';
 
-import L from 'leaflet';
-import 'leaflet-rotatedmarker';
 import { ICarObject, ICompanyData, ICompanyName } from '../../types/carsTypes';
 
 import MarkerCar from './MarkerCar';
-import getCarsFetch from './lib/fetchGetCars';
-import carsPageconfig from './lib/config';
-import isHasToushScreen from './lib/isMobile';
-
 import CarsLayerControl from '../MenuCars/CarsLayerControl';
 
 type IPainCars = L.LatLngBoundsExpression | [][] | any
@@ -19,12 +19,9 @@ type IPainCars = L.LatLngBoundsExpression | [][] | any
 const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   // mapBounds - массив массивов координат для определения расположения видимой карты
   // carsDataStart - массив объектов с данными cars для первого рендере
-  console.log("--Render PainsCars");
 
   const dispatch = useAppDispatch()
   const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
-
-  // console.log("▶ ⇛ carsForMenuFromStore:", carsForMenuFromStore);
 
   const [companyData, setCompanyData] = useState<ICompanyData>(carsDataStart)
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
@@ -97,19 +94,6 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     dispatch(carsMapActions.setCarsFilterMarkers(makeFilterObject(carsDataStart.cars)))
   }, [carsDataStart, dispatch])
 
-  // // Подписываемся на событие изменения масштаба
-  // useLayoutEffect(() => {
-  //   map.on('zoom', updateMapWhenNoUser);
-  //   map.on('moveend', updateMapWhenNoUser);
-
-  //   // Отписываемся от события при размонтировании компонента
-  //   return () => {
-  //     map.off('zoom', updateMapWhenNoUser);
-  //     map.off('moveend', updateMapWhenNoUser);
-  //   };
-  // }, [map, updateMapWhenNoUser]);
-  // leaflet-marker-icon leaflet-zoom-animated leaflet-interactive
-
 
   // Смещение карты при первой загрузке на велечину тултипа
   useEffect(() => {
@@ -132,12 +116,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   return (
     <div>
 
-      <CarsLayerControl key={menuHeaderData.company_id}>
-        {/* carsForMenuFromStore бурем из store он меняется изи menuItem при выборе checkbox */}
-        {/* {isMenuOpen && carsForMenuFromStore?.map((carData) =>
-            (<MenuItemCar carData={carData} key={`menuItem` + carData.car_id}></MenuItemCar>)
-          )} */}
-      </CarsLayerControl>
+      <CarsLayerControl key={menuHeaderData.company_id} />
 
       <Pane name="carsMapPane" style={{ zIndex: 500, width: '100vh', }}>
         {companyData && filterForMarkers.map((el: any) => {

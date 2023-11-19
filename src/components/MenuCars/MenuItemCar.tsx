@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react';
 import { Stack, Checkbox, Box, FormControlLabel } from '@mui/material';
 import { IOneCarForMenu } from '../../types/carsTypes';
-import { IconDisconnect } from '../MainCars/IconDisconnect';
+import { IconDisconnect } from '../HistoryComponents/IconComponent/IconDisconnect';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 
 import style from './style.module.css'

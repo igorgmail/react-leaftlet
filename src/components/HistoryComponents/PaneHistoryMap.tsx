@@ -1,27 +1,25 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { Pane, useMap, LayerGroup } from 'react-leaflet';
 import { v4 as uuidv4 } from 'uuid';
-import { useAppDispatch, useAppSelector } from '../../store';
 
+import { Pane, useMap, LayerGroup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
-import { IHistoryDataFromServer, IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
-import { Spinner } from '../MainCars/Spinner';
-import { IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
-import isHasToushScreen from '../MainCars/lib/isMobile';
+import { useAppSelector } from '../../store';
 import getHistoryFetch from './lib/getHistoryFetch';
+import isHasToushScreen from '../MainCars/lib/isMobile';
+import carsPageconfig from '../MainCars/lib/config';
 
+import { TDataAboutCarForHistoryMenu, IHistoryDataFromServer, IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
+
+import { Spinner } from './IconComponent/Spinner';
 import LayerPoints from './LayerPoints';
 import LayersHistoryMarkers from './LayersHistoryMarkers';
 import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
-import carsPageconfig from '../MainCars/lib/config';
 // type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PaneHistoryMap = () => {
-
-  console.log("'--Render PainHistory");
 
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
@@ -31,7 +29,6 @@ const PaneHistoryMap = () => {
 
   const polilineRef = useRef<L.Polyline | null>(null)
 
-  const dispatch = useAppDispatch()
   const carsItemFromHistoryForm = useAppSelector((state) => state.carsMap?.carsItemFromHistoryForm);
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false

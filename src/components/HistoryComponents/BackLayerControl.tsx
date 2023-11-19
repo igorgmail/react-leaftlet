@@ -1,26 +1,22 @@
-import React, { useState, FC, ReactComponentElement } from 'react'
-import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
+import React, { useState } from 'react'
 
-import L from 'leaflet';
 import Control from 'react-leaflet-custom-control'
+
+import { useAppDispatch, carsMapActions } from '../../store';
+
+import { Tooltip, IconButton } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import style from './style.module.css'
 
-import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { IconHistory } from './IconComponent/IconHistory';
-
-
 const BackLayerControl = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  console.log("--Render Control Back");
 
-  const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
+  // const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
   const dispatch = useAppDispatch()
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("BACK");
     dispatch(carsMapActions.setCarsMapVariant({ variant: 'all' }))
   };
 

@@ -1,27 +1,17 @@
-import React, { useState, FC, ReactComponentElement } from 'react'
-import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
-
-import L from 'leaflet';
+import React, { useState } from 'react'
 import Control from 'react-leaflet-custom-control'
+
+import { useAppSelector } from '../../store';
+
+import { Tooltip, IconButton } from '@mui/material';
+import HistoryMenu from './HistoryMenu';
 
 import style from './style.module.css'
 
-import { Menu, Stack, Tooltip, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { IconHistory } from './IconComponent/IconHistory';
-import HistoryMenu from './HistoryMenu';
-
-interface ICustomLayerControl {
-  // menuHeaderData?: ICompanyName,
-  children?: React.ReactNode,
-}
 const HistoryLayerControl = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  console.log("--Render Contrlo History");
 
-  const menuHeaderData = useAppSelector((state) => state.carsMap.companyName);
   const dataFromDateForm = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm);
-  console.log("▶ ⇛ dataFromDateForm:In COntrol", dataFromDateForm);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -38,7 +28,7 @@ const HistoryLayerControl = () => {
     localOffset: dataFromDateForm?.localOffset || 0,
 
   }
-  console.log("▶ ⇛ newDataFromDateForm:", newDataFromDateForm);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -56,7 +46,6 @@ const HistoryLayerControl = () => {
             aria-expanded={open ? 'true' : undefined}
             className={style.menuIconButton}
           >
-            {/* <IconHistory className={style.menuIcon} sx={{ width: 20, height: 20 }} /> */}
             {dataFromDateForm &&
               <HistoryMenu carData={newDataFromDateForm}></HistoryMenu>
             }

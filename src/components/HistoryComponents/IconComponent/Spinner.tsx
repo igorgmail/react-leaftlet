@@ -1,5 +1,4 @@
 import { Box, Stack, CircularProgress } from '@mui/material';
-import { FC } from 'react';
 
 interface ISpinnerProps {
   className?: string

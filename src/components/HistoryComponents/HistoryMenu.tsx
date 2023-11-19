@@ -1,15 +1,17 @@
 import React, { FC, useState } from 'react';
-import { IconButton, Menu, Typography, Divider, Stack, Button, Paper } from '@mui/material/';
+import { DateTime } from "luxon";
+
+import { useAppDispatch, carsMapActions } from '../../store';
+import carsPageconfig from '../MainCars/lib/config';
+
+import { TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
+
+import { IconButton, Menu, Typography, Divider, Stack, Button } from '@mui/material/';
 import { TextField } from '@mui/material/';
 import { IconHistory } from './IconComponent/IconHistory';
 import { IconCar } from './IconComponent/IconCar';
-import { DateTime } from "luxon";
-import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
-import carsPageconfig from '../MainCars/lib/config';
-import { ICarObject, IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
 import style from './style.module.css'
-
 
 interface IHistoryMenuProps {
   carData: TDataAboutCarForHistoryMenu
@@ -17,8 +19,7 @@ interface IHistoryMenuProps {
 
 
 const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
-  console.log("▶ ⇛HistoryMenu car:", carData);
-  console.log("---Render HistoryMenu");
+
   const dispatch = useAppDispatch()
   // const parcId = useAppSelector((store) => store.carsMap.companyName?.company_id)
   // console.log("DateTime.local()", DateTime.local());
@@ -37,19 +38,14 @@ const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
   const open = Boolean(anchorEl);
 
   const [dateMsForState, setDateForState] = useState<string | any>(carData.dataFromIso || '')
-  console.log("▶ ⇛ dateMsForState:", dateMsForState);
   const [datMsToState, setDateToState] = useState<string | any>(carData.dataToIso || '')
-  console.log("▶ ⇛ datMsToState:", datMsToState);
 
   const [validDateCompare, setValidDateCompare] = useState(true)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     // Получаем время и устанавливаем в state
-    // формат '2023-11-12T00:00'
-    // const dataMidnight: string = DateTime.local().startOf('day').toISO()?.slice(0, 16) || ''
     // формат '2023-11-12T23:15'
-    // const dataTo: string = DateTime.local().toISO()?.slice(0, 16) || ''
     setDateForState(carData.dataFromIso)
     setDateToState(carData.dataToIso)
 
@@ -70,7 +66,6 @@ const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
     event.preventDefault()
 
     const selectedDateFor = event.target.value;
-    console.log("▶ ⇛ selectedDateFor:", selectedDateFor);
 
     setDateForState((current: any) => current = selectedDateFor)
     setValidDateCompare(compareDate(selectedDateFor, datMsToState))
@@ -98,7 +93,6 @@ const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
       dataToIso: DateTime.fromISO(e.target.dateTo.value).toISO() || '',
       localOffset: DateTime.local().offset
     }
-    console.log("▶ ⇛ dataFromDateForm:!!!", dataFromDateForm);
     dispatch(carsMapActions.setCarsMapVariant({ variant: 'history' }))
     dispatch(carsMapActions.setCarsItemFromHistoryForm(dataFromDateForm))
 
@@ -233,9 +227,6 @@ const HistoryMenu: FC<IHistoryMenuProps> = ({ carData }) => {
     </div>
   );
 }
-
-// export default connect(mapStateToProps)(MainCars);
-
 
 
 export default HistoryMenu 

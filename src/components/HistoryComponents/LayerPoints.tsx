@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Circle, Tooltip } from 'react-leaflet';
 
+import { Circle, Tooltip } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
+
 import { IHistoryPoints } from '../../types/carsTypes';
 
 type TLayerPointsProps = {

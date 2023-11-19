@@ -13,12 +13,12 @@ async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu): Promise<IH
   const to = DateTime.fromISO(dataToIso).toFormat('yyyy-MM-dd HH:mm')
   const urlString = url + `?park_id=${parc_id}&car_id=${car_id}&from=${from}&to=${to}`
 
-  console.log("Данные для запроса с сервера");
-  console.log("---------------------------");
-  console.log("▶ ⇛ car_id:", car_id);
-  console.log("▶ ⇛ from:", from);
-  console.log("▶ ⇛ to:", to);
-  console.log("---------------------------");
+  // console.log("Данные для запроса с сервера");
+  // console.log("---------------------------");
+  // console.log("▶ ⇛ car_id:", car_id);
+  // console.log("▶ ⇛ from:", from);
+  // console.log("▶ ⇛ to:", to);
+  // console.log("---------------------------");
 
   try {
     const response = await fetch(urlString, {

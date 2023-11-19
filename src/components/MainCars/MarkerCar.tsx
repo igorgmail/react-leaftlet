@@ -1,21 +1,26 @@
 import React, { FC, useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Marker as LeafletMarker, Tooltip, useMap } from 'react-leaflet';
-import { renderToString } from 'react-dom/server'
+import { render } from 'react-dom';
+import { Provider } from 'react-redux/es/exports';
 import { DateTime } from "luxon";
+import { renderToString } from 'react-dom/server'
 
+
+import { Marker as LeafletMarker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
+
 import { store } from '../../store'
-import carsPageconfig from './lib/config';
 import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
-import { ICarObject, IDataFromDateForm, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
-import { IconDisconnect } from './IconDisconnect';
-import { render } from 'react-dom';
-import HistoryMenu from '../HistoryComponents/HistoryMenu';
+import { IconDisconnect } from '../HistoryComponents/IconComponent/IconDisconnect';
 import isHasToushScreen from './lib/isMobile';
-import { Provider } from 'react-redux/es/exports';
+import carsPageconfig from './lib/config';
+
+import { ICarObject, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
+
+import HistoryMenu from '../HistoryComponents/HistoryMenu';
 
 import style from './style.module.css';
+
 interface CarProps {
   car: ICarObject
 }
@@ -110,7 +115,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
   const addHistoryTooltip = () => {
     // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
-    console.log("IN addHistiry");
     removeAllTooltips()
 
     setTooltipHistoryOpen(true)
@@ -159,12 +163,10 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
 
     tooltipHistory.options.permanent = true
     el?.addEventListener('click', function (e) {
-      console.log("click History");
       console.log(car.car_id);
     });
 
     tooltipHistory.on('click', function (e) {
-      console.log("click History In EventOn");
       console.log(car.car_id);
 
       e.originalEvent.stopPropagation(); // Остановить событие клика
@@ -180,9 +182,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
   }
 
   const removeHistoryTooltip = () => {
-    console.log("In Remove History");
-
-    console.log("▶ ⇛ tooltipHistoryRef.current:", tooltipHistoryRef.current);
     setTooltipHistoryOpen(false)
     tooltipHistoryRef.current.remove()
     tooltipHistoryRef.current = null
@@ -229,7 +228,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
       // Обработка клика за пределами маркера и tooltip(не в попапе)
       if (tooltipHistoryOpen && tooltipHistoryRef.current) {
         removeHistoryTooltip()
-        console.log("Click MAP");
       }
       // map.closePopup();
     }
@@ -250,7 +248,6 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
         mouseout: (e) => mouseOutMarkerHandler(),
         click: (e) => {
           mouseClickMarkerHandler()
-          console.log("CLICK")
         }
       }}
       // data={`markerKey-${item.unicKey}`}
