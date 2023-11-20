@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // import { useLocation } from 'react-router-dom';
 
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
@@ -25,12 +25,12 @@ function MainCars() {
 
   const mapRef = useRef<L.Map | null>(null)
   const dispatch = useAppDispatch()
-  // const location = useLocation();
+
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars>
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
-  // window.history.pushState(22, "SOme")
+
   useEffect(() => {
     if (carsMapVariant === 'all') {
 
@@ -42,7 +42,7 @@ function MainCars() {
             return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
           })
           setCompanyData(data)
-    // L.control.zoom({ position: 'topright' })
+          // L.control.zoom({ position: 'topright' })
 
           return setCarsBounds(carBoundsArray)
         })

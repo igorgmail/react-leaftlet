@@ -52,7 +52,7 @@ const MarkerCar: FC<CarProps> = ({ car }) => {
     // Получаем время (с сервера) в миллисекундах по UTC (last_track: "2023-11-19 13:45:10")
     const timeLastTrack = DateTime.fromFormat(dateString, "yyyy-MM-dd HH:mm:ss").toUTC()
     const timeLocalNow = DateTime.now().toUTC()
-    const different = timeLocalNow < timeLastTrack.plus({ hour: 10 })
+    const different = timeLocalNow < timeLastTrack.plus({ hour: carsPageconfig.differentTime })
     // console.log("---------2--------");
     // console.log(date);
     // console.log(DateTime.fromISO(date));
