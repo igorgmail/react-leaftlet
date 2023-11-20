@@ -19,6 +19,7 @@ interface IHistoryMenuProps {
 
 
 const HistoryMenu: FC<IHistoryMenuProps> = ({ carData, className }) => {
+  console.log("--Render HistoryMenu");
 
   const dispatch = useAppDispatch()
 
