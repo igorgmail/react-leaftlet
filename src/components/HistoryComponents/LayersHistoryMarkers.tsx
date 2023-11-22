@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, FC } from 'react';
 import ReactDOMServer, { render } from 'react-dom';
 
 
-import { useMap, Tooltip } from 'react-leaflet';
+import { useMap, Tooltip, Popup } from 'react-leaflet';
 import { Marker as PointMarker } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
 import L from 'leaflet';
@@ -56,6 +56,15 @@ const LayersHistoryMarkers: FC<TLayerHistoryMarkersProps> = ({ historyFromServer
       }
     // riseOnHover
     >
+      <Popup
+      >
+        <div>
+
+          <p>{historyFromServer.timestamp}</p>
+          <p>{historyFromServer.speed}</p>
+
+        </div>
+      </Popup>
       {/* <Tooltip
         pane='historyMapPane'
         eventHandlers={{

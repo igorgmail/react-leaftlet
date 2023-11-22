@@ -14,6 +14,7 @@ import { Box } from '@mui/material';
 import { Spinner } from '../HistoryComponents/IconComponent/Spinner';
 import PainCars from './PainCars';
 import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
+import carsPageconfig from './lib/config';
 
 
 
@@ -24,6 +25,7 @@ function MainCars() {
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
   const mapRef = useRef<L.Map | null>(null)
+  const zoomControlRef = useRef<undefined>();
   const dispatch = useAppDispatch()
 
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars>
@@ -50,7 +52,9 @@ function MainCars() {
         )
 
       // Очищаем store data 
-      dispatch(dataActions.reset())
+      if (carsPageconfig.storeReset) {
+        dispatch(dataActions.reset())
+      }
       return () => abortController.abort();
     }
 

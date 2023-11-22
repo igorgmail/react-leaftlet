@@ -264,8 +264,3 @@ const PaneHistoryMap = () => {
 }
 
 export default PaneHistoryMap;
-
-// lat: "53.882645"
-// lng: "27.5217466"
-// name: "home"
-// radius: "100"
