@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 // import { useLocation } from 'react-router-dom';
 
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
 import L from 'leaflet';
 
@@ -9,14 +9,13 @@ import { useAppDispatch, useAppSelector, dataActions } from '../../store';
 import getCarsFetch from './lib/fetchGetCars';
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
+import carsPageconfig from './lib/config';
 
 import { Box } from '@mui/material';
 import { Spinner } from '../HistoryComponents/IconComponent/Spinner';
 import PainCars from './PainCars';
 import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
-import carsPageconfig from './lib/config';
-
-
+import CustomZoom from './CustomZoom';
 
 function MainCars() {
 
@@ -25,7 +24,6 @@ function MainCars() {
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
   const mapRef = useRef<L.Map | null>(null)
-  const zoomControlRef = useRef<undefined>();
   const dispatch = useAppDispatch()
 
   //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars>
@@ -62,12 +60,6 @@ function MainCars() {
 
     [carsMapVariant, dispatch])
 
-  // useEffect(() => {
-  //   if (mapRef.current) {
-  //     mapRef.current.remove();
-  //   }
-  // }, []);
-
   return !carsBounds ?
     (<Spinner />)
     :
@@ -86,7 +78,8 @@ function MainCars() {
         zoomControl={false}
         style={{ width: '100%', height: '100%' }}
       >
-        <ZoomControl position="topleft" />
+        {/* <ZoomControl position="topleft" /> */}
+        <CustomZoom />
           <TileLayer
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
