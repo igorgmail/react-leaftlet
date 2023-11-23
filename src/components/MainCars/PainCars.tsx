@@ -122,8 +122,14 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     map.whenReady(() => {
       // if (isMobile)
       // map.zoomOut()
-      map.fitBounds(mapBounds)
-      zoomOutHandler(map)
+      try {
+        map.fitBounds(mapBounds)
+        zoomOutHandler(map)
+      } catch (error) {
+        console.warn("Ошибка В PainCars map.fitBounds-->", error);
+
+      }
+
       // const zoomOut: HTMLButtonElement | null = document.querySelector('.leaflet-control-zoom-out')
     })
 

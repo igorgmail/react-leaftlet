@@ -67,7 +67,7 @@ const OneCarMarker: FC<OneCarProps> = ({ carId }) => {
 
     return () => {
       clearInterval(interval)
-      // abortController.abort();
+      abortController.abort();
     };
 
   }, [imageSize, carId]);

@@ -13,7 +13,7 @@ async function getCarsFetch(abortController: any): Promise<ICompanyData> {
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
       },
       referrerPolicy: "unsafe-url",
-      signal: abortController.signal
+      // signal: abortController.signal
     });
 
 
