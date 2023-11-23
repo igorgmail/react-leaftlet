@@ -23,7 +23,6 @@ interface IiconImageSize {
 const OneCarMarker: FC<OneCarProps> = ({ carStartData }) => {
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
-
   const carId = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm?.car_id);
 
   // Что бы изменить размер картики нужно поменять только width
@@ -38,22 +37,14 @@ const OneCarMarker: FC<OneCarProps> = ({ carStartData }) => {
   }
 
   useLayoutEffect(() => {
-    // const abortController = new AbortController();
-    // getCarsFetch(abortController)
-    //   .then((allCaraData) => {
-    //     // const oneCarData = allCaraData.cars.find((el) => el.car_id === carId)
         var img = new Image();
         img.src = getImgUrl(oneCarData!.car_id)
     img.onload = function (e) {
           var width = img.width;
           var height = img.height;
           const proportions = Math.round(height / width)
-          setImageSize({ ...imageSize, height: imageSize.width * proportions })
-          // setOneCarData(oneCarData!)
-        };
-    // })
-
-
+      setImageSize({ ...imageSize, height: imageSize.width * proportions })
+    };
   }, [])
 
   useEffect(() => {

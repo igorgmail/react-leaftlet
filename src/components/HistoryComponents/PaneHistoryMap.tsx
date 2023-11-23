@@ -21,7 +21,6 @@ import LayersHistoryMarkers from './LayersHistoryMarkers';
 import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
 import OneCarMarker from './OneCarMarker';
-// type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PaneHistoryMap = () => {
 
