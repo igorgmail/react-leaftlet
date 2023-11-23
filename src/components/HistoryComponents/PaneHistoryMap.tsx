@@ -18,9 +18,11 @@ import LayerPoints from './LayerPoints';
 import LayersHistoryMarkers from './LayersHistoryMarkers';
 import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
+import OneCarMarker from './OneCarMarker';
 // type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PaneHistoryMap = () => {
+  console.log("--Render HistoryMap");
 
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
@@ -246,7 +248,12 @@ const PaneHistoryMap = () => {
           ))}
         {/* </LayerGroup> */}
 
-        <Pane name='historyMapPane-line' style={{ width: '100vh', }}></Pane>
+        <Pane name='historyMapPane-line' style={{ width: '100vh', }}></Pane> 
+        {carsItemFromHistoryForm &&
+          <Pane name="OneCarMarker" style={{ width: '100vh', }}>
+            <OneCarMarker carId={carsItemFromHistoryForm.car_id}></OneCarMarker>
+          </Pane>
+        }
       </>
 
     </div>
