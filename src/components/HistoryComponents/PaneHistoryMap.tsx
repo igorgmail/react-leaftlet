@@ -22,7 +22,6 @@ import OneCarMarker from './OneCarMarker';
 // type IPainCars = L.LatLngBoundsExpression | [][] | any
 
 const PaneHistoryMap = () => {
-  console.log("--Render HistoryMap");
 
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
