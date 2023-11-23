@@ -1,7 +1,7 @@
 import { IHistoryDataFromServer, TDataAboutCarForHistoryMenu } from "../../../types/carsTypes";
 import { DateTime } from "luxon";
 
-async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu): Promise<IHistoryDataFromServer> {
+async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu, abortCtrlHistory: AbortController): Promise<IHistoryDataFromServer> {
 
   const parc_id = 1
   const { car_id, car_name, dataFromIso, dataToIso, localOffset } = { ...carData }
@@ -30,6 +30,7 @@ async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu): Promise<IH
         'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
       },
       referrerPolicy: "unsafe-url",
+      signal: abortCtrlHistory.signal
     });
 
     if (response.ok) {

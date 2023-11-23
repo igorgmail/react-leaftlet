@@ -71,10 +71,10 @@ const PaneHistoryMap = () => {
   }
 
 
-  async function historyFetchHandler(data: TDataAboutCarForHistoryMenu) {
+  async function historyFetchHandler(data: TDataAboutCarForHistoryMenu, abortCtrlHistory: AbortController) {
     // получаем данные с сервера оправляем данные с формы из store
     // Получим либо данные либо пустой объект сформированный в getHistoryFetch
-    const historyServerData = await getHistoryFetch(data)
+    const historyServerData = await getHistoryFetch(data, abortCtrlHistory)
 
     if (!historyServerData.car_id) {
       // ошибка нет car_id в ответе с сервера
@@ -130,7 +130,6 @@ const PaneHistoryMap = () => {
 
   }
 
-
   function errorHandler(msg: string) {
     console.warn("ERROR -->", msg);
 
@@ -167,12 +166,14 @@ const PaneHistoryMap = () => {
   }
 
   useEffect(() => {
+    const abortCtrlHistory = new AbortController();
     if (carsItemFromHistoryForm) {
-      historyFetchHandler(carsItemFromHistoryForm)
+      historyFetchHandler(carsItemFromHistoryForm, abortCtrlHistory)
     }
     return () => {
       polilineRef.current?.remove()
       polilineRef.current = null
+      abortCtrlHistory.abort()
       setHistoryDataLoad(false)
     }
   }, [carsItemFromHistoryForm])

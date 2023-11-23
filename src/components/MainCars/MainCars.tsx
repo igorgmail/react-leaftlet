@@ -34,8 +34,8 @@ function MainCars() {
   useEffect(() => {
     if (carsMapVariant === 'all') {
 
-      const abortController = new AbortController();
-      const companyData = getCarsFetch(abortController)
+      const abortCtrlInMainCars = new AbortController();
+      const companyData = getCarsFetch(abortCtrlInMainCars)
       companyData
         .then((data) => {
           const carBoundsArray = data.cars.map((car: ICarObject) => {
@@ -53,7 +53,7 @@ function MainCars() {
       if (carsPageconfig.storeReset) {
         dispatch(dataActions.reset())
       }
-      return () => abortController.abort();
+      return () => abortCtrlInMainCars.abort();
     }
 
   },

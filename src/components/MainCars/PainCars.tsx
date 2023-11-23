@@ -26,6 +26,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   const carsFilterObject = useAppSelector((state) => state.carsMap.carsFilter);
 
   const [companyData, setCompanyData] = useState<ICompanyData>(carsDataStart)
+  console.log("▶ ⇛ companyData:", companyData);
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
   const map = useMap();
 
@@ -105,7 +106,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
     return () => {
       clearInterval(interval)
-      abortController.abort();
+      // abortController.abort();
     };
   }, [map, mapBounds]);
 
