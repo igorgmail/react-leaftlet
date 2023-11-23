@@ -4,6 +4,8 @@ import { Marker as LeafletMarker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-rotatedmarker';
 
+import { useAppSelector } from '../../store';
+
 import isHasToushScreen from '../MainCars/lib/isMobile';
 import carsPageconfig from '../MainCars/lib/config';
 import getCarsFetch from '../MainCars/lib/fetchGetCars';
@@ -11,24 +13,24 @@ import getCarsFetch from '../MainCars/lib/fetchGetCars';
 import { ICarObject } from '../../types/carsTypes';
 
 interface OneCarProps {
-  carId: string | number,
+  carStartData: ICarObject,
 }
 interface IiconImageSize {
   width: number;
   height: number;
 }
 
-const OneCarMarker: FC<OneCarProps> = ({ carId }) => {
+const OneCarMarker: FC<OneCarProps> = ({ carStartData }) => {
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
-  // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
+  const carId = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm?.car_id);
 
   // Что бы изменить размер картики нужно поменять только width
   const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
-  const [oneCarData, setOneCarData] = useState<ICarObject | null>(null)
+  const [oneCarData, setOneCarData] = useState<ICarObject>(carStartData)
 
-  function getImgUrl(id: number) {
+  function getImgUrl(id: string) {
     if (Number(id) === 1) return process.env.PUBLIC_URL + '/img/car1.png'
     if (Number(id) === 2) return process.env.PUBLIC_URL + '/img/car2.png'
     if (Number(id) === 33) return process.env.PUBLIC_URL + '/img/car3.png'
@@ -36,21 +38,20 @@ const OneCarMarker: FC<OneCarProps> = ({ carId }) => {
   }
 
   useLayoutEffect(() => {
-    const abortController = new AbortController();
-    getCarsFetch(abortController)
-      .then((allCaraData) => {
-        const oneCarData = allCaraData.cars.find((el) => el.car_id === carId)
-
+    // const abortController = new AbortController();
+    // getCarsFetch(abortController)
+    //   .then((allCaraData) => {
+    //     // const oneCarData = allCaraData.cars.find((el) => el.car_id === carId)
         var img = new Image();
         img.src = getImgUrl(oneCarData!.car_id)
-        img.onload = function () {
+    img.onload = function (e) {
           var width = img.width;
           var height = img.height;
           const proportions = Math.round(height / width)
           setImageSize({ ...imageSize, height: imageSize.width * proportions })
-          setOneCarData(oneCarData!)
+          // setOneCarData(oneCarData!)
         };
-      })
+    // })
 
 
   }, [])

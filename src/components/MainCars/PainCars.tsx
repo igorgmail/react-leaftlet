@@ -47,7 +47,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
   const getdataForMenuItem = (company: ICompanyData) => {
 
     const dataCarsForMenuItems = company.cars.map((car: ICarObject) => ({
-      car_id: car.car_id,
+      car_id: String(car.car_id),
       car_name: car.car_name,
       checked: true,
       disconnect: false,
@@ -59,7 +59,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
   // Фильтр для передачи в Marker (принимает маасив объектов Cars и возвращает все где checked true)
   const filterForMarkers = dataCarsForMarrkers.filter((el: ICarObject) => {
-    if (carsFilterObject && carsFilterObject[el.car_id] === true) return el
+    if (carsFilterObject && carsFilterObject[Number(el.car_id)] === true) return el
   })
 
   const makeFilterObject = (carsData: any) => {

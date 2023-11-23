@@ -7,6 +7,7 @@ type TypeCarsFilter = { [key: number]: boolean } | null;
 type TypeCarsMapConfig = {
   variant: 'all' | 'history',
   userTimeOffset?: string,
+  carMarcerSize?: {}
 }
 // type TCarMapItem = {
 //   car_id: string | number,

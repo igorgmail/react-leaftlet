@@ -7,11 +7,13 @@ import 'leaflet-rotatedmarker';
 
 import { useAppSelector } from '../../store';
 import getHistoryFetch from './lib/getHistoryFetch';
+import getCarsFetch from '../MainCars/lib/fetchGetCars';
+
 import isHasToushScreen from '../MainCars/lib/isMobile';
 import carsPageconfig from '../MainCars/lib/config';
 import zoomOutHandler from '../MainCars/lib/zoomOut';
 
-import { TDataAboutCarForHistoryMenu, IHistoryDataFromServer, IHistoryPoints, IHistoryCar } from '../../types/carsTypes';
+import { TDataAboutCarForHistoryMenu, IHistoryDataFromServer, IHistoryPoints, IHistoryCar, ICarObject } from '../../types/carsTypes';
 
 import { Spinner } from './IconComponent/Spinner';
 import LayerPoints from './LayerPoints';
@@ -26,6 +28,7 @@ const PaneHistoryMap = () => {
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
   const [forFitBounds, setForFitBounds] = useState<L.LatLngBoundsExpression | [][] | any>(null)
+  const [oneCarData, setOneCarData] = useState<ICarObject | null>(null)
 
   const [historyDataLoad, setHistoryDataLoad] = useState(false)
 
@@ -75,9 +78,11 @@ const PaneHistoryMap = () => {
     // получаем данные с сервера оправляем данные с формы из store
     // Получим либо данные либо пустой объект сформированный в getHistoryFetch
     const historyServerData = await getHistoryFetch(data, abortCtrlHistory)
+    const oneCarData = await getOneCarFromServer(String(carsItemFromHistoryForm?.car_id))
 
     if (!historyServerData.car_id) {
       // ошибка нет car_id в ответе с сервера
+      setOneCarData(oneCarData!)
       errorHandler("Нет car_id")
       setHistoryDataLoad(true)
       return
@@ -85,6 +90,7 @@ const PaneHistoryMap = () => {
     if (historyServerData.history.length === 0 && historyServerData.points.length === 0) {
       // нет данных 
       errorHandler("оба массива (history и points) пусты")
+      setOneCarData(oneCarData!)
       setHistoryDataLoad(true)
       return
     }
@@ -124,6 +130,7 @@ const PaneHistoryMap = () => {
 
       }
     }
+    setOneCarData(oneCarData!)
     setPointsBounds(historyServerData.points)
     setDataFromServer(historyServerData)
     setForFitBounds(coordHistoryToFitBounds)
@@ -165,17 +172,29 @@ const PaneHistoryMap = () => {
     return result
   }
 
+
+  async function getOneCarFromServer(carId: string) {
+    const abortController = new AbortController();
+    const allCarsData = await getCarsFetch(abortController)
+
+    const oneCarData = allCarsData.cars.find((el) => el.car_id === carId)
+    return oneCarData
+  };
+
   useEffect(() => {
     const abortCtrlHistory = new AbortController();
     if (carsItemFromHistoryForm) {
       historyFetchHandler(carsItemFromHistoryForm, abortCtrlHistory)
+      // получить данные авто и положить в state
     }
+
     return () => {
       polilineRef.current?.remove()
       polilineRef.current = null
       abortCtrlHistory.abort()
       setHistoryDataLoad(false)
     }
+    // Данные из формы даты истории
   }, [carsItemFromHistoryForm])
 
   useEffect(() => {
@@ -205,8 +224,9 @@ const PaneHistoryMap = () => {
         polilineRef.current?.addTo(map)
       }
     })
+    // когда есть точки для масштабирования карты
+  }, [forFitBounds]) 
 
-  }, [forFitBounds])
 
   // Удаляем Control
   useEffect(() => {
@@ -249,9 +269,9 @@ const PaneHistoryMap = () => {
         {/* </LayerGroup> */}
 
         <Pane name='historyMapPane-line' style={{ width: '100vh', }}></Pane> 
-        {carsItemFromHistoryForm &&
+        {oneCarData &&
           <Pane name="OneCarMarker" style={{ width: '100vh', }}>
-            <OneCarMarker carId={carsItemFromHistoryForm.car_id}></OneCarMarker>
+            <OneCarMarker carStartData={oneCarData}></OneCarMarker>
           </Pane>
         }
       </>
