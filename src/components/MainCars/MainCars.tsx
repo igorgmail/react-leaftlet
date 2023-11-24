@@ -1,54 +1,75 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { useEffect, useState, useRef } from 'react';
+// import { useLocation } from 'react-router-dom';
 
-import { Box, Stack, CircularProgress } from '@mui/material';
-
-import L from 'leaflet';
+import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
+import L from 'leaflet';
 
-import PainCars from './PainCars';
+import { useAppDispatch, useAppSelector, dataActions } from '../../store';
 import getCarsFetch from './lib/fetchGetCars';
-import style from './style.module.css'
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
+import carsPageconfig from './lib/config';
 
-export default function MainCars() {
+import { Box } from '@mui/material';
+import { Spinner } from '../HistoryComponents/IconComponent/Spinner';
+import PainCars from './PainCars';
+import PaneHistoryMap from '../HistoryComponents/PaneHistoryMap';
+import CustomZoom from './CustomZoom';
 
-  const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>()
+function MainCars() {
+
+  const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>(null)
   const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
+  const [tileId, setTileId] = useState('tileId-1')
 
-  //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars> 
+  const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
+
+  const mapRef = useRef<L.Map | null>(null)
+  const dispatch = useAppDispatch()
+
+  //TODO Сделать проверку полученных первых данных и получаемых ежесекундно данных в <PainCars>
   // на вероятность добавления данных о новом авто или исчезновении данных об авто
   // Если данные не соответсвуют(расходятся) то сделалть перерендер <MainCars> с новой отрисовкой всех
   // компонентов
+
   useEffect(() => {
-    const companyData = getCarsFetch()
-    companyData
-      .then((data) => {
-        const carBoundsArray = data.cars.map((car: ICarObject) => {
-        return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
-      })
-        setCompanyData(data)
-        L.control.zoom({ position: 'topright' })
+    if (carsMapVariant === 'all') {
 
-      return setCarsBounds(carBoundsArray)
-      })
-      .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
-    )
+      const abortCtrlInMainCars = new AbortController();
+      const companyData = getCarsFetch(abortCtrlInMainCars)
+      companyData
+        .then((data) => {
+          const carBoundsArray = data.cars.map((car: ICarObject) => {
+            return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
+          })
+          setCompanyData(data)
+          // L.control.zoom({ position: 'topright' })
 
-  }, [])
+          return setCarsBounds(carBoundsArray)
+        })
+        .catch((e) => console.log("Ошибка приполучении данных с сервера", e)
+        )
+
+      // Очищаем store data 
+      if (carsPageconfig.storeReset) {
+        dispatch(dataActions.reset())
+      }
+      return () => abortCtrlInMainCars.abort();
+    }
+
+  }, [carsMapVariant, dispatch])
+
+  const tileCheckHandler = (id: string) => {
+    setTileId(id)
+  }
 
   return !carsBounds ?
-    (<Box display="flex" width="100%" height="100vh">
-        <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} margin={'auto'}>
-
-          <CircularProgress color="inherit" className={style.carSpinner} />
-        </Stack>
-    </Box>)
-        :
-
+    (<Spinner />)
+    :
     (<Box display="flex" width="100%" height="100vh">
         <MapContainer
+        ref={mapRef}
           // whenReady={() => { console.log("MAP READY") }}
           zoomSnap={0.5}
           zoomDelta={0.5}
@@ -61,13 +82,58 @@ export default function MainCars() {
         zoomControl={false}
         style={{ width: '100%', height: '100%' }}
       >
-        <ZoomControl position="topleft" />
-          <TileLayer
+        {/* <ZoomControl position="topleft" /> */}
+        <CustomZoom />
+        <LayersControl position="topright">
+          <LayersControl.Overlay name="Osm map" checked={tileId === 'tileId-1'}>
+            <TileLayer
+              id={'tileId-1'}
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        />
-        <PainCars mapBounds={carsBounds} carsDataStart={companyData} />
+              eventHandlers={{
+                add: (e) => {
+                  tileCheckHandler(e.target.options.id)
+                  console.log("Added Layer:", e.target.options.id);
+                },
+                remove: (e) => {
+                  // console.log("Removed layer:", e.target.id);
+                }
+              }}
+            />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Google map" checked={tileId === 'tileId-2'}>
+            <TileLayer
+              id={'tileId-2'}
+              url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+              subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+              eventHandlers={{
+                add: (e) => {
+                  tileCheckHandler(e.target.options.id)
+                },
+              }}
+            />
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Спутник" checked={tileId === 'tileId-3'}>
+            <TileLayer
+              id={'tileId-3'}
+              url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+              subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
+              eventHandlers={{
+                add: (e) => {
+                  tileCheckHandler(e.target.options.id)
+                },
+              }}
+            />
+          </LayersControl.Overlay>
+        </LayersControl>
+
+
+        {String(carsMapVariant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
+        {String(carsMapVariant) === 'history' && <PaneHistoryMap />}
+
         </MapContainer>
     </Box>)
 
 }
+
+export default MainCars;
