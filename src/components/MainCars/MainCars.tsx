@@ -20,7 +20,7 @@ import CustomZoom from './CustomZoom';
 function MainCars() {
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>(null)
-  const [companyData, setCompanyData] = useState<ICompanyData | undefined>()
+  const [companyData, setCompanyData] = useState<ICompanyData>()
   const [tileId, setTileId] = useState('tileId-1')
 
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);

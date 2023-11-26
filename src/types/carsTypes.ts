@@ -1,7 +1,7 @@
 // Данные приходят с сервера 
 export interface ICompanyData {
   company_name: string,
-  company_id: string | undefined,
+  company_id: string,
   cars: ICarObject[]
 }
 
@@ -20,7 +20,7 @@ export type ICarObject = {
 // Для store
 export type ICompanyName = {
   company_name: string,
-  company_id: string | undefined,
+  company_id: string,
 }
 
 // Для store для меню cars

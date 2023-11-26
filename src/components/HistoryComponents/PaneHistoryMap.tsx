@@ -22,11 +22,15 @@ import HistoryLayerControl from './HistoryLayerControl';
 import BackLayerControl from './BackLayerControl';
 import OneCarMarker from './OneCarMarker';
 
+interface hasLatLng {
+  lat: string;
+  lng: string;
+}
 const PaneHistoryMap = () => {
 
   const [dataFromServer, setDataFromServer] = useState<IHistoryDataFromServer | null>(null)
   const [pointsBounds, setPointsBounds] = useState<IHistoryPoints[] | []>([])
-  const [forFitBounds, setForFitBounds] = useState<L.LatLngBoundsExpression | [][] | any>(null)
+  const [forFitBounds, setForFitBounds] = useState<L.LatLngTuple[] | null>(null)
   const [oneCarData, setOneCarData] = useState<ICarObject | null>(null)
 
   const [historyDataLoad, setHistoryDataLoad] = useState(false)
@@ -142,6 +146,7 @@ const PaneHistoryMap = () => {
   }
 
   function arrayPointsForBoundsSort(arr: any) {
+    console.log("▶ ⇛ arr:", arr);
     // let result : number[][] = []
     if (arr.length === 0) return []
     const result = arr.reduce(

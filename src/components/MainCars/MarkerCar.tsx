@@ -92,15 +92,14 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
 
   // Удаляем все открытые(все) tooltip с пано "historyTooltipsPane"
   const removeAllTooltips = () => {
-    const allTooltip: any = map.getPane('historyIconTooltipsPane')?.children;
-
-    if (allTooltip) {
-      Array.from(allTooltip).forEach((element: any) => {
-        element.remove()
+    const pane = map.getPane('historyIconTooltipsPane');
+    if (pane) {
+      const allTooltip: HTMLCollection = pane.children;
+      Array.from(allTooltip).forEach((element: Element) => {
+        element.remove();
         // Ваши операции с элементом
       });
     }
-
   }
 
   const addHistoryTooltip = () => {
@@ -196,7 +195,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
 
   // слушаем событие клик на карте если tooltip открыт
   // For mobile 
-  map.on('click', useCallback((e: any) => {
+  map.on('click', useCallback((e: L.LeafletMouseEvent) => {
     const target = e.originalEvent.target as Element
     // L.DomEvent.disableClickPropagation(target)
     if (!target.classList.contains('leaflet-marker-icon')
