@@ -212,7 +212,7 @@ const PaneHistoryMap = () => {
         // console.log("getBoundsZoom", map.getBoundsZoom(forFitBounds));
         //   console.log("getCenter()", map.getCenter());
         map.fitBounds(forFitBounds)
-        zoomOutHandler(map)
+        // zoomOutHandler(map)
         // map.setView(map.getCenter())
         // map.setZoom(9.5)
         // map.zoomOut(-1)
@@ -221,8 +221,9 @@ const PaneHistoryMap = () => {
 
         setTimeout(() => {
           // zoomOut?.click()
+          zoomOutHandler(map)
           setHistoryDataLoad(true)
-        }, 300)
+        }, 200)
         // Добавляем линии на карту
         polilineRef.current?.addTo(map)
       }
