@@ -30,8 +30,10 @@ interface IiconImageSize {
 }
 
 const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
+
   const map = useMap()
   const dispatch = useAppDispatch()
+
   let tooltipRef = useRef<any>(null)
   let tooltipHistoryRef = useRef<any>(null)
   let portalContainerRef = useRef<any>(null)
@@ -54,9 +56,10 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   }
 
   // Обработка событий мыши на маркере
-
+  // для десктоп
   const mouseOverMarkerHandler = () => {
     if (!isMobile) {
+      setTooltipHistoryOpen(true)
       addSpeedTooltip()
       addHistoryTooltip()
     }
@@ -66,6 +69,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     removeNewTooltip()
   }
 
+  // Для мобильных
   const mouseClickMarkerHandler = () => {
     // Если mobile
     if (isMobile) {
@@ -106,9 +110,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     // if (tooltipHistoryRef.current) tooltipHistoryRef.current.closeTooltip()
     removeAllTooltips()
 
-    setTooltipHistoryOpen(true)
-
-    // Создаем tooltip иконка истории (HistoryMenu)
+    // setTooltipHistoryOpen(true)
     const tooltipHistory = L.tooltip({
       pane: 'historyIconTooltipsPane',
       direction: 'left',
@@ -124,7 +126,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     tooltipHistoryRef.current = tooltipHistory
     tooltipHistory.addTo(map)
 
-    var el = tooltipHistory.getElement();
+    const el = tooltipHistory.getElement();
 
     tooltipHistory.options.permanent = true
     el?.addEventListener('click', function (e) {
@@ -155,13 +157,16 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   useLayoutEffect(() => {
     // Рендерим JSX-компонент внутри портала
     // Создаем div для портала
-    const rootEl = document.getElementById('root')!;
-    // const portalContainer = document.createElement('div');
+
+    // const rootEl = document.getElementById('root')!;
     const portalContainer = document.createElement('div');
-    rootEl.appendChild(portalContainer);
+    // rootEl.appendChild(portalContainer);
+
     const root = createRoot(portalContainer);
     root.render(<Provider store={store}><HistoryMenu carData={dataForHistory} /></Provider>);
+
     portalContainerRef.current = portalContainer
+
   }, [])
 
   // Если true значит авто "в сети"
@@ -171,10 +176,10 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     if (Number(id) === 1) return process.env.PUBLIC_URL + '/img/car1.png'
     if (Number(id) === 2) return process.env.PUBLIC_URL + '/img/car2.png'
     if (Number(id) === 33) return process.env.PUBLIC_URL + '/img/car3.png'
-    return ''
+    return '/img/default.png'
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     var img = new Image();
     img.src = getImgUrl(car.car_id)
 

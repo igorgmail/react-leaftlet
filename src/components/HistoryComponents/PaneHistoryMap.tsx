@@ -146,7 +146,6 @@ const PaneHistoryMap = () => {
   }
 
   function arrayPointsForBoundsSort(arr: any) {
-    console.log("▶ ⇛ arr:", arr);
     // let result : number[][] = []
     if (arr.length === 0) return []
     const result = arr.reduce(

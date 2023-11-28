@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector, dataActions } from '../../store';
 import getCarsFetch from './lib/fetchGetCars';
 
 import { ICarObject, ICompanyData } from '../../types/carsTypes';
+import sanitizeCompanyFetch from './lib/sanitizeCompanyFetch';
 import carsPageconfig from './lib/config';
 
 import { Box } from '@mui/material';
@@ -37,13 +38,17 @@ function MainCars() {
     if (carsMapVariant === 'all') {
 
       const abortCtrlInMainCars = new AbortController();
-      const companyData = getCarsFetch(abortCtrlInMainCars)
-      companyData
+      const companyDataFromServer = getCarsFetch(abortCtrlInMainCars)
+
+
+      companyDataFromServer
         .then((data) => {
-          const carBoundsArray = data.cars.map((car: ICarObject) => {
+          const companyData = sanitizeCompanyFetch(data)
+
+          const carBoundsArray = companyData.cars.map((car: ICarObject) => {
             return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
           })
-          setCompanyData(data)
+          setCompanyData(companyData)
           // L.control.zoom({ position: 'topright' })
 
           return setCarsBounds(carBoundsArray)
@@ -93,7 +98,6 @@ function MainCars() {
               eventHandlers={{
                 add: (e) => {
                   tileCheckHandler(e.target.options.id)
-                  console.log("Added Layer:", e.target.options.id);
                 },
                 remove: (e) => {
                   // console.log("Removed layer:", e.target.id);

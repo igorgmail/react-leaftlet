@@ -10,6 +10,7 @@ import getCarsFetch from './lib/fetchGetCars';
 import isHasToushScreen from './lib/isMobile';
 import carsPageconfig from './lib/config';
 import zoomOutHandler from './lib/zoomOut';
+import sanitizeCompanyFetch from './lib/sanitizeCompanyFetch';
 
 import { ICarObject, ICompanyData, ICompanyName, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
@@ -99,7 +100,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     const interval = setInterval(() => {
       getCarsFetch(abortController)
         .then(data => {
-          setCompanyData(data)
+          const companyData = sanitizeCompanyFetch(data)
+          setCompanyData(companyData)
         })
 
     }, carsPageconfig.updateDelay);
@@ -149,7 +151,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
           return <MarkerCar
             car={el}
             dataForHistory={getDataAboutCarForHistory(el)}
-            key={`${el.car_id}-${el.last_track}`} />
+            // key={`${el.car_id}-${el.last_track}`} />
+            key={`${el.car_id}-${el.last_track}-${carsFilterObject?.[el.car_id]}`} />
         }
         )}
       </Pane>
