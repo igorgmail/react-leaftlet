@@ -5,9 +5,9 @@ import { ICompanyData } from "../../../types/carsTypes";
 async function getCarsFetch(park_id: string, abortController: any): Promise<ICompanyData> {
 
   const apiCarsUrl = process.env.REACT_APP_API_URL_CARS;
-
+  console.log('URL запроса:', `${apiCarsUrl}?park_id=${park_id}`);
   try {
-    const response = await fetch(`${apiCarsUrl}?${park_id}`, {
+    const response = await fetch(`${apiCarsUrl}?park_id=${park_id}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
