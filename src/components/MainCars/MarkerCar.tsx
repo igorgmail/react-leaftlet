@@ -23,6 +23,7 @@ import style from './style.module.css';
 interface CarProps {
   car: ICarObject,
   dataForHistory: TDataAboutCarForHistoryMenu,
+  // setMarkerDataLoad: React.Dispatch<React.SetStateAction<boolean>>,
 }
 interface IiconImageSize {
   width: number;
@@ -34,7 +35,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   const map = useMap()
   const dispatch = useAppDispatch()
 
-  let tooltipRef = useRef<any>(null)
+  let tooltipSpeedRef = useRef<any>(null)
   let tooltipHistoryRef = useRef<any>(null)
   let portalContainerRef = useRef<any>(null)
 
@@ -43,8 +44,9 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   // const carsIsConnectFilter = useAppSelector((state) => state.carsMap.isConnectFilter);
   const carsFilter = useAppSelector((state) => state.carsMap.carsFilter);
 
-  // Что бы изменить размер картики нужно поменять только width
-  const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
+  const imageSize = carsPageconfig.carIconSize
+
+  // const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 32 })
   const [tooltipHistoryOpen, setTooltipHistoryOpen] = useState(false)
 
   function timeDifference(dateString: string) {
@@ -90,7 +92,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
       .setLatLng([Number(car.lat), Number(car.lng)])
       .setContent(`скорость ${car.speed} км/ч`)
 
-    tooltipRef.current = tooltip
+    tooltipSpeedRef.current = tooltip
     tooltip.addTo(map)
   }
 
@@ -140,10 +142,10 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
 
 
   const removeNewTooltip = () => {
-    if (tooltipRef.current) {
-      tooltipRef.current.remove()
+    if (tooltipSpeedRef.current) {
+      tooltipSpeedRef.current.remove()
     }
-    tooltipRef.current = null
+    tooltipSpeedRef.current = null
   }
 
   const removeHistoryTooltip = () => {
@@ -153,21 +155,6 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
 
   } 
 
-
-  useLayoutEffect(() => {
-    // Рендерим JSX-компонент внутри портала
-    // Создаем div для портала
-
-    // const rootEl = document.getElementById('root')!;
-    const portalContainer = document.createElement('div');
-    // rootEl.appendChild(portalContainer);
-
-    const root = createRoot(portalContainer);
-    root.render(<Provider store={store}><HistoryMenu carData={dataForHistory} /></Provider>);
-
-    portalContainerRef.current = portalContainer
-
-  }, [])
 
   // Если true значит авто "в сети"
   const isConnection = timeDifference(String(car.last_track))
@@ -179,18 +166,6 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     return '/img/default.png'
   }
 
-  useLayoutEffect(() => {
-    var img = new Image();
-    img.src = getImgUrl(car.car_id)
-
-    img.onload = function () {
-      var width = img.width;
-      var height = img.height;
-      const proportions = Math.round(height / width)
-      setImageSize({ ...imageSize, height: imageSize.width * proportions })
-    };
-
-  }, [])
 
   // Каждый раз при рендере маркера в store ложаться(обновляются) ключи объекта isConnectFilter
   // Объект типа {car_id(id) : boolean(isConnection), ...}
@@ -219,10 +194,25 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
     removeAllTooltips()
   }, [carsFilter]);
 
+  useLayoutEffect(() => {
+    // Рендерим JSX-компонент внутри портала
+    // Создаем div для портала
+
+    // const rootEl = document.getElementById('root')!;
+    const portalContainer = document.createElement('div');
+    // rootEl.appendChild(portalContainer);
+
+    const root = createRoot(portalContainer);
+    root.render(<Provider store={store}><HistoryMenu carData={dataForHistory} /></Provider>);
+
+    portalContainerRef.current = portalContainer
+
+  }, [])
+
   return (
     <LeafletMarker
       eventHandlers={{
-        // add: () => onLoadMarker(),
+        add: () => console.log("MARKER ADD"),
         // loading: () => { console.log("MARKER READY") }
         mouseover: (e) => mouseOverMarkerHandler(),
         mouseout: (e) => mouseOutMarkerHandler(),
@@ -232,7 +222,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
       }}
       // data={`markerKey-${item.unicKey}`}
       pane={"carsMapPane"}
-      // ref={tooltipRef}
+      // ref={tooltipSpeedRef}
       // title={`скорость ${car.speed} км/ч`}
       position={[Number(car.lat), Number(car.lng)]}
       rotationAngle={Number(car.angle)}
@@ -276,6 +266,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
       {/* <CustomPopup speed={car.speed} key={car.car_id}></CustomPopup> */}
     </LeafletMarker>
   )
-}
+};
+
 
 export default MarkerCar

@@ -21,7 +21,7 @@ import CustomZoom from './CustomZoom';
 function MainCars() {
 
   const [carsBounds, setCarsBounds] = useState<L.LatLngBoundsExpression | [] | any>(null)
-  const [companyData, setCompanyData] = useState<ICompanyData>()
+  const [companyData, setCompanyData] = useState<ICompanyData | null>(null)
   const [tileId, setTileId] = useState('tileId-1')
 
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
@@ -48,6 +48,7 @@ function MainCars() {
           const carBoundsArray = companyData.cars.map((car: ICarObject) => {
             return [parseFloat(String(car.lat)), parseFloat(String(car.lng))]
           })
+
           setCompanyData(companyData)
           // L.control.zoom({ position: 'topright' })
 
@@ -68,6 +69,8 @@ function MainCars() {
   const tileCheckHandler = (id: string) => {
     setTileId(id)
   }
+
+
 
   return !carsBounds ?
     (<Spinner />)
@@ -132,7 +135,7 @@ function MainCars() {
         </LayersControl>
 
 
-        {String(carsMapVariant) === 'all' && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
+        {(String(carsMapVariant) === 'all' && companyData) && <PainCars mapBounds={carsBounds} carsDataStart={companyData} />}
         {String(carsMapVariant) === 'history' && <PaneHistoryMap />}
 
         </MapContainer>
