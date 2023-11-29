@@ -2,9 +2,12 @@ import { ICompanyData } from "../../../types/carsTypes";
 
 // https://user-headers.onrender.com/cars
 // http://89.108.99.163/gps/gpsapi.php/all_cars?park_id=1
-async function getCarsFetch(abortController: any): Promise<ICompanyData> {
+async function getCarsFetch(park_id: string, abortController: any): Promise<ICompanyData> {
+
+  const apiCarsUrl = process.env.REACT_APP_API_URL_CARS;
+
   try {
-    const response = await fetch('https://user-headers.onrender.com/cars', {
+    const response = await fetch(`${apiCarsUrl}?${park_id}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

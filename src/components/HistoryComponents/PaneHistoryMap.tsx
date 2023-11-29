@@ -38,6 +38,7 @@ const PaneHistoryMap = () => {
   const polilineRef = useRef<L.Polyline | null>(null)
 
   const carsItemFromHistoryForm = useAppSelector((state) => state.carsMap?.carsItemFromHistoryForm);
+  const parc_id = useAppSelector((state) => state.carsMap.companyName?.company_id)
 
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
 
@@ -178,7 +179,7 @@ const PaneHistoryMap = () => {
 
   async function getOneCarFromServer(carId: string) {
     const abortController = new AbortController();
-    const allCarsData = await getCarsFetch(abortController)
+    const allCarsData = await getCarsFetch(parc_id || '1', abortController)
 
     const oneCarData = allCarsData.cars.find((el) => el.car_id === carId)
     return oneCarData

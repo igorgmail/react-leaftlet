@@ -11,46 +11,31 @@ import carsPageconfig from '../MainCars/lib/config';
 import getCarsFetch from '../MainCars/lib/fetchGetCars';
 
 import { ICarObject } from '../../types/carsTypes';
+import { useSelector } from 'react-redux';
+import getCarIconUrl from '../MainCars/lib/getCarIconUrl';
 
 interface OneCarProps {
   carStartData: ICarObject,
 }
-interface IiconImageSize {
-  width: number;
-  height: number;
-}
 
 const OneCarMarker: FC<OneCarProps> = ({ carStartData }) => {
 
+  const imageSize = carsPageconfig.carIconSize
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
   const carId = useAppSelector((state) => state.carsMap.carsItemFromHistoryForm?.car_id);
+  const parc_id = useAppSelector((state) => state.carsMap.companyName?.company_id)
 
-  // Что бы изменить размер картики нужно поменять только width
-  const [imageSize, setImageSize] = useState<IiconImageSize>({ width: 16, height: 0 })
   const [oneCarData, setOneCarData] = useState<ICarObject>(carStartData)
 
   function getImgUrl(id: string) {
-    if (Number(id) === 1) return process.env.PUBLIC_URL + '/img/car1.png'
-    if (Number(id) === 2) return process.env.PUBLIC_URL + '/img/car2.png'
-    if (Number(id) === 33) return process.env.PUBLIC_URL + '/img/car3.png'
-    return '/img/default.png'
+    return (process.env.NODE_ENV === 'production') ? oneCarData.pic : getCarIconUrl(id)
   }
 
-  useLayoutEffect(() => {
-        var img = new Image();
-        img.src = getImgUrl(oneCarData!.car_id)
-    img.onload = function (e) {
-          var width = img.width;
-          var height = img.height;
-          const proportions = Math.round(height / width)
-      setImageSize({ ...imageSize, height: imageSize.width * proportions })
-    };
-  }, [])
 
   useEffect(() => {
     const abortController = new AbortController();
     const interval = setInterval(async () => {
-      const carDataFromServer = await getCarsFetch(abortController)
+      const carDataFromServer = await getCarsFetch(parc_id || '1', abortController)
       if (carDataFromServer) {
         const oneCarData = carDataFromServer.cars.find((el) => el.car_id === carId)!
         setOneCarData(oneCarData)

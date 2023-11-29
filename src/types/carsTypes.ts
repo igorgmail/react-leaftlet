@@ -26,7 +26,7 @@ export type ICompanyName = {
 // Для store для меню cars
 export interface IDataAllCarsForMenu {
   company_name: string,
-  company_id: string | undefined,
+  company_id: string,
   cars: IOneCarForMenu[]
 }
 // данные одного car для store и carMenu
@@ -78,7 +78,7 @@ export type IDataFromDateForm = {
 
 export type TDataAboutCarForHistoryMenu = {
   company_name: string,
-  company_id: string | undefined,
+  company_id: string,
   car_id: string | number,
   car_name: string,
   dataFromIso: string,

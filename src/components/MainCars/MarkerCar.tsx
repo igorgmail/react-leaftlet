@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector, carsMapActions } from '../../store';
 import { IconDisconnect } from '../HistoryComponents/IconComponent/IconDisconnect';
 import isHasToushScreen from './lib/isMobile';
 import carsPageconfig from './lib/config';
+import getCarIconUrl from './lib/getCarIconUrl';
 
 import { ICarObject, TDataAboutCarForHistoryMenu } from '../../types/carsTypes';
 
@@ -23,11 +24,6 @@ import style from './style.module.css';
 interface CarProps {
   car: ICarObject,
   dataForHistory: TDataAboutCarForHistoryMenu,
-  // setMarkerDataLoad: React.Dispatch<React.SetStateAction<boolean>>,
-}
-interface IiconImageSize {
-  width: number;
-  height: number;
 }
 
 const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
@@ -160,10 +156,7 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   const isConnection = timeDifference(String(car.last_track))
 
   function getImgUrl(id: string) {
-    if (Number(id) === 1) return process.env.PUBLIC_URL + '/img/car1.png'
-    if (Number(id) === 2) return process.env.PUBLIC_URL + '/img/car2.png'
-    if (Number(id) === 33) return process.env.PUBLIC_URL + '/img/car3.png'
-    return '/img/default.png'
+    return (process.env.NODE_ENV === 'production') ? car.pic : getCarIconUrl(id)
   }
 
 
@@ -197,22 +190,19 @@ const MarkerCar: FC<CarProps> = ({ car, dataForHistory }) => {
   useLayoutEffect(() => {
     // Рендерим JSX-компонент внутри портала
     // Создаем div для портала
-
     // const rootEl = document.getElementById('root')!;
     const portalContainer = document.createElement('div');
     // rootEl.appendChild(portalContainer);
-
     const root = createRoot(portalContainer);
     root.render(<Provider store={store}><HistoryMenu carData={dataForHistory} /></Provider>);
 
     portalContainerRef.current = portalContainer
-
   }, [])
 
   return (
     <LeafletMarker
       eventHandlers={{
-        add: () => console.log("MARKER ADD"),
+        // add: () => console.log("MARKER ADD"),
         // loading: () => { console.log("MARKER READY") }
         mouseover: (e) => mouseOverMarkerHandler(),
         mouseout: (e) => mouseOutMarkerHandler(),

@@ -25,7 +25,7 @@ function MainCars() {
   const [tileId, setTileId] = useState('tileId-1')
 
   const carsMapVariant = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
-
+  const parc_id = useAppSelector((state) => state.carsMap.companyName?.company_id);
   const mapRef = useRef<L.Map | null>(null)
   const dispatch = useAppDispatch()
 
@@ -38,7 +38,7 @@ function MainCars() {
     if (carsMapVariant === 'all') {
 
       const abortCtrlInMainCars = new AbortController();
-      const companyDataFromServer = getCarsFetch(abortCtrlInMainCars)
+      const companyDataFromServer = getCarsFetch(parc_id || '1', abortCtrlInMainCars)
 
 
       companyDataFromServer

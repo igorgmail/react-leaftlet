@@ -29,6 +29,8 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
 
   const [companyData, setCompanyData] = useState<ICompanyData>(carsDataStart)
   const [markerDataLoad, setMarkerDataLoad] = useState<boolean>(false)
+  const parc_id = useAppSelector((state) => state.carsMap.companyName?.company_id)
+
   const isMobile = useMemo(() => isHasToushScreen(), [])// mobile -> true ? PC -> false
   const map = useMap();
 
@@ -99,7 +101,7 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     const abortController = new AbortController();
 
     const callback = markerDataLoad ? () => {
-      getCarsFetch(abortController)
+      getCarsFetch(parc_id || '1', abortController)
         .then(data => {
           const companyData = sanitizeCompanyFetch(data)
           setCompanyData(companyData)
@@ -107,10 +109,6 @@ const PainCars: FC<IPainCars> = ({ mapBounds, carsDataStart }) => {
     } : () => { };
 
     const interval = setInterval(callback, carsPageconfig.updateDelay);
-    // if(markerDataLoad){
-
-    // }
-
 
     return () => {
       clearInterval(interval)

@@ -3,15 +3,17 @@ import { DateTime } from "luxon";
 
 async function getHistoryFetch(carData: TDataAboutCarForHistoryMenu, abortCtrlHistory: AbortController): Promise<IHistoryDataFromServer> {
 
-  const parc_id = 1
+  const apiHistoryUrl = process.env.REACT_APP_API_URL_HISTORY;
+
+  const parc_id = carData.company_id || 1
   const { car_id, car_name, dataFromIso, dataToIso, localOffset } = { ...carData }
-  const url = 'https://user-headers.onrender.com/history'
+  // const url = 'https://user-headers.onrender.com/history'
 
   // Формируем дату без учета часового пояса то есть если по местному 20-00
   // то и на сервер отправляем 20-00
   const from = DateTime.fromISO(dataFromIso).toFormat('yyyy-MM-dd HH:mm')
   const to = DateTime.fromISO(dataToIso).toFormat('yyyy-MM-dd HH:mm')
-  const urlString = url + `?park_id=${parc_id}&car_id=${car_id}&from=${from}&to=${to}`
+  const urlString = apiHistoryUrl + `?park_id=${parc_id}&car_id=${car_id}&from=${from}&to=${to}`
 
   // console.log("Данные для запроса с сервера");
   // console.log("---------------------------");
