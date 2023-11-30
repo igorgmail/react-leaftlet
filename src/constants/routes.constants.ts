@@ -6,4 +6,5 @@ export const ROUTES = {
     LOGIN: '/auth/login',
     LOGOUT: '/auth/logout',
   },
+  SETTINGS: '/settings'
 };

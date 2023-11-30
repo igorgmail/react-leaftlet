@@ -5,13 +5,20 @@ import { localizeRoutes } from './common/utils';
 import { ROUTES } from './constants';
 import { Main } from './components';
 import MainCars from './components/MainCars/MainCars';
-
+import SettingMain from './components/SettingComponents/SettingMain';
 const routes: RouteObject[] = [
   {
     path: ROUTES.HOME,
     element: <Main />,
   },
-  { path: "cars", element: <MainCars /> }
+  {
+    path: ROUTES.CARS,
+    element: <MainCars />
+  },
+  {
+    path: ROUTES.SETTINGS,
+    element: <SettingMain />
+  }
 ];
 
 export const App = () => {
