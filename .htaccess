@@ -1,0 +1,9 @@
+RewriteEngine On
+; # Редирект HTTP на HTTPS, удалите эти строки, если это не требуется
+; RewriteCond %{HTTPS} off
+; RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Перенаправление всех запросов на index.html, кроме файлов и директорий
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
