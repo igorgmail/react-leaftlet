@@ -2,27 +2,28 @@ export const mockData = {
   company: {
     company_id: "1",
     name: "Компания АБС",
-    short_link: "http://89.108.99.163/~HA9D4KXLWG"
+    short_link: "http://89.108.99.163/~HA9D4KXLWG",
+    balance: '550',
   },
   cars: [
     {
       car_id: "1",
       name: "VW Passat",
-      pic: "http://89.108.99.163/pics/car1.png",
+      pic: '/img/car1.png',//"http://89.108.99.163/pics/car1.png",
       imei: "350612070317373",
-      alter_imei: null
+      alter_imei: '350612070317373'
     },
     {
       car_id: "2",
       name: "Renault Master",
-      pic: "http://89.108.99.163/pics/car2.png",
+      pic: '/img/car2.png',//"http://89.108.99.163/pics/car2.png",
       imei: "333",
       alter_imei: "444"
     },
     {
       car_id: "33",
       name: "Ларгус Иванов",
-      pic: "http://89.108.99.163/pics/car3.png",
+      pic: '/img/car3.png',//"http://89.108.99.163/pics/car3.png",
       imei: "eeer",
       alter_imei: null
     }

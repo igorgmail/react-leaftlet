@@ -1,8 +1,15 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, FC } from "react"
 
 import { Container, Stack } from "@mui/material"
 
-const ControlPointBlock = () => {
+import { TPointsData } from "./types/carsSettingsTypes";
+
+interface IPointDataProps {
+  pointData: TPointsData[]
+}
+const ControlPointBlock: FC<IPointDataProps> = ({ pointData }) => {
+  console.log("--Render ControlPointBlock");
+
   return (
     <div>ControlPointBlock</div>
   )

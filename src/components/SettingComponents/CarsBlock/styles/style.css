@@ -1,0 +1,14 @@
+.inputFocusStyle {
+  outline: none;
+  /* Убирает стандартный контур */
+  border: none;
+  /* Задайте нужный стиль границы */
+}
+
+.inputFocusStyle:focus {
+  outline: none;
+  /* Убирает стандартный контур */
+  border: 2px solid #1976D2;
+  border-radius: 4px;
+  /* Задайте нужный стиль границы */
+}
