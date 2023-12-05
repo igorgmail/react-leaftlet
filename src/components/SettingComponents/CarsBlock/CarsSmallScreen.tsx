@@ -15,8 +15,7 @@ import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { inputCarsDataDisableStyle, inputCarsIconStyle } from "../CompanyBlock/customStyle";
-import './styles/style.css'
+import '../styles/style.css'
 import RemoveDialog from "./RemoveDialog";
 
 interface ICarsBlockProps {
@@ -103,9 +102,8 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                   eventData={makeEventData(car)} />
 
                 <input
-                  className="inputFocusStyle"
+                  className="all-white-input-style"
                   style={{
-                    ...inputCarsDataDisableStyle,
                     width: `calc(${car.name.length}ch + 22px)`,
                   }}
                   type="text"
@@ -117,12 +115,13 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
             {/* Icon */}
             <Grid item xs={6}>
               <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                {/* <Box width={'40px'} margin={'auto'}> */}
-                <img src={car.pic}
-                  style={{ ...inputCarsIconStyle, transform: 'rotate(90deg)', width: '2rem' }}
+
+                <img
+                  className="carblock-icon-cars"
+                  src={car.pic}
+                  style={{ transform: 'rotate(90deg)', width: '2rem' }}
                   alt="Иконка"></img>
-                {/* </Box> */}
-                {/* <Box component={'img'} src={carsData[0].pic}></Box> */}
+
               </Stack>
             </Grid>
 
@@ -146,8 +145,8 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                 sx={{ padding: '8px' }}
               >
                 <input
-                  className="inputFocusStyle"
-                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.imei.length}ch + 22px)` }}
+                  className="all-white-input-style"
+                  style={{ width: `calc(${car.imei.length}ch + 22px)` }}
                   type="text"
                   readOnly={true}
                   defaultValue={car.imei || ''} />
@@ -158,8 +157,8 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
             <Grid item xs={6}>
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
                 <input
-                  className="inputFocusStyle"
-                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
+                  className="all-white-input-style"
+                  style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
                   type="text"
                   readOnly={true}
                   defaultValue={car.alter_imei || ''} />

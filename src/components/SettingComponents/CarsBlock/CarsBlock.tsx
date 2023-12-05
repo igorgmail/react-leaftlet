@@ -12,10 +12,7 @@ import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLadgeScreen from "./CarsLadgeScreen";
 import AddCar from "./AddCar";
 
-
-
-import { inputCarsDataDisableStyle, inputCarsIconStyle } from "../CompanyBlock/customStyle";
-import './styles/style.css'
+import '../styles/style.css'
 
 
 

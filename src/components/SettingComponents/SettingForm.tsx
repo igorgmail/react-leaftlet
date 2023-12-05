@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react"
 
 import { Container, Stack } from "@mui/material"
 import CarsBlock from "./CarsBlock/CarsBlock"
-import ControlPointBlock from "./ControlPointBlock"
+import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
 import EventsBlock from "./EventsBlock"
 import CompanyBlock from "./CompanyBlock/CompanyBlock"
 

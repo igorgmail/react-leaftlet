@@ -21,7 +21,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Backdrop from '@mui/material/Backdrop'
 
 
-import { inputCarsDataDisableStyle, inputCarsIconStyle } from "../CompanyBlock/customStyle";
+
 
 
 const AddCar = () => {

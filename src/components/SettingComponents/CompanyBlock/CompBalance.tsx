@@ -1,21 +1,16 @@
 import { FC, useState, useEffect } from "react"
 
 import { Box, Button, Stack } from "@mui/material"
-import CreateIcon from '@mui/icons-material/Create';
 
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 
-import { TCompanyData } from "../types/carsSettingsTypes";
 
-import { inputDisableStyle } from "./customStyle";
 
+import '../styles/style.css'
 type TCompBalanceProps = {
   companyId: string,
   balance: string
 }
-
-
 
 
 const CompBalance: FC<TCompBalanceProps> = ({ companyId, balance }) => {
@@ -24,7 +19,10 @@ const CompBalance: FC<TCompBalanceProps> = ({ companyId, balance }) => {
 
       <Stack display={'flex'} flexDirection={'row'} gap={'0.5rem'}>
         <input
-          style={{ ...inputDisableStyle, width: `calc(${balance.length}ch + 20px)` }}
+          className="company-block--dis-input"
+          style={{
+            width: `calc(${balance.length}ch + 20px)`
+          }}
           type="text"
           disabled
           defaultValue={balance}>

@@ -3,9 +3,6 @@ import { FC, useState, useEffect } from "react"
 import { Box, Button, Stack } from "@mui/material"
 import CreateIcon from '@mui/icons-material/Create';
 
-import { TCompanyData } from "../types/carsSettingsTypes";
-
-import { inputDisableStyle } from "./customStyle";
 
 type TCompNameProps = {
   companyId: string,
@@ -17,7 +14,10 @@ const CompName: FC<TCompNameProps> = ({ companyId, companyName }) => {
     <Stack display={'flex'} flexDirection={'column'}>
       <Stack display={'flex'} flexDirection={'row'} gap={'1rem'}>
         <input
-          style={{ ...inputDisableStyle, width: 'calc(10ch + 24px)' }}
+          className="company-block--dis-input"
+          style={{
+            width: `calc(${companyName.length}ch + 22px)`
+          }}
           type="text"
           disabled
           defaultValue={companyName}></input>

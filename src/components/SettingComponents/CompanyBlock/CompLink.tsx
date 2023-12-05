@@ -4,15 +4,11 @@ import { Box, Button, Stack } from "@mui/material"
 
 
 // Icons
-import CreateIcon from '@mui/icons-material/Create';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ClearIcon from '@mui/icons-material/Clear';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
-import { TCompanyData } from "../types/carsSettingsTypes";
-
-import { inputDisableStyle } from "./customStyle";
 
 type TCompLinkProps = {
   companyId: string,
@@ -26,7 +22,8 @@ const CompLink: FC<TCompLinkProps> = ({ companyId, shotLink }) => {
 
       <Stack display={'flex'} flexDirection={'row'} gap={'0.5rem'}>
         <input
-          style={inputDisableStyle}
+          className="company-block--dis-input"
+          // style={inputDisableStyle}
           type="text"
           disabled
           defaultValue={shotLink} />
