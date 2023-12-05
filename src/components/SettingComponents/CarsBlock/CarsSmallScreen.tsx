@@ -8,10 +8,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
+import { Container, Stack, Box, Typography, Grid, Divider, Button } from "@mui/material"
 
 
 import { ICarObject } from "../types/carsSettingsTypes";
+
+import ClearIcon from '@mui/icons-material/Clear';
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -58,7 +60,11 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
         <>
           <Grid
             container alignItems="center" justifyContent="center"
-            sx={{ backgroundColor: 'white', marginTop: '2rem' }}>
+            sx={{
+              backgroundColor: 'white',
+              marginTop: '2rem',
+              borderRadius: '10px'
+            }}>
 
             {/* Block - 1 */}
             <Grid item xs={6}>
@@ -82,7 +88,15 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
             {/* Name */}
             <Grid item xs={6}>
-              <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
+              <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
+                <Button
+                  sx={{
+                    minWidth: '10px', width: '2rem',
+                    marginRight: '2rem',
+                    "& .MuiButton-startIcon": { margin: "auto" }
+                  }}
+                  // variant="outlined"
+                  startIcon={<ClearIcon sx={{ margin: 'auto' }} />}></Button>
                 <input
                   className="inputFocusStyle"
                   style={{
