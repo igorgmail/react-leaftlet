@@ -15,16 +15,9 @@ import { ICarObject } from "../types/carsSettingsTypes";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
 import { inputCarsDataDisableStyle, inputCarsIconStyle } from "../CompanyBlock/customStyle";
 import './styles/style.css'
-
-const styleHead = { borderBottom: 'none', padding: '0 1rem 8px', color: 'white', }
-const styleCell = { padding: '0 1rem' }
-
-
+import RemoveDialog from "./RemoveDialog";
 
 interface ICarsBlockProps {
   carsData: ICarObject[]
@@ -32,9 +25,16 @@ interface ICarsBlockProps {
 
 
 
-
 const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
   console.log("▶ ⇛ carsData:", carsData);
+
+  const getApprove = (e: any) => {
+    console.log("▶ ⇛ e:", e.target);
+
+  }
+
+
+
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
       <Stack
@@ -89,14 +89,10 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
             {/* Name */}
             <Grid item xs={6}>
               <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
-                <Button
-                  sx={{
-                    minWidth: '10px', width: '2rem',
-                    marginRight: '2rem',
-                    "& .MuiButton-startIcon": { margin: "auto" }
-                  }}
-                  // variant="outlined"
-                  startIcon={<ClearIcon sx={{ margin: 'auto' }} />}></Button>
+                <RemoveDialog
+                  getApprove={getApprove}
+                  carData={car}></RemoveDialog>
+
                 <input
                   className="inputFocusStyle"
                   style={{
