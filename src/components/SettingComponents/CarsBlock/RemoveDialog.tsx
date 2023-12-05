@@ -8,15 +8,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { ICarObject } from "../types/carsSettingsTypes";
+import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { Stack } from '@mui/material';
 
+
 type TRemoveDialogProps = {
-  getApprove: (arg: boolean) => void,
-  carData: ICarObject
+  callback: (dialogEvent: TRemoveDialogCallback) => void,
+  eventData: {
+    event: string,
+    subjectid: string,
+    msg: string
+  }
 }
 
-const RemoveDialog: FC<TRemoveDialogProps> = ({ getApprove, carData }) => {
+
+const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -25,12 +31,13 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ getApprove, carData }) => {
 
   const handleClose = (e: any) => {
     setOpen(false);
-    // getApprove(e);
   };
 
   const handleAgree = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget;
-    console.log("Выбран автомобиль с ID:", target.dataset.carid);
+    const { event, subjectid } = target.dataset
+    const dialogEvent = { event, subjectid }
+    if (event && subjectid) callback(dialogEvent)
     setOpen(false);
   }
 
@@ -55,9 +62,8 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ getApprove, carData }) => {
           {"Удаление !!!"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <p>Подтвердите удаление</p>
-            <p>{carData.name}</p>
+          <DialogContentText id="alert-dialog-description" sx={{ textAlign: 'center' }}>
+            <div dangerouslySetInnerHTML={{ __html: eventData.msg }}></div>
           </DialogContentText>
         </DialogContent>
         <DialogActions >
@@ -65,7 +71,8 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ getApprove, carData }) => {
             sx={{ width: '100%' }}
           >
             <Button
-              data-carid={carData.car_id}
+              data-event={eventData.event}
+              data-subjectid={eventData.subjectid}
               onClick={(e: any) => handleAgree(e)}
             >Согласен</Button>
             <Button onClick={(e: any) => handleClose(false)} autoFocus>

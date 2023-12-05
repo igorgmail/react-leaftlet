@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import { Container, Stack, Box, Typography, Grid, Divider, Button } from "@mui/material"
 
 
-import { ICarObject } from "../types/carsSettingsTypes";
+import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -23,13 +23,22 @@ interface ICarsBlockProps {
   carsData: ICarObject[]
 }
 
+const makeEventData = (carObject: ICarObject) => {
 
+  const eventData = {
+    event: 'REMOVE_CAR',
+    subjectid: carObject.car_id,
+    msg: `Будет удален автомобиль <br>${carObject.name}`
+  }
+
+  return eventData
+}
 
 const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
   console.log("▶ ⇛ carsData:", carsData);
 
-  const getApprove = (e: any) => {
-    console.log("▶ ⇛ e:", e.target);
+  const handleDialog = (eventData: TRemoveDialogCallback) => {
+    console.log("▶ ⇛ eventData:", eventData);
 
   }
 
@@ -89,9 +98,9 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
             {/* Name */}
             <Grid item xs={6}>
               <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
-                <RemoveDialog
-                  getApprove={getApprove}
-                  carData={car}></RemoveDialog>
+
+                <RemoveDialog callback={handleDialog}
+                  eventData={makeEventData(car)} />
 
                 <input
                   className="inputFocusStyle"

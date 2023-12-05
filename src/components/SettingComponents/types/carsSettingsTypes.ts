@@ -49,3 +49,8 @@ export type TIcons = {
   icon_id: string,
   url: string,
 }
+
+export type TRemoveDialogCallback = {
+  event: string | undefined;
+  subjectid: string | undefined;
+}

@@ -12,7 +12,7 @@ import { Container, Stack, Box, Typography, Grid, Button, Divider } from "@mui/m
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { ICarObject } from "../types/carsSettingsTypes";
+import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import { inputCarsDataDisableStyle, inputCarsIconStyle } from "../CompanyBlock/customStyle";
 import './styles/style.css'
@@ -24,16 +24,25 @@ interface ICarsBlockProps {
 }
 
 
+
 const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
 
+  const makeEventData = (carObject: ICarObject) => {
 
-  const getApprove = (e: any) => {
-    console.log("ETarget", e.currenTarget);
-    console.log("ETargetID", e.target.dataset.dataCarid);
+    const eventData = {
+      event: 'REMOVE_CAR',
+      subjectid: carObject.car_id,
+      msg: `Будет удален автомобиль <br>${carObject.name}`
+    }
 
+    return eventData
   }
 
+  const handleDialog = (eventData: TRemoveDialogCallback) => {
+    console.log("▶ ⇛ eventData:", eventData);
+
+  }
 
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -107,7 +116,7 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                     }}
                     // variant="outlined"
                     startIcon={<ClearIcon sx={{ marginLeft: '0' }} />}></Button> */}
-                  <RemoveDialog getApprove={getApprove} carData={car}></RemoveDialog>
+                  <RemoveDialog callback={handleDialog} eventData={makeEventData(car)} />
 
                   <input
                     readOnly={true}
