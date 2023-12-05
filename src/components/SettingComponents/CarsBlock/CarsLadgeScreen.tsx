@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container, Stack, Box, Typography, Grid, Button } from "@mui/material"
+import { Container, Stack, Box, Typography, Grid, Button, Divider } from "@mui/material"
 
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -114,7 +114,7 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                     className="inputFocusStyle"
                     style={{
                       ...inputCarsDataDisableStyle,
-                      width: `calc(${car.name.length}ch + 18px)`,
+                      width: `calc(${car.name.length}ch + 22px)`,
                       // margin: 'auto'
                   }}
                     defaultValue={car.name}
@@ -156,6 +156,7 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                     defaultValue={car.alter_imei || ''} />
                 </Stack>
               </Grid>
+              <Divider />
             </>
           ))
           }

@@ -97,7 +97,7 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                   className="inputFocusStyle"
                   style={{
                     ...inputCarsDataDisableStyle,
-                    width: `calc(${car.name.length}ch + 18px)`,
+                    width: `calc(${car.name.length}ch + 22px)`,
                   }}
                   type="text"
                   readOnly={true}
@@ -138,7 +138,7 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
               >
                 <input
                   className="inputFocusStyle"
-                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.imei.length}ch + 20px)` }}
+                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.imei.length}ch + 22px)` }}
                   type="text"
                   readOnly={true}
                   defaultValue={car.imei || ''} />
@@ -150,7 +150,7 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
                 <input
                   className="inputFocusStyle"
-                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.alter_imei?.length || 0}ch + 20px)` }}
+                  style={{ ...inputCarsDataDisableStyle, width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
                   type="text"
                   readOnly={true}
                   defaultValue={car.alter_imei || ''} />
