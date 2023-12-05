@@ -8,6 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
+import { handlerRemoveDialog } from '../utils/handlerRemoveDialog';
+
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { Stack } from '@mui/material';
 
