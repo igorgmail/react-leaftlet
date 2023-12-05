@@ -1,52 +1,43 @@
-import { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC } from "react"
 
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Container, Stack, Box, Typography, Grid, Divider, Button } from "@mui/material"
+import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
 
 
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
-import ClearIcon from '@mui/icons-material/Clear';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import '../styles/style.css'
-import RemoveDialog from "./RemoveDialog";
 
-interface ICarsBlockProps {
-  carsData: ICarObject[]
+import { TPointsData } from "../types/carsSettingsTypes";
+import RemoveDialog from "../CarsBlock/RemoveDialog";
+
+interface IPointDataProps {
+  pointData: TPointsData[]
 }
 
-const makeEventData = (carObject: ICarObject) => {
+const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
 
-  const eventData = {
-    event: 'REMOVE_CAR',
-    subjectid: carObject.car_id,
-    msg: `Будет удален автомобиль <br>${carObject.name}`
-  }
-
-  return eventData
-}
-
-const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
-  console.log("▶ ⇛ carsData:", carsData);
 
   const handleDialog = (eventData: TRemoveDialogCallback) => {
     console.log("▶ ⇛ eventData:", eventData);
-
   }
 
+  const makeEventData = (point: TPointsData) => {
 
+    const eventData = {
+      event: 'REMOVE_POINT',
+      subjectid: point.point_id,
+      msg: `Будет удалена контрольная точка <br>${point.name}`
+    }
+
+    return eventData
+  }
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
-      {carsData.map((car) => (
+      {pointData.map((point) => (
         <>
           <Grid
             container alignItems="center" justifyContent="center"
@@ -71,7 +62,7 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
             <Grid item xs={6}>
               <Stack sx={{ backgroundColor: '#078c75', color: 'white', borderTopRightRadius: '10px', }}>
-                <Typography align="center">Иконка</Typography>
+                <Typography align="center">Радиус</Typography>
               </Stack>
 
             </Grid>
@@ -81,69 +72,49 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
               <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
 
                 <RemoveDialog callback={handleDialog}
-                  eventData={makeEventData(car)} />
+                  eventData={makeEventData(point)} />
 
                 <input
                   className="all-white-input-style"
                   style={{
-                    width: `calc(${car.name.length}ch + 22px)`,
+                    width: `calc(${point.name.length}ch + 30px)`,
                   }}
                   type="text"
                   readOnly={true}
-                  defaultValue={car.name} />
+                  defaultValue={point.name} />
               </Stack>
             </Grid>
 
-            {/* Icon */}
+            {/* Radius */}
             <Grid item xs={6}>
               <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-
-                <img
-                  className="carblock-icon-cars"
-                  src={car.pic}
-                  style={{ transform: 'rotate(90deg)', width: '2rem' }}
-                  alt="Иконка"></img>
-
+                <input
+                  className="all-white-input-style"
+                  style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
+                  type="text"
+                  readOnly={true}
+                  defaultValue={point.radius} />
               </Stack>
             </Grid>
 
             {/* Block - 2 */}
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
-                <Typography align="center">Imei</Typography>
+                <Typography align="center">Адресс</Typography>
               </Stack>
             </Grid>
 
-            <Grid item xs={6}>
-              <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
-                <Typography align="center">Imei 2</Typography>
-
-              </Stack>
-            </Grid>
-
-            {/* Imei */}
+            {/* Address */}
             <Grid item xs={6}>
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
                 sx={{ padding: '8px' }}
               >
                 <input
                   className="all-white-input-style"
-                  style={{ width: `calc(${car.imei.length}ch + 22px)` }}
+                  style={{ width: `calc(${point.name.length}ch + 30px)` }}
                   type="text"
                   readOnly={true}
-                  defaultValue={car.imei || ''} />
-              </Stack>
-            </Grid>
-
-            {/* Imei-2 */}
-            <Grid item xs={6}>
-              <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                <input
-                  className="all-white-input-style"
-                  style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
-                  type="text"
-                  readOnly={true}
-                  defaultValue={car.alter_imei || ''} />
+                  defaultValue={point.name || ''} />
               </Stack>
             </Grid>
 
@@ -172,4 +143,4 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
     </Box >
   )
 }
-export default CarsSmallScreen
+export default ControlBlockSmScreen

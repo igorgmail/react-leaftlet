@@ -45,24 +45,6 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
-      <Stack
-        display={'flex'} justifyContent={'center'}
-        sx={{
-          backgroundColor: '#078c75',
-          color: 'white',
-          borderRadius: '10px',
-          // borderTopLeftRadius: '10px',
-          // borderTopRightRadius: '10px',
-          padding: '.8rem',
-          // paddingLeft: '1rem',
-          // paddingTop: '1rem',
-          marginBottom: '8px'
-        }}>
-        <Typography variant="h6" align="left" gutterBottom sx={{ marginBottom: '0' }}>
-          Автомобили
-        </Typography>
-      </Stack>
-
       {/* Header Cars */}
       <Stack
         sx={{ marginBottom: '0' }}

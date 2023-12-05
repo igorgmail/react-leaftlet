@@ -19,33 +19,26 @@ interface IPointDataProps {
 }
 
 
-const BlockLadgeScreen: FC<IPointDataProps> = ({ pointData }) => {
+const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
 
 
   const handleDialog = (eventData: TRemoveDialogCallback) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 
+  const makeEventData = (point: TPointsData) => {
+
+    const eventData = {
+      event: 'REMOVE_POINT',
+      subjectid: point.point_id,
+      msg: `Будет удалена контрольная точка <br>${point.name}`
+    }
+
+    return eventData
+  }
+
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
-
-      <Stack
-        display={'flex'} justifyContent={'center'}
-        sx={{
-          backgroundColor: '#078c75',
-          color: 'white',
-          borderRadius: '10px',
-          // borderTopLeftRadius: '10px',
-          // borderTopRightRadius: '10px',
-          padding: '.8rem',
-          // paddingLeft: '1rem',
-          // paddingTop: '1rem',
-          marginBottom: '8px'
-        }}>
-        <Typography variant="h6" align="left" gutterBottom sx={{ marginBottom: '0' }}>
-          Контрольные точки
-        </Typography>
-      </Stack>
 
       {/* Header Cars */}
       <Stack
@@ -65,10 +58,10 @@ const BlockLadgeScreen: FC<IPointDataProps> = ({ pointData }) => {
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }}>
             <Stack >Имя</Stack>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={7}>
             <Stack display={'flex'} alignItems={'center'}>Адрес</Stack>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <Stack display={'flex'} alignItems={'center'}>Радиус</Stack>
           </Grid>
         </Grid>
@@ -87,22 +80,15 @@ const BlockLadgeScreen: FC<IPointDataProps> = ({ pointData }) => {
                 <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
 
                   {/* Remove Button */}
-                  {/* <Button
-                  sx={{
-                    minWidth: '10px', width: '2rem',
-                    "& .MuiButton-startIcon": { margin: "auto" }
-                  }}
-                  // variant="outlined"
-                  startIcon={<ClearIcon sx={{ marginLeft: '0' }} />}></Button> */}
-                  {/* <RemoveDialog callback={handleDialog} 
-                  eventData={makeEventData(car)} 
-                  /> */}
+                  <RemoveDialog callback={handleDialog}
+                    eventData={makeEventData(point)}
+                  />
 
                   <input
+                    className="all-white-input-style"
                     readOnly={true}
-                    className="inputFocusStyle"
                     style={{
-                      width: `calc(${point.name.length}ch + 22px)`,
+                      width: `calc(${point.name.length}ch + 30px)`,
                       // margin: 'auto'
                     }}
                     defaultValue={point.name}
@@ -111,26 +97,22 @@ const BlockLadgeScreen: FC<IPointDataProps> = ({ pointData }) => {
               </Grid>
 
               {/* Address */}
-              <Grid item xs={6} display={'flex'} justifyContent={'center'}>
-                <Stack>
-                  <Box margin={'auto'} display={'flex'} alignItems={'center'}>
-                    {/* <img src={point.pic}
-                      style={{ transform: 'rotate(90deg)', width: '2rem' }}
-                      alt="Иконка"></img> */}
-                  </Box>
-                </Stack>
+              <Grid item xs={7} display={'flex'} justifyContent={'center'}>
+                <Box margin={'auto'} display={'flex'} alignItems={'center'}>
+
+                </Box>
               </Grid>
 
               {/* Radius */}
-              <Grid item xs={3} display={'flex'} alignItems={'center'}>
-                <Stack>
-                  <input
-                    className="inputFocusStyle"
-                    style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
-                    type="text"
-                    readOnly={true}
-                    defaultValue={point.radius} />
-                </Stack>
+              <Grid item xs={2} display={'flex'} justifyContent={'center'}>
+                {/* <Stack display={'flex'} alignItems={'center'}> */}
+                <input
+                  className="all-white-input-style"
+                  style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
+                  type="text"
+                  readOnly={true}
+                  defaultValue={point.radius} />
+                {/* </Stack> */}
               </Grid>
 
               <Divider />
@@ -145,4 +127,4 @@ const BlockLadgeScreen: FC<IPointDataProps> = ({ pointData }) => {
     </Stack >
   )
 }
-export default BlockLadgeScreen
+export default ControlBlockLgScreen

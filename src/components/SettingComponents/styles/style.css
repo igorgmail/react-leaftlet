@@ -3,10 +3,7 @@
   /* border: none; */
   /* Что бы ни менялся размер при focus */
   border: 2px solid #ffffff;
-  background-color: none;
-
   padding: 8px;
-
   cursor: pointer;
 }
 
