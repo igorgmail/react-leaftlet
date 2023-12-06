@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons } from '../../components/SettingComponents/types/carsSettingsTypes';
+import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons } from '../../components/SettingPage/types/carsSettingsTypes';
 
 const initialState: ISettingsData = {
   company: null,

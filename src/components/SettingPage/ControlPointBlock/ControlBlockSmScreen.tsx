@@ -1,43 +1,46 @@
 import React, { useState, useEffect, FC } from "react"
 
-import { Container, Stack, Box, Typography, Grid } from "@mui/material"
+import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
 
 
-import { ICarObject, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-import RemoveDialog from "../CarsBlock/RemoveDialog";
+import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 
+import { TPointsData } from "../types/carsSettingsTypes";
+import RemoveDialog from "../components/RemoveDialog";
 
-
-interface IEventBlockProps {
-  eventsData: TEventsData[]
+interface IPointDataProps {
+  pointData: TPointsData[]
 }
 
-const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
+const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
 
-  const makeEventData = (eventObject: TEventsData) => {
-
-    const eventData = {
-      event: 'REMOVE_CAR',
-      subjectid: eventObject.event_id,
-      msg: `Будет удалено событие <br>${eventObject.event}`
-    }
-
-    return eventData
-  }
 
   const handleDialog = (eventData: TRemoveDialogCallback) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 
+  const makeEventData = (point: TPointsData) => {
+
+    const eventData = {
+      event: 'REMOVE_POINT',
+      subjectid: point.point_id,
+      msg: `Будет удалена контрольная точка <br>${point.name}`
+    }
+
+    return eventData
+  }
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
-      {eventsData.map((oneEvent) => (
+      {pointData.map((point) => (
 
         <Grid
-          key={`events-block-` + oneEvent.event_id}
+          key={`control-block-` + point.point_id}
           container alignItems="center" justifyContent="center"
           sx={{
             backgroundColor: 'white',
@@ -47,65 +50,72 @@ const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
           {/* Block - 1 */}
           <Grid item xs={6}>
-            <Stack sx={{ backgroundColor: '#078c75', color: 'white', borderTopLeftRadius: '10px', }}>
-              <Typography align="center">Автомобиль</Typography>
+            <Stack sx={{
+              backgroundColor: '#078c75',
+              color: 'white',
+              borderTopLeftRadius: '10px',
+            }}>
+
+              <Typography align="center">Имя</Typography>
             </Stack>
+
           </Grid>
 
           <Grid item xs={6}>
             <Stack sx={{ backgroundColor: '#078c75', color: 'white', borderTopRightRadius: '10px', }}>
-              <Typography align="center">Точка</Typography>
+              <Typography align="center">Радиус</Typography>
             </Stack>
+
           </Grid>
 
-          {/* Avto */}
+          {/* Name */}
           <Grid item xs={6}>
             <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
 
               <RemoveDialog callback={handleDialog}
-                eventData={makeEventData(oneEvent)} />
+                eventData={makeEventData(point)} />
 
               <input
                 className="all-white-input-style"
                 style={{
-                  width: `calc(${oneEvent.event.length}ch + 30px)`,
+                  width: `calc(${point.name.length}ch + 30px)`,
                 }}
                 type="text"
                 readOnly={true}
-                defaultValue={oneEvent.event} />
+                defaultValue={point.name} />
             </Stack>
           </Grid>
 
-          {/* Point */}
+          {/* Radius */}
           <Grid item xs={6}>
             <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
               <input
                 className="all-white-input-style"
-                style={{ width: `calc(${oneEvent.event.length}ch + 22px)`, fontSize: '0.8rem' }}
+                style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
                 type="text"
                 readOnly={true}
-                defaultValue={oneEvent.event} />
+                defaultValue={point.radius} />
             </Stack>
           </Grid>
 
           {/* Block - 2 */}
           <Grid item xs={12}>
             <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
-              <Typography align="center">Событие</Typography>
+              <Typography align="center">Адресс</Typography>
             </Stack>
           </Grid>
 
-          {/* Event */}
+          {/* Address */}
           <Grid item xs={6}>
             <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
               sx={{ padding: '8px' }}
             >
               <input
                 className="all-white-input-style"
-                style={{ width: `calc(${oneEvent.event.length}ch + 30px)` }}
+                style={{ width: `calc(${point.name.length}ch + 30px)` }}
                 type="text"
                 readOnly={true}
-                defaultValue={oneEvent.event} />
+                defaultValue={point.name || ''} />
             </Stack>
           </Grid>
 
@@ -132,4 +142,4 @@ const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
     </Box >
   )
 }
-export default EventSmBlock
+export default ControlBlockSmScreen

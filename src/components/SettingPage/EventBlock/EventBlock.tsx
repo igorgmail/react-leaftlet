@@ -10,6 +10,7 @@ import EventSmBlock from "./EventSmBlock";
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import BlockHeader from "../components/BlockHeader";
 
 
 interface IEventBlockProps {
@@ -26,27 +27,7 @@ const EventBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
   return (
     <Stack sx={{ whidth: '100%' }}>
-      <Stack
-        display={'flex'} justifyContent={'center'}
-        sx={{
-          backgroundColor: '#078c75',
-          color: 'white',
-          borderRadius: '10px',
-          // borderTopLeftRadius: '10px',
-          // borderTopRightRadius: '10px',
-          padding: '.8rem',
-          // paddingLeft: '1rem',
-          // paddingTop: '1rem',
-          marginBottom: '0',
-          marginTop: '2rem',
-          position: 'sticky',
-          top: '0',
-          zIndex: '1500'
-        }}>
-        <Typography variant="h6" align="left" gutterBottom sx={{ marginBottom: '0' }}>
-          События
-        </Typography>
-      </Stack>
+      <BlockHeader header={"События"} />
       {!isSmallScreen ? (
         <EventLgBlock eventsData={eventsData} />
       ) : (

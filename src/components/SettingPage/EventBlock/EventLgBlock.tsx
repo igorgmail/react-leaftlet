@@ -4,7 +4,7 @@ import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
 
 
 import { ICarObject, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-import RemoveDialog from "../CarsBlock/RemoveDialog";
+import RemoveDialog from "../components/RemoveDialog";
 
 interface IEventBlockProps {
   eventsData: TEventsData[]

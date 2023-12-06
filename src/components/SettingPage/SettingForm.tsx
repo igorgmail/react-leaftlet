@@ -5,10 +5,11 @@ import CarsBlock from "./CarsBlock/CarsBlock"
 import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
 import EventBlock from "./EventBlock/EventBlock"
 import CompanyBlock from "./CompanyBlock/CompanyBlock"
-
+import UserBlock from "./UsersBlock/UserBlock"
 import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../store';
 
 import { mockData } from "./mockData"
+
 
 
 
@@ -39,6 +40,7 @@ const SettingForm = () => {
       <CarsBlock carsData={carsData} key={'cars'}></CarsBlock>
       <ControlPointBlock pointData={controlPointData} key={'control'}></ControlPointBlock>
       <EventBlock eventsData={eventsData} key={'events'}></EventBlock>
+      <UserBlock></UserBlock>
     </Stack>
   )
 }

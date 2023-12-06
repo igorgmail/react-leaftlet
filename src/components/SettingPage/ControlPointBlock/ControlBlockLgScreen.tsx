@@ -8,7 +8,7 @@ import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import RemoveDialog from "../CarsBlock/RemoveDialog";
+import RemoveDialog from "../components/RemoveDialog";
 
 import { TPointsData } from "../types/carsSettingsTypes";
 
@@ -77,50 +77,50 @@ const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
               paddingLeft: '.8rem'
             }}
           >
-              {/* Name */}
-              <Grid item xs={3} display={'flex'} justifyContent={'flex-start'}>
-                <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
+            {/* Name */}
+            <Grid item xs={3} display={'flex'} justifyContent={'flex-start'}>
+              <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
 
-                  {/* Remove Button */}
-                  <RemoveDialog callback={handleDialog}
-                    eventData={makeEventData(point)}
-                  />
+                {/* Remove Button */}
+                <RemoveDialog callback={handleDialog}
+                  eventData={makeEventData(point)}
+                />
 
-                  <input
-                    className="all-white-input-style"
-                    readOnly={true}
-                    style={{
-                      width: `calc(${point.name.length}ch + 30px)`,
-                      // margin: 'auto'
-                    }}
-                    defaultValue={point.name}
-                  />
-                </Stack>
-              </Grid>
-
-              {/* Address */}
-              <Grid item xs={7} display={'flex'} justifyContent={'center'}>
-                <Box margin={'auto'} display={'flex'} alignItems={'center'}>
-
-                </Box>
-              </Grid>
-
-              {/* Radius */}
-              <Grid item xs={2} display={'flex'} justifyContent={'center'}>
-                {/* <Stack display={'flex'} alignItems={'center'}> */}
                 <input
                   className="all-white-input-style"
-                  style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
-                  type="text"
                   readOnly={true}
-                  defaultValue={point.radius} />
-                {/* </Stack> */}
-              </Grid>
+                  style={{
+                    width: `calc(${point.name.length}ch + 30px)`,
+                    // margin: 'auto'
+                  }}
+                  defaultValue={point.name}
+                />
+              </Stack>
+            </Grid>
 
-              <Divider />
+            {/* Address */}
+            <Grid item xs={7} display={'flex'} justifyContent={'center'}>
+              <Box margin={'auto'} display={'flex'} alignItems={'center'}>
+
+              </Box>
+            </Grid>
+
+            {/* Radius */}
+            <Grid item xs={2} display={'flex'} justifyContent={'center'}>
+              {/* <Stack display={'flex'} alignItems={'center'}> */}
+              <input
+                className="all-white-input-style"
+                style={{ width: `calc(${point.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
+                type="text"
+                readOnly={true}
+                defaultValue={point.radius} />
+              {/* </Stack> */}
+            </Grid>
+
+            <Divider />
           </Grid>
-          ))
-          }
+        ))
+        }
 
 
 
