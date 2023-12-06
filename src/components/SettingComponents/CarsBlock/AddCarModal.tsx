@@ -36,7 +36,11 @@ const AddCarModal: FC<TAddCarModalProps> = () => {
 
 
   return (
-    <div>
+
+    <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}
+      sx={{ width: '80%' }}
+    >
+
       <Fab color="primary" aria-label="add-car" size="small"
         onClick={() => handleOpen()}
         sx={{
@@ -64,7 +68,7 @@ const AddCarModal: FC<TAddCarModalProps> = () => {
       >
         {/* /create_car {“car_name”:”Renault Master”,”icon”: “file_name”,”imei”:”354354654”,”alter_imei”:”ltjewtjew”} */}
         <Fade in={open}>
-          <Box sx={style}>
+          <Box sx={{ ...style, width: ['80%', '60%', '50%'] }}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Добавление автомобиля
             </Typography>
@@ -73,14 +77,6 @@ const AddCarModal: FC<TAddCarModalProps> = () => {
               <Stack>
                 <Grid container
                   rowSpacing={1}
-                // sx={{
-                //   marginTop: '0.8rem',
-                //   backgroundColor: '#078c75',
-                //   color: 'white',
-                //   borderTopLeftRadius: '8px',
-                //   borderTopRightRadius: '8px',
-                //   paddingLeft: '.8rem'
-                // }}
                 >
                   <Grid item xs={4} sx={{ borderTopLeftRadius: '8px' }}>
                     <Stack >
@@ -184,7 +180,8 @@ const AddCarModal: FC<TAddCarModalProps> = () => {
           </Box>
         </Fade>
       </Modal>
-    </div>
+    </Stack >
+
   );
 }
 

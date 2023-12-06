@@ -1,8 +1,8 @@
 // Данные приходят с сервера
 export interface ISettingsData {
-  company: TCompanyData,
+  company: TCompanyData | null,
   cars: ICarObject[],
-  point: TPointsData[],
+  points: TPointsData[],
   events: TEventsData[],
   type_of_events: TTypeEvents,
   icons: TIcons[],

@@ -3,26 +3,22 @@ import React, { useState, useEffect, FC } from "react"
 import { Container, Stack, Box, Typography, Grid } from "@mui/material"
 
 
-import { ICarObject } from "../types/carsSettingsTypes";
+import { ICarObject, TEventsData } from "../types/carsSettingsTypes";
+
+import EventLgBlock from "./EventLgBlock";
+import EventSmBlock from "./EventSmBlock";
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import CarsSmallScreen from "./CarsSmallScreen";
-import CarsLadgeScreen from "./CarsLadgeScreen";
-import AddCarModal from "./AddCarModal";
 
-import '../styles/style.css'
-
-
-
-
-
-interface ICarsBlockProps {
-  carsData: ICarObject[]
+interface IEventBlockProps {
+  eventsData: TEventsData[]
 }
-const CarsBlock: FC<ICarsBlockProps> = ({ carsData }) => {
-  console.log("--Render CarsBlock");
+
+const EventBlock: FC<IEventBlockProps> = ({ eventsData }) => {
+  console.log("--Render EventsBlock");
+
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -42,25 +38,22 @@ const CarsBlock: FC<ICarsBlockProps> = ({ carsData }) => {
           // paddingLeft: '1rem',
           // paddingTop: '1rem',
           marginBottom: '0',
+          marginTop: '2rem',
           position: 'sticky',
           top: '0',
           zIndex: '1500'
         }}>
         <Typography variant="h6" align="left" gutterBottom sx={{ marginBottom: '0' }}>
-          Автомобили
+          События
         </Typography>
       </Stack>
       {!isSmallScreen ? (
-        <CarsLadgeScreen carsData={carsData} />
+        <EventLgBlock eventsData={eventsData} />
       ) : (
-        <CarsSmallScreen carsData={carsData} />
+        <EventSmBlock eventsData={eventsData} />
       )}
-      <AddCarModal />
+      {/* <AddCarModal /> */}
     </Stack>
   )
 }
-export default CarsBlock
-
-
-
-
+export default EventBlock

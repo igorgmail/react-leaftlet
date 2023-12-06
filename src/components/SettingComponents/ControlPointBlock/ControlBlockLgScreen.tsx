@@ -67,14 +67,16 @@ const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
         </Grid>
 
 
-        <Grid container
-          sx={{
-            backgroundColor: 'white',
-            paddingLeft: '.8rem'
-          }}
-        >
-          {pointData.length > 0 && pointData.map((point) => (
-            <>
+
+        {pointData.length > 0 && pointData.map((point) => (
+          <Grid
+            key={`control-block-` + point.point_id}
+            container
+            sx={{
+              backgroundColor: 'white',
+              paddingLeft: '.8rem'
+            }}
+          >
               {/* Name */}
               <Grid item xs={3} display={'flex'} justifyContent={'flex-start'}>
                 <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
@@ -116,11 +118,11 @@ const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
               </Grid>
 
               <Divider />
-            </>
+          </Grid>
           ))
           }
 
-        </Grid>
+
 
       </Stack>
 

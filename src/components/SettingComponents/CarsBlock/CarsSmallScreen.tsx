@@ -47,8 +47,9 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
       {carsData.map((car) => (
-        <>
-          <Grid
+        <Grid
+          key={`cars-block-` + car.car_id}
+
             container alignItems="center" justifyContent="center"
             sx={{
               backgroundColor: 'white',
@@ -160,9 +161,7 @@ const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
               </Stack>
 
             </Grid>
-          </Grid>
-          {/* <Divider sx={{ margin: '4px', borderWidth: '1px', borderColor: 'red' }}></Divider > */}
-        </>
+        </Grid>
       ))
       }
 

@@ -39,6 +39,9 @@ const ControlPointBlock: FC<IPointDataProps> = ({ pointData }) => {
           // paddingTop: '1rem',
           marginBottom: '8px',
           marginTop: '2rem',
+          position: 'sticky',
+          top: '0',
+          zIndex: '1500'
         }}>
         <Typography variant="h6" align="left" gutterBottom sx={{ marginBottom: '0' }}>
           Контрольные точки

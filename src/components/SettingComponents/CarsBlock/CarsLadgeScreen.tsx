@@ -75,15 +75,24 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
         </Grid>
 
 
-        <Grid container
+        {/* <Grid container
           sx={{
             backgroundColor: 'white',
             paddingLeft: '.8rem'
           }}
-        >
+        > */}
 
-          {carsData.length > 0 && carsData.map((car) => (
-            <>
+        {carsData.length > 0 && carsData.map((car) => (
+
+          <Grid container
+            key={`cars-block-` + car.car_id}
+            sx={{
+              backgroundColor: 'white',
+              paddingLeft: '.8rem'
+            }}
+          >
+
+
               {/* Name */}
               <Grid item xs={3} md={3} display={'flex'} justifyContent={'flex-start'}>
                 <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
@@ -152,11 +161,12 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
                 </Stack>
               </Grid>
               <Divider />
-            </>
+          </Grid>
+
           ))
           }
 
-        </Grid>
+        {/* </Grid> */}
 
       </Stack>
 

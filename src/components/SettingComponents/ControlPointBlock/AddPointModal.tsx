@@ -64,7 +64,7 @@ const AddPointModal = () => {
       >
         {/* /create_car {“car_name”:”Renault Master”,”icon”: “file_name”,”imei”:”354354654”,”alter_imei”:”ltjewtjew”} */}
         <Fade in={open}>
-          <Box sx={style}>
+          <Box sx={{ ...style, width: ['80%', '60%', '50%'] }}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Добавление контрольной точки
             </Typography>

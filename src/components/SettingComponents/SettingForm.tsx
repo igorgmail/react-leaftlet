@@ -3,9 +3,10 @@ import { useState, useEffect, useMemo } from "react"
 import { Container, Stack } from "@mui/material"
 import CarsBlock from "./CarsBlock/CarsBlock"
 import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
-import EventsBlock from "./EventsBlock"
+import EventBlock from "./EventBlock/EventBlock"
 import CompanyBlock from "./CompanyBlock/CompanyBlock"
 
+import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../store';
 
 import { mockData } from "./mockData"
 
@@ -14,6 +15,9 @@ import { mockData } from "./mockData"
 
 const SettingForm = () => {
   console.log("--Render Setting Form");
+
+  const dispatch = useAppDispatch()
+  // const carsSettingsData = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
 
   const companyData = mockData.company
@@ -24,14 +28,17 @@ const SettingForm = () => {
   const iconsData = mockData.icons // {icon_id: " ",url: " "}
 
 
+  useEffect(() => {
+    dispatch(carsSettingsActions.setInitialSettingsData(mockData))
+  }, [])
   return (
-    <Stack display={'flex'} margin={'auto'} mt={'2rem'}
+    <Stack display={'flex'} margin={'auto'} mt={'2rem'} mb={'2rem'}
       sx={{ width: { sm: "90%", md: "70%" }, }}
     >
       <CompanyBlock companyData={companyData} key={'company'}></CompanyBlock>
       <CarsBlock carsData={carsData} key={'cars'}></CarsBlock>
       <ControlPointBlock pointData={controlPointData} key={'control'}></ControlPointBlock>
-      <EventsBlock eventsData={eventsData} key={'events'}></EventsBlock>
+      <EventBlock eventsData={eventsData} key={'events'}></EventBlock>
     </Stack>
   )
 }

@@ -38,8 +38,9 @@ const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
       {pointData.map((point) => (
-        <>
+
           <Grid
+          key={`control-block-` + point.point_id}
             container alignItems="center" justifyContent="center"
             sx={{
               backgroundColor: 'white',
@@ -131,9 +132,7 @@ const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
               </Stack>
 
             </Grid>
-          </Grid>
-          {/* <Divider sx={{ margin: '4px', borderWidth: '1px', borderColor: 'red' }}></Divider > */}
-        </>
+        </Grid>
       ))
       }
 

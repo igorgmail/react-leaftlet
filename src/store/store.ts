@@ -5,6 +5,7 @@ import { routesReducer } from './slices/routesSlice';
 import { filterReducer } from './slices/filtersSlice';
 import { dataReducer } from './slices/dataRoutes';
 import { carsMapReducer } from './slices/carsMapSlice';
+import { carsSettingsReducer } from './slices/carsSettingsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     filters: filterReducer,
     data: dataReducer,
     carsMap: carsMapReducer,
+    carsSettings: carsSettingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
