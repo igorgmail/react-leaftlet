@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react"
+import { FC, useState, useEffect, useRef } from "react"
 
 import { Box, Button, Stack } from "@mui/material"
 
@@ -17,16 +17,36 @@ type TCompLinkProps = {
 
 
 const CompLink: FC<TCompLinkProps> = ({ companyId, shotLink }) => {
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (input) {
+      // Установка курсора в конец текста
+      input.scrollLeft = input.scrollWidth;
+      // input.value = shotLink; // Убедитесь, что shotLink загружен или обновлен
+      // input.focus();
+      // input.blur();
+    }
+  }, [shotLink]); // Обновление при изменении shotLink
+
   return (
     <Stack display={'flex'} flexDirection={'column'} >
 
       <Stack display={'flex'} flexDirection={'row'} gap={'0.5rem'}>
+        <Stack>
+
         <input
+            style={{ width: '80%' }}
+            ref={inputRef}
           className="company-block--dis-input"
           // style={inputDisableStyle}
           type="text"
           disabled
           defaultValue={shotLink} />
+        </Stack>
         <Stack>
           <Button
             sx={{
