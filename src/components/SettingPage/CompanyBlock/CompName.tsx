@@ -10,15 +10,17 @@ import { Box, Button, Stack } from "@mui/material"
 import CreateIcon from '@mui/icons-material/Create';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { IRequestOptions } from "../types/carsSettingsTypes";
+import React from "react";
 
 
 const CompName = () => {
   console.log("--Render CompanyName");
 
-  const companyData = useAppSelector((store) => store.carsSettings.company)
+  const companyName = useAppSelector((store) => store.carsSettings.company.name)
+  const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
 
   const [readonlyName, setReadolyName] = useState(true)
-  const [compName, setCompName] = useState(companyData.name)
+  const [compName, setCompName] = useState(companyName)
   const { sendRequest } = useApi();
   const { showAlert, alertComponent } = useAlert();
   const dispatch = useAppDispatch()
@@ -43,7 +45,7 @@ const CompName = () => {
       method: 'POST',
       body: JSON.stringify({
         company_name: compName,
-        company_id: companyData.company_id
+        company_id: companyId
       }),
     };
 
@@ -53,7 +55,7 @@ const CompName = () => {
       console.warn("Error in save company name", response.error);
       showAlert('Имя компании не изменено', 'error');
       dispatch(carsSettingsActions.setRefreshCompanyData())
-      setCompName(companyData.name)
+      setCompName(companyName)
       return
     }
     if (response) {
@@ -62,8 +64,6 @@ const CompName = () => {
       setCompName(company_name)
       dispatch(carsSettingsActions.setCompanyName(company_name))
     }
-
-
   };
 
   return (

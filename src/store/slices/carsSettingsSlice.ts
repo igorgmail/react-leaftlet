@@ -57,6 +57,8 @@ export const carsSettingsSlice = createSlice({
       state.icons = action.payload.icons
       console.log("set action.payload.company", action?.payload?.company);
     },
+
+
     //  предусмотрена для отображения загрузки и блокирования страницы
     setRequestWorks: (state, action: PayloadAction<boolean>) => {
       state.config.requestWorks = action.payload
@@ -65,8 +67,25 @@ export const carsSettingsSlice = createSlice({
     setRefreshCompanyData: (state) => {
       state.company = { ...state.company }
     },
+    // Имя компании установить
     setCompanyName: (state, action: PayloadAction<TCompanyData>) => {
       state.company.name = action.payload.name
+    },
+
+    // Установить shortLink
+    setShortLink: (state, action: PayloadAction<string>) => {
+      state.company.short_link = action.payload
+      console.log("▶ ⇛ action.payload:", action.payload);
+    },
+
+    // Удалить shortLink
+    setRemoveShortLink: (state) => {
+      state.company.short_link = ''
+    },
+
+    // Установить balance
+    setBalance: (state, action: PayloadAction<string>) => {
+      state.company.balance = action.payload
     },
   },
 }

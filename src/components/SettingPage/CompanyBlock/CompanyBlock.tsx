@@ -19,9 +19,9 @@ const CompanyBlock: FC<TCompanyBlockProps> = () => {
   console.log("--Render CompanyBlock");
 
   const dispatch = useAppDispatch()
-  const companyData = useAppSelector((store) => store.carsSettings.company)
-// const requestWorks = useAppSelector((store) => store.carsSettings.config.requestWorks)
-  console.log("▶ ⇛ companyData:", companyData);
+  const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
+  const balance = useAppSelector((store) => store.carsSettings.company.balance)
+  // const requestWorks = useAppSelector((store) => store.carsSettings.config.requestWorks)
 
 
   return (
@@ -32,7 +32,7 @@ const CompanyBlock: FC<TCompanyBlockProps> = () => {
       flexWrap={'wrap'}
     >
 
-      {companyData?.company_id &&
+      {companyId &&
         <>
       {/* Block One */}
       {/* Имя компании */}
@@ -40,11 +40,11 @@ const CompanyBlock: FC<TCompanyBlockProps> = () => {
 
       {/* Block Two */}
       {/* Баланс */}
-        <CompBalance companyId={companyData.company_id} balance={companyData.balance} key={'compBlock-balance'}></CompBalance>
+        <CompBalance key={'compBlock-balance'}></CompBalance>
 
       {/* Block Three */}
       {/* Короткая Ссылка */}
-        <CompLink companyId={companyData.company_id} shotLink={companyData.short_link} key={'compBlock-link'}></CompLink>
+        <CompLink key={'compBlock-link'}></CompLink>
       </>
 
       }
