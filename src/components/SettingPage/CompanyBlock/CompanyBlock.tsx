@@ -1,37 +1,27 @@
 import { FC, useState, useEffect } from "react"
 
-import * as React from 'react';
-import { Stack, Box, Button, Typography } from '@mui/material';
-import { TextField, Input } from '@mui/material';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-// Icons
-import CreateIcon from '@mui/icons-material/Create';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
-import ClearIcon from '@mui/icons-material/Clear';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { useAppDispatch, carsMapActions, useAppSelector } from "../../../store";
 
-
-import { TCompanyData } from "../types/carsSettingsTypes";
-
-
-import { StackedBarChart } from "@mui/icons-material";
+import { Stack, } from '@mui/material';
 
 import CompName from "./CompName";
 import CompBalance from "./CompBalance";
 import CompLink from "./CompLink";
 
+import { TCompanyData } from "../types/carsSettingsTypes";
+import SimpleBackdrop from "../components/BackDrop";
+
 interface TCompanyBlockProps {
-  companyData: TCompanyData
+  companyData?: TCompanyData
 }
 
-const CompanyBlock: FC<TCompanyBlockProps> = ({ companyData }) => {
-  console.log("▶ ⇛ companyData:", companyData);
+const CompanyBlock: FC<TCompanyBlockProps> = () => {
+  console.log("--Render CompanyBlock");
 
+  const dispatch = useAppDispatch()
+  const companyData = useAppSelector((store) => store.carsSettings.company)
+// const requestWorks = useAppSelector((store) => store.carsSettings.config.requestWorks)
+  console.log("▶ ⇛ companyData:", companyData);
 
 
   return (
@@ -42,18 +32,23 @@ const CompanyBlock: FC<TCompanyBlockProps> = ({ companyData }) => {
       flexWrap={'wrap'}
     >
 
+      {companyData?.company_id &&
+        <>
       {/* Block One */}
       {/* Имя компании */}
-      <CompName companyId={companyData.company_id} companyName={companyData.name}></CompName>
+        <CompName key={'compBlock-name'}></CompName>
 
       {/* Block Two */}
       {/* Баланс */}
-      <CompBalance companyId={companyData.company_id} balance={companyData.balance} ></CompBalance>
+        <CompBalance companyId={companyData.company_id} balance={companyData.balance} key={'compBlock-balance'}></CompBalance>
 
       {/* Block Three */}
       {/* Короткая Ссылка */}
-      <CompLink companyId={companyData.company_id} shotLink={companyData.short_link} ></CompLink>
+        <CompLink companyId={companyData.company_id} shotLink={companyData.short_link} key={'compBlock-link'}></CompLink>
+      </>
 
+      }
+      {/* {requestWorks && <SimpleBackdrop />} */}
     </Stack>
   )
 }

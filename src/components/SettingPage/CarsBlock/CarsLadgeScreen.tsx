@@ -1,17 +1,14 @@
 import { useState, useEffect, FC } from "react"
 
-import { Container, Stack, Box, Typography, Grid, Button, Divider } from "@mui/material"
+import { Stack, Grid, Divider } from "@mui/material"
 
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-
-import '../styles/style.css'
 
 import RemoveDialog from "../components/RemoveDialog";
 
 interface ICarsBlockProps {
   carsData: ICarObject[],
 }
-
 
 
 const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {

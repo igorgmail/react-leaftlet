@@ -78,15 +78,6 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
               <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
 
                 {/* Remove Button */}
-                <input
-                  readOnly={true}
-                  className="all-white-input-style"
-                  style={{
-                    width: `calc(${oneEvent.car_id.length}ch + 22px)`,
-                    // margin: 'auto'
-                  }}
-                  defaultValue={oneEvent.car_id}
-                />
                 <RemoveDialog callback={handleDialog} eventData={makeEventData(oneEvent)} />
 
                 <input

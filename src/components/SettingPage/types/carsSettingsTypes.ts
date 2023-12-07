@@ -1,6 +1,6 @@
 // Данные приходят с сервера
 export interface ISettingsData {
-  company: TCompanyData | null,
+  company: TCompanyData,
   cars: ICarObject[],
   points: TPointsData[],
   events: TEventsData[],
@@ -53,4 +53,11 @@ export type TIcons = {
 export type TRemoveDialogCallback = {
   event: string | undefined;
   subjectid: string | undefined;
+}
+
+type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export interface IRequestOptions {
+  method: Tmethod;
+  body?: BodyInit | null;
 }

@@ -1,18 +1,15 @@
 import React, { useState, useEffect, FC } from "react"
 
-import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
+import { Stack, Box, Grid, Divider } from "@mui/material"
 
 
-import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import RemoveDialog from "../components/RemoveDialog";
 
 import { TPointsData } from "../types/carsSettingsTypes";
 
-import '../styles/style.css'
 
 interface IPointDataProps {
   pointData: TPointsData[]

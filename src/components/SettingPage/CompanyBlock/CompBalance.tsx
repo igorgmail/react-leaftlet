@@ -4,9 +4,6 @@ import { Box, Button, Stack } from "@mui/material"
 
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 
-
-
-import '../styles/style.css'
 type TCompBalanceProps = {
   companyId: string,
   balance: string
@@ -14,6 +11,8 @@ type TCompBalanceProps = {
 
 
 const CompBalance: FC<TCompBalanceProps> = ({ companyId, balance }) => {
+  console.log("--Render CompanyBalance");
+
   return (
     <Stack display={'flex'} flexDirection={'column'}>
 

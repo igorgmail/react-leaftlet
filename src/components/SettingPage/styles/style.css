@@ -27,5 +27,30 @@
   border-radius: 8px;
   color: white;
   padding: 8px;
-  border: none;
+  border: 2px solid transparent;
+  }
+  
+  .company-block--name-active-input {
+    background-color: #ffffff;
+    border-radius: 8px;
+    color: rgb(0, 0, 0);
+    padding: 8px;
+    border: 2px solid rgb(243, 76, 154);
+    box-shadow: 0 0 8px 0 rgba(243, 74, 74, 0.6);
+  }
+  
+  .company-block--name-active-input:focus {
+    outline-width: 0;
+  }
+  
+  #alert-portal {
+    position: fixed;
+    top: 40px;
+    /* bottom: 40px; */
+    /* Расстояние от нижнего края экрана */
+    left: 50%;
+    transform: translateX(-50%);
+    /* Центрирование Alert по горизонтали */
+    z-index: 2100;
+    /* Убедитесь, что Alert находится поверх других элементов */
 }

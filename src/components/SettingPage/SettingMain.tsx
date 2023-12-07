@@ -3,6 +3,9 @@ import { useState, useEffect } from "react"
 import { Container } from "@mui/material"
 import SettingForm from "./SettingForm"
 
+import './styles/style.css'
+
+
 const SettingMain = () => {
   return (
     <Container>

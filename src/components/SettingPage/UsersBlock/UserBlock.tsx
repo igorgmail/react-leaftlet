@@ -12,10 +12,7 @@ import UserLgBlock from "./UserLgBlock";
 
 
 interface IUserBlockProps {
-  usersData?: {
-    user: string,
-    role: string
-  }
+  usersData: { email: string, role: string }[]
 }
 
 const UserBlock: FC<IUserBlockProps> = ({ usersData }) => {
@@ -30,7 +27,7 @@ const UserBlock: FC<IUserBlockProps> = ({ usersData }) => {
     <Stack sx={{ whidth: '100%' }}>
       <BlockHeader header={"Пользователи"} />
 
-      <UserLgBlock></UserLgBlock>
+      <UserLgBlock usersData={usersData}></UserLgBlock>
       {/* {!isSmallScreen ? (
         <UserLgBlock eventsData={eventsData} />
       ) : (

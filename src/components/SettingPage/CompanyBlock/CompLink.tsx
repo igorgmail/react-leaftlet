@@ -17,6 +17,7 @@ type TCompLinkProps = {
 
 
 const CompLink: FC<TCompLinkProps> = ({ companyId, shotLink }) => {
+  console.log("--Render CompanyLink");
 
   const inputRef = useRef<HTMLInputElement>(null);
 

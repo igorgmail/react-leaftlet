@@ -1,3 +1,5 @@
+import { ISettingsData } from "./types/carsSettingsTypes"
+
 export const mockData = {
   company: {
     company_id: "1",
@@ -125,4 +127,28 @@ export const mockData = {
       url: "http://89.108.99.163/pics/car9.png"
     }
   ]
+}
+
+export const mockUserData = {
+  users: [
+    {
+      email: 'kenherli@gmail.com',
+      role: 'admin'
+    },
+    {
+      email: 'petrov@mail.pl',
+      role: 'user'
+    },
+
+  ]
+}
+
+export async function imitationFetchMockData(): Promise<ISettingsData> {
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(mockData)
+    }, 300)
+  })
+
 }

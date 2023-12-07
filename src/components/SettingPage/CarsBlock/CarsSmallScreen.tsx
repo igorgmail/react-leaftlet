@@ -1,21 +1,10 @@
 import { useState, useEffect, FC } from "react"
 
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Container, Stack, Box, Typography, Grid, Divider, Button } from "@mui/material"
+import { Stack, Box, Typography, Grid } from "@mui/material"
 
 
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
-import ClearIcon from '@mui/icons-material/Clear';
-
-import '../styles/style.css'
 import RemoveDialog from "../components/RemoveDialog";
 
 interface ICarsBlockProps {

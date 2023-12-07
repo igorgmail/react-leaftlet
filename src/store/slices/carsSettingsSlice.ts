@@ -1,13 +1,28 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons } from '../../components/SettingPage/types/carsSettingsTypes';
 
-const initialState: ISettingsData = {
-  company: null,
+
+// type TSettingsConfig = {
+//   requestWorks: boolean
+//   }
+
+interface IInitSettingStore extends ISettingsData {
+  config: {
+    requestWorks: boolean
+  }
+}
+
+
+const initialState: IInitSettingStore = {
+  company: { company_id: '', name: '', short_link: '', balance: '' },
   cars: [],
   points: [],
   events: [],
   type_of_events: [],
-  icons: []
+  icons: [],
+  config: {
+    requestWorks: false
+  }
 }
 
 export const carsSettingsSlice = createSlice({
@@ -34,13 +49,24 @@ export const carsSettingsSlice = createSlice({
       state.icons = [...action.payload]
     },
     setInitialSettingsData: (state, action: PayloadAction<ISettingsData>) => {
-      console.log("▶ ⇛ action.payload:", action.payload);
       state.company = action.payload.company
       state.cars = action.payload.cars
       state.points = action.payload.points
       state.events = action.payload.events
       state.type_of_events = action.payload.type_of_events
       state.icons = action.payload.icons
+      console.log("set action.payload.company", action?.payload?.company);
+    },
+    //  предусмотрена для отображения загрузки и блокирования страницы
+    setRequestWorks: (state, action: PayloadAction<boolean>) => {
+      state.config.requestWorks = action.payload
+    },
+    // Обновить состояние компании
+    setRefreshCompanyData: (state) => {
+      state.company = { ...state.company }
+    },
+    setCompanyName: (state, action: PayloadAction<TCompanyData>) => {
+      state.company.name = action.payload.name
     },
   },
 }

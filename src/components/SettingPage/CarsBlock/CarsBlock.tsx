@@ -13,7 +13,7 @@ import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLadgeScreen from "./CarsLadgeScreen";
 import AddCarModal from "./AddCarModal";
 
-import '../styles/style.css'
+
 
 
 
