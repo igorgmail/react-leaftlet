@@ -18,7 +18,9 @@ const CompBalance = () => {
 
 
   const companyBalance = useAppSelector((store) => store.carsSettings.company.balance)
+  console.log("▶ ⇛ companyBalance:", companyBalance);
   const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
+  console.log("▶ ⇛ companyId:", companyId);
 
   const [compBalance, setCompBalance] = useState(companyBalance)
   const { sendRequest } = useApi();
@@ -55,6 +57,7 @@ const CompBalance = () => {
   }
 
   return (
+    <>
     <Stack display={'flex'} flexDirection={'column'}>
 
       <Stack display={'flex'} flexDirection={'row'} gap={'0.5rem'}>
@@ -85,8 +88,9 @@ const CompBalance = () => {
       <Stack>
         <Box>Баланс</Box>
       </Stack>
+      </Stack>
       {alertComponent}
-    </Stack>
+    </>
   )
 }
 export default CompBalance

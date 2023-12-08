@@ -157,6 +157,7 @@ const CompLink = () => {
 
 
   return (
+    <>
     <Stack display={'flex'} flexDirection={'column'} >
 
       <Stack display={'flex'} flexDirection={'row'} gap={'0.5rem'}>
@@ -241,8 +242,10 @@ const CompLink = () => {
       <Stack>
         <Box>Короткая ссылка</Box>
       </Stack>
+      </Stack>
       {alertComponent}
-    </Stack>
+    </>
+
   )
 }
 export default CompLink

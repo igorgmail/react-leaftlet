@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react"
+import { FC, useState, useEffect, useRef } from "react"
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 import useApi from "../hooks/useApi";
@@ -21,21 +21,23 @@ const CompName = () => {
 
   const [readonlyName, setReadolyName] = useState(true)
   const [compName, setCompName] = useState(companyName)
+  const nameInputRef = useRef<HTMLInputElement>(null)
   const { sendRequest } = useApi();
   const { showAlert, alertComponent } = useAlert();
   const dispatch = useAppDispatch()
 
-  const handlerEditorButton = () => {
+  const handleEditorButton = () => {
     setReadolyName(false)
+    nameInputRef.current?.focus()
   }
 
-  const handlerSaveName = () => {
+  const handleSaveName = () => {
     setReadolyName(true)
     submitData()
     dispatch(carsSettingsActions.setRequestWorks(true))
   }
 
-  const handlerNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.currentTarget.value
     setCompName((cur) => cur = value)
   }
@@ -76,7 +78,8 @@ const CompName = () => {
       <Stack display={'flex'} flexDirection={'row'} gap={'1rem'}>
         <input
             className={readonlyName ? "company-block--dis-input" : 'company-block--name-active-input'}
-            onChange={(e) => handlerNameInput(e)}
+            onChange={(e) => handleNameInput(e)}
+            ref={nameInputRef}
           style={{
             width: `calc(${compName.length}ch + 22px)`
           }}
@@ -96,11 +99,11 @@ const CompName = () => {
             startIcon=
             {readonlyName ?
               <CreateIcon
-                onClick={handlerEditorButton}
+                onClick={handleEditorButton}
                 sx={{ margin: 'auto' }}
               />
               : <CheckRoundedIcon
-                onClick={handlerSaveName}
+                onClick={handleSaveName}
               />}
           >
           </Button>
