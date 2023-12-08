@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { FC } from "react";
 
-import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
+import { Stack, Grid, Divider } from "@mui/material";
 
+import { TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
-import { ICarObject, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import RemoveDialog from "../components/RemoveDialog";
 
 interface IEventBlockProps {

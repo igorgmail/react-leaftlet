@@ -28,7 +28,7 @@ const CompBalance = () => {
 
   const dispatch = useAppDispatch()
 
-
+  //TODO Запрос GET body не имеет, либо передать в параметрах company_id либо поменять на сервере на POST
   const handleUpdateBalance = async () => {
 
     const requestOptions: IRequestOptions = {
@@ -67,7 +67,7 @@ const CompBalance = () => {
             width: `calc(${compBalance.length}ch + 20px)`
           }}
           type="text"
-          disabled
+            readOnly
           defaultValue={compBalance}>
         </input>
         <Stack display={'flex'} flexDirection={'row'} alignItems={'center'}>

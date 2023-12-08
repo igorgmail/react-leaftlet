@@ -169,7 +169,7 @@ const CompLink = () => {
           className="company-block--dis-input"
           // style={inputDisableStyle}
           type="text"
-          disabled
+              readOnly
             value={shortLink} />
         </Stack>
 

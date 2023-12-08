@@ -1,8 +1,10 @@
-import { Divider, Grid, Stack } from "@mui/material"
+import { Button, Divider, Grid, Stack } from "@mui/material"
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { makeEventData } from "./utils/makeEventData";
 import RemoveDialog from "../components/RemoveDialog";
+import IconsCarsMenu from "./IconsCarsMenu";
+
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
 
@@ -17,11 +19,7 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
 
-  const [inputReadOnly, setInputReadOnly] = useState(true)
-
-  // const [chooseInput, setChooseInput] = useState<string | null>(null)
-
-  const inputRef = useRef(null);
+  const [iconsMenuOpen, setIconsMenuOpen] = useState(true)
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
   const dispatch = useAppDispatch()
@@ -30,28 +28,31 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 
-  const handleCarNameInput = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+  const handleDoubleClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()
     const touchNumber = event.detail
 
     if (touchNumber === 2) {
-      // setInputReadOnly(false)
-      // setChooseInput(event.currentTarget.name)
       const targ = event.currentTarget
       targ.focus()
 
       dispatch(carsSettingsActions.setChooseInputName(event.currentTarget.name))
       // Установка курсора в конец текста
+      // targ.type = 'text'
       const textLength = targ.value.length;
       targ.setSelectionRange(textLength, textLength);
+      // targ.type = 'number'
     }
+  }
+
+  const handleImageClick = () => {
+
   }
 
   const handleTouchCarNameInput = () => {
     console.log("TOUCCH");
 
   }
-
 
 
   return (
@@ -71,8 +72,8 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
           <RemoveDialog callback={handleDialog} eventData={makeEventData(car)} />
 
           <input
-            onClick={handleCarNameInput}
-            onTouchStart={handleCarNameInput}
+            onClick={handleDoubleClick}   // onTouchStart={handleTouchCarNameInput}
+            onMouseDown={handleTouchCarNameInput}
             className={chooseInputFromStore === `id${car.car_id}-carName` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.name.length}ch + 22px)`,
@@ -87,14 +88,24 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
 
       {/* Icon */}
       <Grid item xs={2} md={3} display={'flex'} justifyContent={'center'}>
-        <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
+        <Stack margin={'auto'} display={'flex'} alignItems={'center'}
+          aria-haspopup="true"
+          aria-expanded={'true'}
 
-          <img src={car.pic}
+          id="demo-positioned-button"
+          aria-controls={'demo-positioned-menu'}
+        >
+          <IconsCarsMenu >
+            <img src={car.pic}
             className="carblock-icon-cars"
             style={{
-              transform: 'rotate(90deg)', width: '2rem'
+              transform: 'rotate(90deg)', width: '2rem',
+              position: 'relative'
             }}
-            alt="Иконка"></img>
+              alt="Иконка"
+            >
+            </img>
+          </IconsCarsMenu>
 
         </Stack>
       </Grid>
@@ -103,7 +114,7 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       <Grid item xs={3} md={3} display={'flex'} alignItems={'center'}>
         <Stack>
           <input
-            onClick={handleCarNameInput}
+            onClick={handleDoubleClick} onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === `id${car.car_id}-carImei` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
@@ -120,7 +131,8 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       <Grid item xs={4} md={3} display={'flex'} alignItems={'center'}>
         <Stack >
           <input
-            onClick={handleCarNameInput}
+            onClick={handleDoubleClick}
+            onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === `id${car.car_id}-carImei-2` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.alter_imei?.length || 0}ch + 22px)`, fontSize: '0.8rem'
@@ -136,8 +148,6 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     </Grid>
   )
 }
-
-
 
 
 export default LadgeCarsField

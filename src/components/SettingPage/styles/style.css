@@ -28,7 +28,7 @@
   /* color: 'white', */
   padding: 8px;
   /* border: 'none', */
-  /* cursor: 'pointer' */
+  cursor: pointer
 }
 
 .company-block--dis-input {
@@ -66,4 +66,35 @@
 }
 .dialog-modal--content {
   text-align: center;
+}
+.cars-popup--wrap {
+  border: 2px solid #078c75;
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  gap: 0.5rem;
+}
+
+.cars-popup--row-block {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.cars-popup--item {
+  display: flex;
+  align-items: center;
+  width: 4rem;
+  cursor: pointer;
+  border: 2px solid #e7e7e7;
+  border-radius: 4px;
+}
+
+.cars-popup--item:hover {
+  border: 2px solid #078c75;
+  border-radius: 4px;
+}
+
+.cars-popup--image {
+  width: 1.5rem;
+  transform: rotate(90deg);
 }

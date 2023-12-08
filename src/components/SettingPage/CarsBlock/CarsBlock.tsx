@@ -30,19 +30,18 @@ const CarsBlock = () => {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       event.stopPropagation()
-
       const target = event.target as HTMLElement;
       const attrName = target.getAttribute('name')
+      if (attrName !== chooseInput) {
+        console.warn("Снимаем выделение");
 
-      if (attrName !== chooseInput) dispatch(carsSettingsActions.setChooseInputName(null))
-
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
     }
-
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-
     };
   }, [chooseInput, dispatch]);
 
@@ -51,11 +50,18 @@ const CarsBlock = () => {
     <Stack sx={{ whidth: '100%' }}>
 
       <BlockHeader header={'Автомобили'} />
+
       {!isSmallScreen ? (
+
         <CarsLadgeScreen carsData={carsData} />
+
       ) : (
+
         <CarsSmallScreen carsData={carsData} />
+
       )}
+
+
       <AddCarModal />
     </Stack>
   )
