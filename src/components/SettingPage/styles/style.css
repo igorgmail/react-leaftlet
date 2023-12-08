@@ -13,6 +13,15 @@
   border-radius: 4px;
 }
 
+.all-white-input--choose-style {
+  outline: none;
+  /* border: none; */
+  /* Что бы ни менялся размер при focus */
+  padding: 8px;
+  border: 2px solid #fd3232;
+  border-radius: 4px;
+  box-shadow: 0 0 8px 0 rgba(243, 74, 74, 0.6);
+}
 .carblock-icon-cars {
   background-color: none;
   /* borderRadius: '8px', */
@@ -43,6 +52,7 @@
     outline-width: 0;
   }
   
+                                /* Для отображения Alert */
   #alert-portal {
     position: fixed;
     top: 40px;
@@ -53,4 +63,7 @@
     /* Центрирование Alert по горизонтали */
     z-index: 2100;
     /* Убедитесь, что Alert находится поверх других элементов */
+}
+.dialog-modal--content {
+  text-align: center;
 }

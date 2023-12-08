@@ -64,9 +64,9 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
           {"Удаление !!!"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" sx={{ textAlign: 'center' }}>
-            <div dangerouslySetInnerHTML={{ __html: eventData.msg }}></div>
-          </DialogContentText>
+          {/* <DialogContentText id="alert-dialog-description" sx={{ textAlign: 'center' }}> */}
+          <div dangerouslySetInnerHTML={{ __html: eventData.msg }} className='dialog-modal--content'></div>
+          {/* </DialogContentText> */}
         </DialogContent>
         <DialogActions >
           <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'}

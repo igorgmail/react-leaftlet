@@ -2,25 +2,17 @@ import { useState, useEffect, FC } from "react"
 
 import { Stack, Box, Typography, Grid } from "@mui/material"
 
+import RemoveDialog from "../components/RemoveDialog";
+
+import { makeEventData } from "./utils/makeEventData";
 
 import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-
-import RemoveDialog from "../components/RemoveDialog";
 
 interface ICarsBlockProps {
   carsData: ICarObject[]
 }
 
-const makeEventData = (carObject: ICarObject) => {
 
-  const eventData = {
-    event: 'REMOVE_CAR',
-    subjectid: carObject.car_id,
-    msg: `Будет удален автомобиль <br>${carObject.name}`
-  }
-
-  return eventData
-}
 
 const CarsSmallScreen: FC<ICarsBlockProps> = ({ carsData }) => {
   console.log("▶ ⇛ carsData:", carsData);

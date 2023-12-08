@@ -8,7 +8,8 @@ import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTyp
 
 interface IInitSettingStore extends ISettingsData {
   config: {
-    requestWorks: boolean
+    requestWorks: boolean,
+    chooseInputName: string | null,
   }
 }
 
@@ -21,7 +22,8 @@ const initialState: IInitSettingStore = {
   type_of_events: [],
   icons: [],
   config: {
-    requestWorks: false
+    requestWorks: false,
+    chooseInputName: null
   }
 }
 
@@ -86,6 +88,11 @@ export const carsSettingsSlice = createSlice({
     // Установить balance
     setBalance: (state, action: PayloadAction<string>) => {
       state.company.balance = action.payload
+    },
+
+    // Установить имя выбранного меню
+    setChooseInputName: (state, action: PayloadAction<string | null>) => {
+      state.config.chooseInputName = action.payload
     },
   },
 }

@@ -48,7 +48,7 @@ const SettingForm = () => {
       {settingsData ? (
         <>
           <CompanyBlock key={'company'}></CompanyBlock>
-          <CarsBlock carsData={settingsData.cars} key={'cars'}></CarsBlock>
+          <CarsBlock key={'cars'}></CarsBlock>
           <ControlPointBlock pointData={settingsData.points} key={'control'}></ControlPointBlock>
           <EventBlock eventsData={settingsData.events} key={'events'}></EventBlock>
           <UserBlock usersData={mockUserData.users}></UserBlock>
