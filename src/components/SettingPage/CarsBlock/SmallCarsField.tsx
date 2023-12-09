@@ -15,6 +15,17 @@ interface ISmallCarsProps {
 
 
 const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
+  console.log("--Render SmallField");
+
+
+  const iconsCars = useAppSelector((store) => store.carsSettings.icons)
+  const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
+
+
+  const [inputCarNameValue, setInputCarNameValue] = useState(car.name);
+  const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
+  const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
+  const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
 
 
   const handleDialog = (eventData: TRemoveDialogCallback) => {
@@ -22,10 +33,27 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
 
   }
 
-  const handleIconCarInNetClick = (e: React.MouseEvent) => {
-    const target = e.currentTarget
-    console.log("▶ handleImageClick target:", target);
+  const handleIconCarInNetClick = (e: React.MouseEvent, popupState: any) => {
+    const target = e.currentTarget as HTMLImageElement;
+    if (target.dataset.iconid) {
+      const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
+      setInputCarIconIdValue(chooseIconUrl?.url || '')
+    }
+    popupState.close()
   }
+
+  const handleTouchCarNameInput = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+    const targ = event.currentTarget
+    targ.focus()
+
+    dispatch(carsSettingsActions.setChooseInputName(event.currentTarget.name))
+    // Установка курсора в конец текста
+    // targ.type = 'text'
+    const textLength = targ.value.length;
+    targ.setSelectionRange(textLength, textLength);
+
+  }
+
 
 
   return (
@@ -35,9 +63,11 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
         backgroundColor: 'white',
         marginTop: '2rem',
         borderRadius: '10px'
-      }}>
+      }}
+      data-carid={car.car_id}
+    >
 
-      {/* Block - 1 */}
+      {/* Block - 1 Name and Icon */}
       <Grid item xs={6}>
         <Stack sx={{
           backgroundColor: '#078c75',
@@ -65,30 +95,36 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
             eventData={makeEventData(car)} />
 
           <input
-            className="all-white-input-style"
+            // onClick={() => { }}   // onTouchStart={handleTouchCarNameInput}
+            onMouseDown={handleTouchCarNameInput}
+            className={chooseInputFromStore === `id${car.car_id}-carName` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.name.length}ch + 22px)`,
             }}
             type="text"
             readOnly={true}
-            defaultValue={car.name} />
+            onChange={(e) => setInputCarNameValue(e.target.value)}
+            value={inputCarNameValue}
+            name={`id${car.car_id}-carName`}
+          />
         </Stack>
       </Grid>
 
       {/* Icon */}
       <Grid item xs={6}>
         <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-          <IconsCarsMenu handleIconCarInNetClick={handleIconCarInNetClick}>
+          <IconsCarsMenu
+            handleIconCarInNetClick={handleIconCarInNetClick}>
             <img
+              src={inputCarIconIdValue}
               className="carblock-icon-cars"
-              src={car.pic}
               style={{ transform: 'rotate(90deg)', width: '2rem' }}
               alt="Иконка"></img>
           </IconsCarsMenu>
         </Stack>
       </Grid>
 
-      {/* Block - 2 */}
+      {/* Block - 2 Imei and Alter-Imei*/}
       <Grid item xs={6}>
         <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
           <Typography align="center">Imei</Typography>
@@ -108,11 +144,15 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
           sx={{ padding: '8px' }}
         >
           <input
-            className="all-white-input-style"
+            onClick={() => { }} // По одиночному клику
+            onChange={(e) => setInputCarImeiValue(e.target.value)}
+            className={chooseInputFromStore === `id${car.car_id}-carImei` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.imei.length}ch + 22px)` }}
             type="text"
-            readOnly={true}
-            defaultValue={car.imei || ''} />
+            readOnly={chooseInputFromStore !== `id${car.car_id}-carImei`}
+            value={inputCarImeiValue}
+            name={`id${car.car_id}-carImei`}
+          />
         </Stack>
       </Grid>
 
@@ -120,11 +160,15 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
       <Grid item xs={6}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
           <input
-            className="all-white-input-style"
+            onClick={() => { }}
+            onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
+            className={chooseInputFromStore === `id${car.car_id}-carImei-2` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
             type="text"
-            readOnly={true}
-            defaultValue={car.alter_imei || ''} />
+            readOnly={chooseInputFromStore !== `id${car.car_id}-carImei-2`}
+            value={inputCarAlterImeiValue || ''}
+            name={`id${car.car_id}-carImei-2`}
+          />
         </Stack>
       </Grid>
 
@@ -145,3 +189,7 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
   )
 }
 export default SmallCarsField
+
+function dispatch(arg0: { payload: string | null; type: "carsSettings/setChooseInputName"; }) {
+  throw new Error("Function not implemented.");
+}

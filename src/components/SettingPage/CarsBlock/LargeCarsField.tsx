@@ -14,6 +14,7 @@ interface ICarsFieldProps {
 
 const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
   console.log("--Render CarsField Large");
+
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -21,7 +22,6 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
   const [inputCarNameValue, setInputCarNameValue] = useState(car.name);
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
-
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
 
 
@@ -59,10 +59,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     popupState.close()
   }
 
-  const handleTouchCarNameInput = () => {
-    console.log("TOUCH");
 
-  }
 
 
   return (
@@ -83,7 +80,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
 
           <input
             onClick={handleDoubleClick}   // onTouchStart={handleTouchCarNameInput}
-            onMouseDown={handleTouchCarNameInput}
+            onMouseDown={() => { }}
             className={chooseInputFromStore === `id${car.car_id}-carName` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.name.length}ch + 22px)`,
@@ -101,8 +98,10 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
         <Stack margin={'auto'} display={'flex'} alignItems={'center'}
         >
           {/* Popup Cars Icons */}
-          <IconsCarsMenu handleIconCarInNetClick={handleIconCarInNetClick}>
-            <img src={inputCarIconIdValue}
+          <IconsCarsMenu
+            handleIconCarInNetClick={handleIconCarInNetClick}>
+            <img
+              src={inputCarIconIdValue}
               className="carblock-icon-cars"
               style={{
                 transform: 'rotate(90deg)', width: '2rem',
@@ -120,7 +119,8 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       <Grid item xs={3} md={3} display={'flex'} alignItems={'center'}>
         <Stack>
           <input
-            onClick={handleDoubleClick} onChange={(e) => setInputCarImeiValue(e.target.value)}
+            onClick={handleDoubleClick}
+            onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === `id${car.car_id}-carImei` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
