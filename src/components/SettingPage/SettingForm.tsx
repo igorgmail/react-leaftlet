@@ -11,8 +11,9 @@ import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../store
 import { mockUserData, imitationFetchMockData } from "./mockData"
 import { Spinner } from "./components/Spinner"
 
-import { ISettingsData } from "./types/carsSettingsTypes"
-
+import { IRequestOptions, ISettingsData } from "./types/carsSettingsTypes"
+import API_ENDPOINTS from "./utils/apiEndpoints"
+import useApi from './hooks/useApi'
 
 
 const SettingForm = () => {
@@ -21,6 +22,8 @@ const SettingForm = () => {
 
   const [settingsData, setSettingsData] = useState<ISettingsData>()
   const dispatch = useAppDispatch()
+
+  const { sendRequest } = useApi()
   // const carsSettingsData = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
 
@@ -30,14 +33,37 @@ const SettingForm = () => {
   // const eventsData = settingsData.events // События
   // const typeOfEventsData = settingsData.type_of_events // Типы события  [ "IN", "OUT"]
   // const iconsData = settingsData.icons // {icon_id: " ",url: " "}
+  const submitData = async () => {
+    const requestOptions: IRequestOptions = {
+      method: 'GET',
+    };
+
+    const response = await sendRequest(API_ENDPOINTS.GET_SETTINGS, requestOptions)
+
+    if (response.error) {
+      console.warn("Error in get settings", response.error);
+      // showAlert('Имя компании не изменено', 'error');
+      return
+    }
+    if (response) {
+      console.log("▶ ⇛ response:", response.data);
+      dispatch(carsSettingsActions.setInitialSettingsData(response.data))
+      setSettingsData(response.data)
+    }
+  };
 
 
   useEffect(() => {
-    imitationFetchMockData().then((data) => {
-      setSettingsData(data)
-      return data
-    }).then((data) => dispatch(carsSettingsActions.setInitialSettingsData(data)))
-  }, [dispatch])
+    submitData()
+  }, [])
+
+
+  // useEffect(() => {
+  //   imitationFetchMockData().then((data) => {
+  //     setSettingsData(data)
+  //     return data
+  //   }).then((data) => dispatch(carsSettingsActions.setInitialSettingsData(data)))
+  // }, [dispatch])
 
 
 
