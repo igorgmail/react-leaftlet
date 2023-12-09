@@ -3,7 +3,7 @@ import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { makeEventData } from "./utils/makeEventData";
 import RemoveDialog from "../components/RemoveDialog";
-import IconsCarsMenu from "./IconsCarsMenu";
+import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
@@ -12,16 +12,21 @@ interface ICarsFieldProps {
   car: ICarObject,
 }
 
-const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
-  console.log("--Render CarsField Ladge");
+const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
+  console.log("--Render CarsField Large");
+  const iconsCars = useAppSelector((store) => store.carsSettings.icons)
+  const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
+
 
   const [inputCarNameValue, setInputCarNameValue] = useState(car.name);
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
 
-  const [iconsMenuOpen, setIconsMenuOpen] = useState(true)
+  const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
 
-  const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
+
+
+
   const dispatch = useAppDispatch()
 
   const handleDialog = (eventData: TRemoveDialogCallback) => {
@@ -45,12 +50,17 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     }
   }
 
-  const handleImageClick = () => {
-
+  const handleIconCarInNetClick = (e: React.MouseEvent, popupState: any) => {
+    const target = e.currentTarget as HTMLImageElement;
+    if (target.dataset.iconid) {
+      const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
+      setInputCarIconIdValue(chooseIconUrl?.url || '')
+    }
+    popupState.close()
   }
 
   const handleTouchCarNameInput = () => {
-    console.log("TOUCCH");
+    console.log("TOUCH");
 
   }
 
@@ -89,19 +99,15 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       {/* Icon */}
       <Grid item xs={2} md={3} display={'flex'} justifyContent={'center'}>
         <Stack margin={'auto'} display={'flex'} alignItems={'center'}
-          aria-haspopup="true"
-          aria-expanded={'true'}
-
-          id="demo-positioned-button"
-          aria-controls={'demo-positioned-menu'}
         >
-          <IconsCarsMenu >
-            <img src={car.pic}
-            className="carblock-icon-cars"
-            style={{
-              transform: 'rotate(90deg)', width: '2rem',
-              position: 'relative'
-            }}
+          {/* Popup Cars Icons */}
+          <IconsCarsMenu handleIconCarInNetClick={handleIconCarInNetClick}>
+            <img src={inputCarIconIdValue}
+              className="carblock-icon-cars"
+              style={{
+                transform: 'rotate(90deg)', width: '2rem',
+                position: 'relative'
+              }}
               alt="Иконка"
             >
             </img>
@@ -150,4 +156,4 @@ const LadgeCarsField: FC<ICarsFieldProps> = ({ car }) => {
 }
 
 
-export default LadgeCarsField
+export default LargeCarsField

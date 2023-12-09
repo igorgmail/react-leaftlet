@@ -4,7 +4,7 @@ import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from
 import { makeEventData } from "./utils/makeEventData";
 import RemoveDialog from "../components/RemoveDialog";
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
-import IconsCarsMenu from "./IconsCarsMenu";
+import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 
 
 
@@ -20,6 +20,11 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
   const handleDialog = (eventData: TRemoveDialogCallback) => {
     console.log("▶ ⇛ eventData:", eventData);
 
+  }
+
+  const handleIconCarInNetClick = (e: React.MouseEvent) => {
+    const target = e.currentTarget
+    console.log("▶ handleImageClick target:", target);
   }
 
 
@@ -73,7 +78,7 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
       {/* Icon */}
       <Grid item xs={6}>
         <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-          <IconsCarsMenu >
+          <IconsCarsMenu handleIconCarInNetClick={handleIconCarInNetClick}>
             <img
               className="carblock-icon-cars"
               src={car.pic}

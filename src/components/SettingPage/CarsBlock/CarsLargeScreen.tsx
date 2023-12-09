@@ -3,7 +3,7 @@ import { useState, useEffect, FC, useRef } from "react"
 import { Stack, Grid } from "@mui/material"
 
 
-import LadgeCarsField from "./LadgeCarsField";
+import LargeCarsField from "./LargeCarsField";
 
 import { ICarObject } from "../types/carsSettingsTypes";
 
@@ -12,7 +12,7 @@ interface ICarsBlockProps {
 }
 
 
-const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
+const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
 
   return (
@@ -47,7 +47,7 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
           </Grid>
         </Grid>
 
-        {carsData.length > 0 && carsData.map((car) => (<LadgeCarsField car={car} key={`cars-block-` + car.car_id} />))
+        {carsData.length > 0 && carsData.map((car) => (<LargeCarsField car={car} key={`cars-block-` + car.car_id} />))
         }
 
       </Stack>
@@ -61,4 +61,4 @@ const CarsLadgeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
 
 
-export default CarsLadgeScreen
+export default CarsLargeScreen

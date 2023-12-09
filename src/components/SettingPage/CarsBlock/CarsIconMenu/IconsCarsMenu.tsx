@@ -3,15 +3,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { Grid, Stack } from '@mui/material';
-import { useAppSelector } from '../../../store';
+import { Box, Grid, Stack } from '@mui/material';
+import { useAppSelector } from '../../../../store';
 
+import IconsCarsBlockNet from './IconsCarsBlockNet';
 
 type TIconsCarsMenuProps = {
-  children: React.ReactNode
+  children: React.ReactNode,
+  handleIconCarInNetClick: (e: React.MouseEvent, popupState: any) => void
 }
 
-const IconsCarsMenu: React.FC<TIconsCarsMenuProps> = ({ children }) => {
+const IconsCarsMenu: React.FC<TIconsCarsMenuProps> = ({ children, handleIconCarInNetClick }) => {
 
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -25,7 +27,7 @@ const IconsCarsMenu: React.FC<TIconsCarsMenuProps> = ({ children }) => {
   // };
 
   return (
-    <PopupState variant="popover" popupId="demo-popup-popover">
+    <PopupState variant="popover" popupId="icons-popup-popover">
       {(popupState) => (
         <div>
           <Button  {...bindTrigger(popupState)}
@@ -44,12 +46,22 @@ const IconsCarsMenu: React.FC<TIconsCarsMenuProps> = ({ children }) => {
               horizontal: 'center',
             }}
           >
+            <Box style={{ outline: 'none' }} padding={2} margin="auto" maxWidth={600}>
+              <Grid container>
 
-            <Stack className='cars-popup--wrap'>
+
+                {iconsCars && iconsCars.map((oneIcon) =>
+                (<IconsCarsBlockNet
+                  iconObject={oneIcon}
+                  handleIconCarInNetClick={handleIconCarInNetClick}
+                  popupState={popupState}
+                />))
+                }
+                {/* <Stack className='cars-popup--wrap'>
 
               <Stack
                 className='cars-popup--row-block'>
-                <Stack className='cars-popup--item'>
+                <Stack className='cars-popup--item' onClick={(e) => handleImageClick(e)}>
                   <img src={iconsCars[0].url} className='cars-popup--image'></img>
                 </Stack>
                 <Stack className='cars-popup--item'>
@@ -84,8 +96,9 @@ const IconsCarsMenu: React.FC<TIconsCarsMenuProps> = ({ children }) => {
                 </Stack>
               </Stack>
 
-            </Stack>
-
+            </Stack> */}
+              </Grid>
+            </Box>
 
           </Popover>
         </div>

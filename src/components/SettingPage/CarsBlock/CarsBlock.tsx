@@ -9,7 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import BlockHeader from "../components/BlockHeader";
 import CarsSmallScreen from "./CarsSmallScreen";
-import CarsLadgeScreen from "./CarsLadgeScreen";
+import CarsLargeScreen from "./CarsLargeScreen";
 import AddCarModal from "./AddCarModal";
 
 import { ICarObject } from "../types/carsSettingsTypes";
@@ -53,7 +53,7 @@ const CarsBlock = () => {
 
       {!isSmallScreen ? (
 
-        <CarsLadgeScreen carsData={carsData} />
+        <CarsLargeScreen carsData={carsData} />
 
       ) : (
 
