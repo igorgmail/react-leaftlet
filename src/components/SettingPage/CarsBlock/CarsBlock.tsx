@@ -7,10 +7,12 @@ import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../st
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import useCheckWhereIsClick from "./hooks/useCheckWhereIsClick";
+
 import BlockHeader from "../components/BlockHeader";
 import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLargeScreen from "./CarsLargeScreen";
-import AddCarModal from "./AddCarModal";
+import AddCarModal from "./AddCarModal/AddCarModal";
 
 import { ICarObject } from "../types/carsSettingsTypes";
 
@@ -18,26 +20,73 @@ import { ICarObject } from "../types/carsSettingsTypes";
 const CarsBlock = () => {
   console.log("--Render CarsBlock");
 
+  const checkWhereClick = useCheckWhereIsClick()
+
   const carsData = useAppSelector((store) => store.carsSettings.cars)
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const chooseInput = useAppSelector((store) => store.carsSettings.config.chooseInputName)
-  console.log("▶ ⇛ chooseInput: IN UP", chooseInput);
+  const objectWasModified = useAppSelector((store) => store.carsSettings.config.currentSelectBlock)
 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      event.stopPropagation()
-      const target = event.target as HTMLElement;
-      const attrName = target.getAttribute('name')
-      if (attrName !== chooseInput) {
-        console.warn("Снимаем выделение");
 
-        dispatch(carsSettingsActions.setChooseInputName(null))
+    function handleClickOutside(event: MouseEvent) {
+      const watchClick = checkWhereClick(event)
+
+      if (chooseInput === null) return
+
+      console.log("▶ ⇛ watchClick:", watchClick);
+      // dispatch(carsSettingsActions.setChooseInputName(null))
+      if (!watchClick) return
+
+      switch (watchClick) {
+        case 'same':
+          return
+
+        case 'similar':
+
+          const touchNumber = event.detail
+          console.log("▶ ⇛⇛USE touchNumber:", touchNumber);
+          // получаем значение атрибута data-forstore
+          const target = event.target as HTMLElement
+          const attrValue = target.dataset?.forstore
+          if (touchNumber === 2) dispatch(carsSettingsActions.setChooseInputName(attrValue!))
+
+          break
+
+      // case 'another':
+      //   dispatch(carsSettingsActions.setChooseInputName(null))
+      //   break
+
+        // default:
+        //   dispatch(carsSettingsActions.setChooseInputName(null))
       }
+
+
+      // console.log("▶ ⇛ watchClick:", watchClick);
+
+      // console.log("▶ ⇛Сработал  handleClickOutside:");
+
+      // event.stopPropagation()
+      // const target = event.target as HTMLElement;
+      // const attrName = target.getAttribute('data-forstore')
+
+
+      // // Проверяем если клик не на том же инпуте то true
+      // if (attrName === chooseInput) {
+      //   console.log("Клик на том же элементе");
+      //   return
+      // }
+      // console.warn("Снимаем выделение");
+      // // Удаляем имя выбранного элемента из store
+      // dispatch(carsSettingsActions.setChooseInputName(null))
+
     }
+
+
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {

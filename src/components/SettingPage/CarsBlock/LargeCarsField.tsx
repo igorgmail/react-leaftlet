@@ -3,7 +3,9 @@ import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { makeEventData } from "./utils/makeEventData";
 import RemoveDialog from "../components/RemoveDialog";
-import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
+// import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
+
+import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
@@ -23,7 +25,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
-
+  const [modalOpen, setModalOpen] = useState(false);
 
 
 
@@ -33,7 +35,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 
-  const handleDoubleClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()
     const touchNumber = event.detail
 
@@ -41,7 +43,9 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       const targ = event.currentTarget
       targ.focus()
 
-      dispatch(carsSettingsActions.setChooseInputName(event.currentTarget.name))
+      // TODO Здесь нужна проверка на то что сейчас в сторе
+      if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
+
       // Установка курсора в конец текста
       // targ.type = 'text'
       const textLength = targ.value.length;
@@ -50,13 +54,13 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
     }
   }
 
-  const handleIconCarInNetClick = (e: React.MouseEvent, popupState: any) => {
+  const handleIconCarInNetClick = (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLImageElement;
     if (target.dataset.iconid) {
       const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
       setInputCarIconIdValue(chooseIconUrl?.url || '')
     }
-    popupState.close()
+    setModalOpen(false)
   }
 
 
@@ -70,6 +74,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
         paddingLeft: '.8rem'
       }}
       data-carid={car.car_id}
+      data-interactive
     >
 
       {/* Name */}
@@ -79,7 +84,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
           <RemoveDialog callback={handleDialog} eventData={makeEventData(car)} />
 
           <input
-            onClick={handleDoubleClick}   // onTouchStart={handleTouchCarNameInput}
+            onClick={handleInputClick}   // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === `id${car.car_id}-carName` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -88,7 +93,9 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
             readOnly={chooseInputFromStore !== `id${car.car_id}-carName`}
             onChange={(e) => setInputCarNameValue(e.target.value)}
             value={inputCarNameValue}
-            name={`id${car.car_id}-carName`}
+            data-forstore={`id${car.car_id}-carName`}
+            data-interactive
+
           />
         </Stack>
       </Grid>
@@ -98,8 +105,12 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
         <Stack margin={'auto'} display={'flex'} alignItems={'center'}
         >
           {/* Popup Cars Icons */}
-          <IconsCarsMenu
-            handleIconCarInNetClick={handleIconCarInNetClick}>
+          <ModalWithIconsCars
+            handleIconCarInNetClick={handleIconCarInNetClick}
+            iconParentId={car.car_id}
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+          >
             <img
               src={inputCarIconIdValue}
               className="carblock-icon-cars"
@@ -108,9 +119,12 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
                 position: 'relative'
               }}
               alt="Иконка"
+              data-forstore={`id${car.car_id}-carParentIcon`}
+              data-interactive
+              data-interactive-image
             >
             </img>
-          </IconsCarsMenu>
+          </ModalWithIconsCars>
 
         </Stack>
       </Grid>
@@ -119,7 +133,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       <Grid item xs={3} md={3} display={'flex'} alignItems={'center'}>
         <Stack>
           <input
-            onClick={handleDoubleClick}
+            onClick={handleInputClick}
             onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === `id${car.car_id}-carImei` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -128,7 +142,8 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
             type="text"
             readOnly={chooseInputFromStore !== `id${car.car_id}-carImei`}
             value={inputCarImeiValue}
-            name={`id${car.car_id}-carImei`}
+            data-forstore={`id${car.car_id}-carImei`}
+            data-interactive
           />
         </Stack>
       </Grid>
@@ -137,7 +152,7 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
       <Grid item xs={4} md={3} display={'flex'} alignItems={'center'}>
         <Stack >
           <input
-            onClick={handleDoubleClick}
+            onClick={handleInputClick}
             onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === `id${car.car_id}-carImei-2` ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -146,7 +161,8 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
             type="text"
             readOnly={chooseInputFromStore !== `id${car.car_id}-carImei-2`}
             value={inputCarAlterImeiValue || ''}
-            name={`id${car.car_id}-carImei-2`}
+            data-forstore={`id${car.car_id}-carImei-2`}
+            data-interactive
           />
         </Stack>
       </Grid>

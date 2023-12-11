@@ -1,15 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons } from '../../components/SettingPage/types/carsSettingsTypes';
+import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons, TUsers } from '../../components/SettingPage/types/carsSettingsTypes';
 
 
-// type TSettingsConfig = {
-//   requestWorks: boolean
-//   }
+type TPointsDataWithAddress = TPointsData & {
+  address: string;
+};
+
+type TSelectFieldCar = {
+  typeField: 'cars' | 'points' | 'events' | 'users',
+  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
+}
 
 interface IInitSettingStore extends ISettingsData {
   config: {
     requestWorks: boolean,
     chooseInputName: string | null,
+    currentSelectBlock: TSelectFieldCar | null
   }
 }
 
@@ -23,7 +29,8 @@ const initialState: IInitSettingStore = {
   icons: [],
   config: {
     requestWorks: false,
-    chooseInputName: null
+    chooseInputName: null,
+    currentSelectBlock: null
   }
 }
 
@@ -94,6 +101,13 @@ export const carsSettingsSlice = createSlice({
     setChooseInputName: (state, action: PayloadAction<string | null>) => {
       state.config.chooseInputName = action.payload
     },
+
+    // Установить текущее состояние выбора (какой инпут меняем, сюда ложим весь объект чье это поле
+    // С указанием типа объекта - cars | points | events | users
+    setCurrentSelectBlock: (state, action: PayloadAction<TSelectFieldCar | null>) => {
+      state.config.currentSelectBlock = action.payload
+    },
+
   },
 }
 )

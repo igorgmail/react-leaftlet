@@ -50,6 +50,11 @@ export type TIcons = {
   url: string,
 }
 
+export type TUsers = {
+  user_id: string,
+  email: string,
+}
+
 export type TRemoveDialogCallback = {
   event: string | undefined;
   subjectid: string | undefined;

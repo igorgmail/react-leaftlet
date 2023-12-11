@@ -10,7 +10,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import ControlBlockSmScreen from "./ControlBlockSmScreen";
 import ControlBlockLgScreen from "./ControlBlockLgScreen";
-import AddPointModal from "./AddPointModal";
+import AddPointModal from "./AddPointModal/AddPointModal";
 import { TPointsData } from "../types/carsSettingsTypes";
 import BlockHeader from "../components/BlockHeader";
 
