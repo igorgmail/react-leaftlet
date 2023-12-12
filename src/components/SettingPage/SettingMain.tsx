@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 
 import { Container } from "@mui/material"
 import SettingForm from "./SettingForm"
-
 import './styles/style.css'
 
 

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger'
 // ...
 
 import { routesReducer } from './slices/routesSlice';
@@ -15,10 +16,11 @@ export const store = configureStore({
     carsMap: carsMapReducer,
     carsSettings: carsSettingsReducer,
   },
+  devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(logger),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../store
 
 import { mockUserData, imitationFetchMockData } from "./mockData"
 import { Spinner } from "./components/Spinner"
+import PreloadImages from "./components/PreloadImage"
 
 import { IRequestOptions, ISettingsData } from "./types/carsSettingsTypes"
 import API_ENDPOINTS from "./utils/apiEndpoints"
@@ -78,7 +79,7 @@ const SettingForm = () => {
           <ControlPointBlock pointData={settingsData.points} key={'control'}></ControlPointBlock>
           <EventBlock eventsData={settingsData.events} key={'events'}></EventBlock>
           <UserBlock usersData={mockUserData.users}></UserBlock>
-
+          <PreloadImages iconsUrls={settingsData.icons} />
         </>
 
       ) : <Spinner />}

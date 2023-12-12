@@ -2,6 +2,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import { FC, useRef, useState } from 'react';
 
 import { useMap, useMapEvents } from 'react-leaflet';
+import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../../../store';
 
 
 type Tcoord = {
@@ -17,6 +18,7 @@ type TPinMarkerProps = {
 const PinMarker: FC<TPinMarkerProps> = () => {
 
   const map = useMap()
+  const dispatch = useAppDispatch()
   const [pinMove, setPinMove] = useState(false)
 
 
@@ -29,7 +31,7 @@ const PinMarker: FC<TPinMarkerProps> = () => {
       setPinMove(false)
 
       const center = map.getCenter()
-
+      dispatch(carsSettingsActions.setMapCenter(center))
     },
     // zoomstart: () => {
     //   console.log('Масштаб карты начал меняться');

@@ -9,6 +9,7 @@ import { Stack } from '@mui/material';
 import Map from './Map';
 import { FC, useState } from 'react';
 import { store } from '../../../../store/store';
+import { LatLng } from 'leaflet';
 
 
 const style = {
@@ -24,13 +25,8 @@ const style = {
   p: 4,
 };
 
-type Tcoord = {
-  lat: number,
-  lng: number
-}
-
 type TMapModalMain = {
-  handleSaveModal: (coord: Tcoord) => void
+  handleSaveModal: (coord: LatLng) => void
 }
 
 
@@ -39,22 +35,19 @@ const MapModalMain: FC<TMapModalMain> = ({ handleSaveModal }) => {
 
   // const config = useAppSelector((store) =)
   const [open, setOpen] = React.useState(false);
-  const [coord, setCoord] = useState(null)
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
 
   const handleSaveButton = () => {
+    const mapCenterFromState = store.getState().carsSettings.config.mapCenter;
 
-    const currentState = store.getState().carsSettings;
-    console.log("▶ ⇛ currentState:", currentState);
-    // console.log("Coordinate : ", coord);
-    // if (coord) {
-    //   handleSaveModal(coord)
-    //   handleClose()
-    // }
-
+    // Передаем в форму
+    if (mapCenterFromState) {
+      handleSaveModal(mapCenterFromState)
+    }
+    handleClose()
   }
 
 

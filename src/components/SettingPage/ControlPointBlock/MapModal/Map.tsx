@@ -9,12 +9,7 @@ import { Box, Button, Stack } from '@mui/material';
 import PinMarker from './PinMarker';
 
 import './style.css'
-import React from 'react';
 
-type Tcoord = {
-  lat: number,
-  lng: number
-}
 
 type TMapProps = {
   // setCoord: (coord: Tcoord) => void
@@ -25,21 +20,8 @@ const Map: FC<TMapProps> = () => {
   const [tileId, setTileId] = useState('tileId-1')
   const mapRef = useRef<L.Map | null>(null)
 
-  const [open, setOpen] = React.useState(false);
-
-  // const map = useMap()
-
   const tileCheckHandler = (id: string) => {
     setTileId(id)
-  }
-
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleSaveButton = () => {
-    // const center = map.getCenter()
-    // console.log("▶ ⇛ center:", center);
   }
 
 

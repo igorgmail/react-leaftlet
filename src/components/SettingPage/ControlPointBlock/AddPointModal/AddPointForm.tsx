@@ -6,6 +6,7 @@ import { Fab, Box, Typography, Modal, Fade, Stack, Grid, Button, TextField, Icon
 import AddIcon from '@mui/icons-material/Add';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import MapModalMain from "../MapModal/MapModalMain";
+import { LatLng } from "leaflet";
 
 type Tcoord = {
   lat: number,
@@ -26,13 +27,11 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
   const [radius, setRadius] = useState('');
 
 
-  const handleSaveModal = () => {
-    // setAddress()
-    // if (coord.lat && coord.lng) {
-    //   setLat(coord.lat)
-    //   setLng(coord.lng)
+  const handleSaveModal = (coord: LatLng) => {
+    const { lat, lng } = coord
+    setLat(lat)
+    setLng(lng)
 
-    // }
   }
 
   const handleAddPointSubmit = (e: React.FormEvent) => {
@@ -104,7 +103,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
                 className="modal-input"
                 type="number"
                 value={String(lat)}
-                // required
+                required
                 disabled
               />
             </Stack>
@@ -124,7 +123,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
                 className="modal-input"
                 type="number"
                 value={String(lng)}
-                // required
+                required
                 disabled
               />
             </Stack>
