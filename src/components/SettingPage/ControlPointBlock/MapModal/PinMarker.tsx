@@ -25,6 +25,10 @@ const PinMarker: FC<TPinMarkerProps> = () => {
   useMapEvents({
     movestart: () => {
       setPinMove(true)
+      console.log("MOVE START");
+
+      dispatch(carsSettingsActions.setMapMove(true))
+
       // setCoord({ ...map.getCenter() }!)
     },
     moveend: () => {
@@ -32,6 +36,8 @@ const PinMarker: FC<TPinMarkerProps> = () => {
 
       const center = map.getCenter()
       dispatch(carsSettingsActions.setMapCenter(center))
+      dispatch(carsSettingsActions.setMapMove(false))
+
     },
     // zoomstart: () => {
     //   console.log('Масштаб карты начал меняться');

@@ -26,7 +26,7 @@ const Map: FC<TMapProps> = () => {
 
 
   return (
-    <Box display="flex" width="100%" height="100vh">
+    <Box display="flex" width="100%" height={'100%'}>
 
       <MapContainer
         ref={mapRef}

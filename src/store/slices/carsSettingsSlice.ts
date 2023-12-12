@@ -20,6 +20,7 @@ interface IInitSettingStore extends ISettingsData {
     requestWorks: boolean,
     chooseInputName: string | null,
     currentSelectBlock: TSelectFieldCar | null,
+    mapMove: boolean | undefined,
     mapCenter: LatLng | null
   }
 }
@@ -36,6 +37,7 @@ const initialState: IInitSettingStore = {
     requestWorks: false,
     chooseInputName: null,
     currentSelectBlock: null,
+    mapMove: undefined,
     mapCenter: null
   }
 }
@@ -114,7 +116,11 @@ export const carsSettingsSlice = createSlice({
       state.config.currentSelectBlock = action.payload
     },
 
-    // Установливаем сентр карты пи каждом изменении карты
+    // Карта двигается в данный момент или нет (true | false)
+    setMapMove: (state, action: PayloadAction<boolean>) => {
+      state.config.mapMove = action.payload
+    },
+    // Установливаем центр карты пи каждом изменении карты
     setMapCenter: (state, action: PayloadAction<LatLng | null>) => {
       state.config.mapCenter = action.payload
     },

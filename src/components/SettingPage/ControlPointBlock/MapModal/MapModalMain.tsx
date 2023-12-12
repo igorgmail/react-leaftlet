@@ -1,28 +1,28 @@
-import * as React from 'react';
+import React, { FC, useState } from 'react';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
-import { Stack } from '@mui/material';
+import { Stack, Input } from '@mui/material';
 import Map from './Map';
-import { FC, useState } from 'react';
 import { store } from '../../../../store/store';
 import { LatLng } from 'leaflet';
+import AddressBlock from '../AddPointModal/AddressBlock';
 
 
 const style = {
   position: 'absolute' as 'absolute',
-  top: '10px',
-  left: '10px',
+  top: '0px',
+  left: '0px',
   // transform: 'translate(-50%, -50%)',
-  width: '95%',
+  width: '100%',
   height: '95vh',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 2,
 };
 
 type TMapModalMain = {
@@ -68,14 +68,24 @@ const MapModalMain: FC<TMapModalMain> = ({ handleSaveModal }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+
         <Box sx={style}>
-          <Stack display={'flex'} flexDirection={'column'} sx={{ height: '100%' }}>
+          <Stack display={'flex'} flexDirection={'column'} sx={{ height: '100%' }} gap={0.5}>
+
+            <Stack
+              sx={{ width: '100%', height: '2rem' }}
+              display={'flex'}
+              flexDirection={'row'}
+              alignItems={'center'}
+              justifyContent={'center'}
+            >
+              <AddressBlock ></AddressBlock>
+            </Stack>
+
             <Stack display={'flex'}
               sx={{ width: '100%', height: '100%' }}
             >
-
               <Map></Map>
-
             </Stack>
 
             <Stack
@@ -89,8 +99,11 @@ const MapModalMain: FC<TMapModalMain> = ({ handleSaveModal }) => {
               <Button onClick={handleClose}>Отменить</Button>
               <Button onClick={handleSaveButton}>Сохранить</Button>
             </Stack>
+
           </Stack>
+
         </Box>
+
       </Modal>
     </>
   );

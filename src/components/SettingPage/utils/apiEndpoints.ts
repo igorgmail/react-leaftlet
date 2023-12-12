@@ -10,6 +10,7 @@ const API_ENDPOINTS = {
   SAVE_CAR: "/save_car", // "Обновить запись об автомобиле"
   DELETE_POINT: "/delete_point", // "Удалить запись о контрольной точке"
   CREATE_POINT: "/create_point", // "Создать запись о контрольной точке"
+  GET_ADDRESS_FROM_NOMI: "https://nominatim.openstreetmap.org/reverse", // Получаем адрес с API nominatim
   SAVE_POINT: "/save_point", // "Обновить запись о контрольной точке"
   DELETE_EVENT: "/delete_event", // "Удалить запись о контрольном событии"
   CREATE_EVENT: "/create_event", // "Создать запись о событии"
