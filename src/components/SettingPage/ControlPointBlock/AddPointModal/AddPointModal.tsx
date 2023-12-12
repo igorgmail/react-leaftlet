@@ -2,11 +2,12 @@ import React, { useState, useEffect, FC } from "react"
 
 import { Fab, Box, Typography, Modal, Fade, Stack, Grid, Button, TextField, IconButton, CircularProgress } from "@mui/material"
 
+import { useAppDispatch, carsSettingsActions } from "../../../../store";
 import useApi from "../../hooks/useApi";
 import useAlert from "../../hooks/useAlert";
 
 import API_ENDPOINTS from "../../utils/apiEndpoints";
-
+import DataExtractor from "../../utils/dataExtractor";
 // Icons
 import useBackDrop from "../../hooks/useBackdrop";
 import ModalWrap from "../../components/ModalWrap";
@@ -37,13 +38,21 @@ const AddPointModal = () => {
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const handleClose = () => setOpen(false);
 
-
+  const dispatch = useAppDispatch()
   const handleFormSubmit = (pointData: TPointData) => {
 
-    console.log("▶ ⇛ handleFormSubmit:", pointData);
     startBackDrop()
     setOpen(false)
-    setTimeout(() => { stopBackDrop() }, 2000)
+    fetchAddNewPoint(pointData)
+      .then((data) => {
+        if (data) {
+          stopBackDrop()
+          const extractPointData = DataExtractor.getPointsFromServerData(data)
+          console.log("▶ ⇛ extractPointData:", extractPointData);
+          dispatch(carsSettingsActions.setNewPoints(extractPointData))
+        }
+      })
+      .finally(() => stopBackDrop())
   }
 
 
@@ -59,11 +68,14 @@ const AddPointModal = () => {
       return
     }
     if (response) {
-      const { link } = response.data
-      console.log("▶ ⇛ new_link:", link);
+      const pointsData = await response.data
+      const newPointData = await response.data.pointData
+      console.info("▶FROMSERVER ⇛ Создана новая точка");
+      console.info("▶FROMSERVER ⇛ CREATE_POINT", pointsData);
       // showAlert('Имя компании изменено успешно', 'success');
       // setShortLink(link)
       // dispatch(carsSettingsActions.setShortLink(link))
+      return newPointData
     }
   }
 

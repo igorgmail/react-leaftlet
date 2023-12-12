@@ -1,20 +1,22 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 
-import { Alert, AlertTitle, Container, Stack } from "@mui/material"
+import { Stack } from "@mui/material"
 import CarsBlock from "./CarsBlock/CarsBlock"
 import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
 import EventBlock from "./EventBlock/EventBlock"
 import CompanyBlock from "./CompanyBlock/CompanyBlock"
 import UserBlock from "./UsersBlock/UserBlock"
-import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../store';
+import { useAppDispatch, carsSettingsActions } from '../../store';
 
-import { mockUserData, imitationFetchMockData } from "./mockData"
+import { mockUserData } from "./mockData"
 import { Spinner } from "./components/Spinner"
 import PreloadImages from "./components/PreloadImage"
 
 import { IRequestOptions, ISettingsData } from "./types/carsSettingsTypes"
 import API_ENDPOINTS from "./utils/apiEndpoints"
 import useApi from './hooks/useApi'
+import useAlert from "./hooks/useAlert"
+
 
 
 const SettingForm = () => {
@@ -25,6 +27,7 @@ const SettingForm = () => {
   const dispatch = useAppDispatch()
 
   const { sendRequest } = useApi()
+  const { showAlert, alertComponent } = useAlert()
   // const carsSettingsData = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
 
 
@@ -34,7 +37,7 @@ const SettingForm = () => {
   // const eventsData = settingsData.events // События
   // const typeOfEventsData = settingsData.type_of_events // Типы события  [ "IN", "OUT"]
   // const iconsData = settingsData.icons // {icon_id: " ",url: " "}
-  const submitData = async () => {
+  const getDataFromServer = async () => {
     const requestOptions: IRequestOptions = {
       method: 'GET',
     };
@@ -43,28 +46,18 @@ const SettingForm = () => {
 
     if (response.error) {
       console.warn("Error in get settings", response.error);
-      // showAlert('Имя компании не изменено', 'error');
+      showAlert('Не удалось получить данные с сервера', 'error');
       return
     }
     if (response) {
-      console.log("▶ ⇛ response:", response.data);
       dispatch(carsSettingsActions.setInitialSettingsData(response.data))
       setSettingsData(response.data)
     }
   };
 
-
   useEffect(() => {
-    submitData()
+    getDataFromServer()
   }, [])
-
-
-  // useEffect(() => {
-  //   imitationFetchMockData().then((data) => {
-  //     setSettingsData(data)
-  //     return data
-  //   }).then((data) => dispatch(carsSettingsActions.setInitialSettingsData(data)))
-  // }, [dispatch])
 
 
 
@@ -76,14 +69,14 @@ const SettingForm = () => {
         <>
           <CompanyBlock key={'company'}></CompanyBlock>
           <CarsBlock key={'cars'}></CarsBlock>
-          <ControlPointBlock pointData={settingsData.points} key={'control'}></ControlPointBlock>
+          <ControlPointBlock key={'control'}></ControlPointBlock>
           <EventBlock eventsData={settingsData.events} key={'events'}></EventBlock>
           <UserBlock usersData={mockUserData.users}></UserBlock>
           <PreloadImages iconsUrls={settingsData.icons} />
         </>
 
       ) : <Spinner />}
-
+      {alertComponent}
     </Stack>
   )
 }

@@ -13,17 +13,18 @@ import ControlBlockLgScreen from "./ControlBlockLgScreen";
 import AddPointModal from "./AddPointModal/AddPointModal";
 import { TPointsData } from "../types/carsSettingsTypes";
 import BlockHeader from "../components/BlockHeader";
+import { useAppSelector } from "../../../store";
 
 
 interface IPointDataProps {
-  pointData: TPointsData[]
+  // pointData: TPointsData[]
 }
-const ControlPointBlock: FC<IPointDataProps> = ({ pointData }) => {
+const ControlPointBlock: FC<IPointDataProps> = () => {
   console.log("--Render ControlPointBlock");
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const pointData = useAppSelector((store) => store.carsSettings.points)
 
   return (
     <Stack sx={{ whidth: '100%' }}>

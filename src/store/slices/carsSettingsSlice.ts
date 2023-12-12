@@ -1,5 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ISettingsData, TCompanyData, ICarObject, TPointsData, TEventsData, TTypeEvents, TIcons, TUsers } from '../../components/SettingPage/types/carsSettingsTypes';
+import {
+  ISettingsData, TCompanyData, ICarObject, TPointsData,
+  TEventsData, TTypeEvents, TIcons, TUsers, TPointDataFromServer
+} from '../../components/SettingPage/types/carsSettingsTypes';
 import { LatLng } from 'leaflet';
 
 type TPointsDataWithAddress = TPointsData & {
@@ -72,7 +75,6 @@ export const carsSettingsSlice = createSlice({
       state.events = action.payload.events
       state.type_of_events = action.payload.type_of_events
       state.icons = action.payload.icons
-      console.log("set action.payload.company", action?.payload?.company);
     },
 
 
@@ -80,6 +82,7 @@ export const carsSettingsSlice = createSlice({
     setRequestWorks: (state, action: PayloadAction<boolean>) => {
       state.config.requestWorks = action.payload
     },
+    // ? COMPANY BLOCK--------------------------
     // Обновить состояние компании
     setRefreshCompanyData: (state) => {
       state.company = { ...state.company }
@@ -92,7 +95,6 @@ export const carsSettingsSlice = createSlice({
     // Установить shortLink
     setShortLink: (state, action: PayloadAction<string>) => {
       state.company.short_link = action.payload
-      console.log("▶ ⇛ action.payload:", action.payload);
     },
 
     // Удалить shortLink
@@ -104,8 +106,8 @@ export const carsSettingsSlice = createSlice({
     setBalance: (state, action: PayloadAction<string>) => {
       state.company.balance = action.payload
     },
-
-    // Установить имя выбранного меню
+    // ? CARS BLOCK --------------------------
+    // Установить имя выбранного интерактивного элемента(input)
     setChooseInputName: (state, action: PayloadAction<string | null>) => {
       state.config.chooseInputName = action.payload
     },
@@ -116,6 +118,13 @@ export const carsSettingsSlice = createSlice({
       state.config.currentSelectBlock = action.payload
     },
 
+    // ? POINTS BLOCK --------------------------
+    // Установить имя выбранного интерактивного элемента(input)
+    setNewPoints: (state, action: PayloadAction<TPointsData>) => {
+      state.points = [...state.points, action.payload]
+    },
+
+    // ? MODAL WITH MAP BLOCK --------------------------
     // Карта двигается в данный момент или нет (true | false)
     setMapMove: (state, action: PayloadAction<boolean>) => {
       state.config.mapMove = action.payload

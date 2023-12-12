@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react"
+import { useState } from "react"
 
 import { Box, Button, Stack } from "@mui/material"
 
@@ -17,10 +17,8 @@ const CompBalance = () => {
   console.log("--Render CompanyBalance");
 
 
-  const companyBalance = useAppSelector((store) => store.carsSettings.company.balance)
-  console.log("▶ ⇛ companyBalance:", companyBalance);
-  const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
-  console.log("▶ ⇛ companyId:", companyId);
+  const companyBalance = useAppSelector((store) => store.carsSettings.company.balance);
+  const companyId = useAppSelector((store) => store.carsSettings.company.company_id);
 
   const [compBalance, setCompBalance] = useState(companyBalance)
   const { sendRequest } = useApi();
@@ -49,6 +47,7 @@ const CompBalance = () => {
     }
     if (response) {
       const { balance } = response.data
+      console.info("Баланс--", balance)
       showAlert('Баланс компании обновлен', 'success');
       setCompBalance(balance)
       dispatch(carsSettingsActions.setBalance(balance))

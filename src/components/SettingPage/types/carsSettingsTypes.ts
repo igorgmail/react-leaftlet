@@ -28,6 +28,7 @@ export type ICarObject = {
 
 export type TPointsData = {
   point_id: string,
+  address?: string,
   name: string,
   lat: string,
   lng: string,
@@ -65,4 +66,15 @@ type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export interface IRequestOptions {
   method: Tmethod;
   body?: BodyInit | null;
+}
+
+// FROM SERVER
+
+export type TPointDataFromServer = {
+  address: string,
+  point_id: string,
+  point_name: string,
+  lat: string,
+  lng: string,
+  radius: string
 }

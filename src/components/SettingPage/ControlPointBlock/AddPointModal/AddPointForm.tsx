@@ -31,7 +31,6 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
 
 
   const handleSaveModal = (coord: LatLng, addressValue: string | undefined) => {
-    console.log("▶ ⇛ handleSaveModal:");
     const { lat, lng } = coord
     setLat(lat)
     setLng(lng)
@@ -49,8 +48,6 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
       lng: lng,
       radius: radius
     }
-
-    console.log("Поинт Дата для сервера", pointData);
     handleFormSubmit(pointData)
   }
 
