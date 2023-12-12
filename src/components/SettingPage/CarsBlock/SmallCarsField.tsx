@@ -79,6 +79,16 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
     dispatch(carsSettingsActions.setCurrentSelectBlock({ typeField: 'cars', selectBlockObject: selectObject }))
 
   }, [inputCarNameValue, inputCarImeiValue, inputCarAlterImeiValue, inputCarIconIdValue, dispatch])
+
+  const CAR_KEY = {
+    name: `id${car.name}-carName`,
+    imei: `id${car.imei}-carImei`,
+    altImei: `id${car.alter_imei}-altCarImei`,
+    pic: `id${car.pic}-carPic`,
+    parentPic: `id${car.car_id}-parentIcon`
+  }
+
+
   return (
     <Grid
       container alignItems="center" justifyContent="center"
@@ -121,15 +131,15 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
             // onClick={handleTouchCarNameInput}  
             onTouchStart={handleTouchCarNameInput}
             // onMouseDown={handleTouchCarNameInput}
-            className={chooseInputFromStore === `id${car.car_id}-carName` ? "all-white-input--choose-style" : "all-white-input-style"}
+            className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.name.length}ch + 22px)`,
             }}
             type="text"
-            readOnly={chooseInputFromStore !== `id${car.car_id}-carName`}
+            readOnly={chooseInputFromStore !== CAR_KEY.name}
             onChange={(e) => setInputCarNameValue(e.target.value)}
             value={inputCarNameValue}
-            data-forstore={`id${car.car_id}-carName`}
+            data-forstore={CAR_KEY.name}
           />
         </Stack>
       </Grid>
@@ -151,7 +161,11 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
               src={inputCarIconIdValue}
               className="carblock-icon-cars"
               style={{ transform: 'rotate(90deg)', width: '2rem' }}
-              alt="Иконка">
+              alt="Иконка"
+              data-forstore={CAR_KEY.parentPic}
+              data-interactive
+              data-interactive-image
+            >
             </img>
           </ModalWithIconsCars>
         </Stack>
@@ -179,12 +193,12 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
           <input
             onTouchStart={handleTouchCarNameInput}
             onChange={(e) => setInputCarImeiValue(e.target.value)}
-            className={chooseInputFromStore === `id${car.car_id}-carImei` ? "all-white-input--choose-style" : "all-white-input-style"}
+            className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.imei.length}ch + 22px)` }}
             type="text"
-            readOnly={chooseInputFromStore !== `id${car.car_id}-carImei`}
+            readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
-            data-forstore={`id${car.car_id}-carImei`}
+            data-forstore={CAR_KEY.imei}
           />
         </Stack>
       </Grid>
@@ -195,12 +209,12 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
           <input
             onTouchStart={handleTouchCarNameInput}
             onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
-            className={chooseInputFromStore === `id${car.car_id}-carImei-2` ? "all-white-input--choose-style" : "all-white-input-style"}
+            className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
             type="text"
-            readOnly={chooseInputFromStore !== `id${car.car_id}-carImei-2`}
+            readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
-            data-forstore={`id${car.car_id}-carImei-2`}
+            data-forstore={CAR_KEY.altImei}
           />
         </Stack>
       </Grid>

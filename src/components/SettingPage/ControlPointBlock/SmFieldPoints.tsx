@@ -42,6 +42,11 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
     return eventData
   }
+  const handleMouseLeave = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+    console.log("▶ ⇛ event:", event);
+
+  }
+
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()
     const touchNumber = event.detail
@@ -61,7 +66,11 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     }
   }
 
-
+  const POINT_KEY = {
+    name: `id${onePoint.point_id}-pointName`,
+    address: `id${onePoint.address}-pointAddress`,
+    radius: `id${onePoint.point_id}-pointRadius`,
+  }
 
   return (
     <Grid
@@ -103,14 +112,15 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             // onTouchStart={handleTouchCarNameInput}
             // onMouseDown={handleTouchCarNameInput}
             onClick={handleInputClick}
+            onMouseLeave={handleMouseLeave}
             onChange={(e) => setPointName(e.target.value)}
-            className={chooseInputFromStore === `id${onePoint.point_id}-pointName` ? "all-white-input--choose-style" : "all-white-input-style"}
-            readOnly={chooseInputFromStore !== `id${onePoint.point_id}-pointName`}
+            className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
+            readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
               width: `calc(${onePoint.name.length}ch + 30px)`,
             }}
             value={pointName}
-            data-forstore={`id${onePoint.point_id}-pointName`}
+            data-forstore={POINT_KEY.name}
             data-interactive
           />
         </Stack>
@@ -122,12 +132,12 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
           <input
             onClick={handleInputClick}
             onChange={(e) => setPointRadius(e.target.value)}
-            className={chooseInputFromStore === `id${onePoint.point_id}-pointRadius` ? "all-white-input--choose-style" : "all-white-input-style"}
+            className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${onePoint.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
-            type="text"
-            readOnly={true}
+            type="number"
+            readOnly={chooseInputFromStore !== POINT_KEY.radius}
             value={pointRadius}
-            data-forstore={`id${onePoint.point_id}-pointRadius`}
+            data-forstore={POINT_KEY.radius}
             data-interactive
           />
         </Stack>
@@ -141,7 +151,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
       </Grid>
 
       {/* Address */}
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
           sx={{ padding: '8px' }}
         >
@@ -150,12 +160,12 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             <input
               onClick={handleInputClick}
               onChange={(e) => setPointAddress(e.target.value)}
-              className={chooseInputFromStore === `id${onePoint.point_id}-pointAddress` ? "all-white-input--choose-style" : "all-white-input-style"}
+            className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
-              readOnly={chooseInputFromStore !== `id${onePoint.address}-pointAddress`}
+            readOnly={chooseInputFromStore !== POINT_KEY.address}
               value={pointAddress}
-              data-forstore={`id${onePoint.point_id}-pointAddress`}
+            data-forstore={POINT_KEY.address}
               data-interactive
             />
           }
