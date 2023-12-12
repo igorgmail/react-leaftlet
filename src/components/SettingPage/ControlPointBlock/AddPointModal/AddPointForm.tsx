@@ -1,38 +1,44 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, useEffect, FC, useCallback } from "react"
 
-import { Fab, Box, Typography, Modal, Fade, Stack, Grid, Button, TextField, IconButton, Divider } from "@mui/material"
-
-// Icons
-import AddIcon from '@mui/icons-material/Add';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import MapModalMain from "../MapModal/MapModalMain";
+import { Fab, Box, Typography, Modal, Fade, Stack, Grid, Button, TextField, IconButton, Divider, Backdrop, CircularProgress } from "@mui/material"
 import { LatLng } from "leaflet";
 
-type Tcoord = {
-  lat: number,
-  lng: number
+import MapModalMain from "../MapModal/MapModalMain";
+import { Spinner } from "../../components/Spinner"; 
+
+type TPointData = {
+  point_name: string,
+  address: string | undefined,
+  lat: number | null,
+  lng: number | null,
+  radius: string
 }
+
 type TAddPointForm = {
   handleClose: () => void,
-  handleFormSubmit: () => void
+  handleFormSubmit: (pointData: TPointData) => void
 }
 
 
-const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
+const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
+  console.log("--Render AddPointForm");
 
   const [pointName, setPointName] = useState('')
-  const [address, setAddress] = useState('')
+  const [address, setAddress] = useState<string | undefined>('')
   const [lat, setLat] = useState<number | null>(null)
   const [lng, setLng] = useState<number | null>(null)
   const [radius, setRadius] = useState('');
 
 
-  const handleSaveModal = (coord: LatLng) => {
+  const handleSaveModal = (coord: LatLng, addressValue: string | undefined) => {
+    console.log("▶ ⇛ handleSaveModal:");
     const { lat, lng } = coord
     setLat(lat)
     setLng(lng)
-
+    setAddress(addressValue)
+    // handleFormSubmit()
   }
+
 
   const handleAddPointSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,13 +51,13 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
     }
 
     console.log("Поинт Дата для сервера", pointData);
-
+    handleFormSubmit(pointData)
   }
 
   return (
     <Stack>
-      <form onSubmit={handleAddPointSubmit}>
 
+      <form onSubmit={handleAddPointSubmit} >
         <Grid container
           rowSpacing={1}
         >
@@ -99,7 +105,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
             <Stack display={'flex'}>
               <input
                 id="pointLatInput"
-                placeholder="50.5647"
+                placeholder="--.--"
                 className="modal-input"
                 type="number"
                 value={String(lat)}
@@ -119,7 +125,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
             <Stack display={'flex'}>
               <input
                 id="pointLngInput"
-                placeholder="55.2547"
+                placeholder="--.--"
                 className="modal-input"
                 type="number"
                 value={String(lng)}
@@ -156,7 +162,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose }) => {
         <Stack display={'flex'} flexDirection={'row'} justifyContent={'center'} gap={'2rem'}
           sx={{ marginTop: '1rem' }}
         >
-          <Button type="submit">Добавить</Button>
+          <Button type="submit">Сохранить</Button>
           <Button onClick={handleClose}>Отмена</Button>
         </Stack>
       </form>

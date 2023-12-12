@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, FC } from 'react';
 // import { useLocation } from 'react-router-dom';
 
-import { MapContainer, TileLayer, Marker, LayersControl, useMapEvents, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
 import L from 'leaflet';
 import { Box, Button, Stack } from '@mui/material';
