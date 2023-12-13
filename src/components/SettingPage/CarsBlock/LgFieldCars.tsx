@@ -1,6 +1,6 @@
-import { Button, Divider, Grid, Stack } from "@mui/material"
-import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
+import { Divider, Grid, Stack } from "@mui/material"
+import { ICarObject, TEventForDialog, TEventFromDialog } from "../types/carsSettingsTypes";
+import { FC, useState } from "react";
 
 import RemoveDialog from "../components/RemoveDialog";
 // import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
@@ -86,6 +86,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
     }
     setModalOpen(false)
   }
+
   const makeEventData = (car: ICarObject) => {
     const eventData: TEventForDialog = {
       event: 'REMOVE_CAR',
@@ -95,6 +96,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
     return eventData
   }
+
   const CAR_KEY = {
     name: `id${car.name}-carName`,
     imei: `id${car.imei}-carImei`,
@@ -113,7 +115,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
         paddingLeft: '.8rem'
       }}
       data-carid={car.car_id}
-      data-interactive
+        // data-interactive
     >
 
       {/* Name */}

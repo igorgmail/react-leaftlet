@@ -1,11 +1,15 @@
-import { Divider, Grid, Stack, Typography } from "@mui/material"
+import { Grid, Stack, Typography } from "@mui/material"
 import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
-import { makeEventData } from "./utils/makeEventData";
+import { FC, useEffect, useState } from "react";
+
 import RemoveDialog from "../components/RemoveDialog";
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 // import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
+
+
+import useRemoveDialog from "../hooks/useRemoveDialog";
+import useBackDrop from "../hooks/useBackdrop";
 
 interface ISmFieldCarsProps {
   car: ICarObject
@@ -15,7 +19,6 @@ interface ISmFieldCarsProps {
 const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   console.log("--Render SmallField");
 
-  const dispatch = useAppDispatch()
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -26,49 +29,41 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { sendRemove } = useRemoveDialog()
+  const dispatch = useAppDispatch()
 
   const handleDialog = (eventData: TEventFromDialog) => {
-    console.log("▶ ⇛ eventData:", eventData);
+    startBackDrop()
+    sendRemove(eventData)
+      .then((data) => {
+        if (data.data) {
+          const id = data.data.data
+          dispatch(carsSettingsActions.setRemoveCar(id))
+          stopBackDrop()
+        } else {
+          console.info("При удалении Авто с сервера пришли некорректные данные");
 
-  }
-
-  const handleIconCarInNetClick = (e: React.MouseEvent) => {
-    const target = e.currentTarget as HTMLImageElement;
-    if (target.dataset.iconid) {
-      const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
-      setInputCarIconIdValue(chooseIconUrl?.url || '')
-    }
-  }
-
-  const handleTouchCarNameInput = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    const targ = event.currentTarget
-    targ.focus()
-
-    // TODO Здесь нужна проверка на то что сейчас в сторе
-    if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
-    // Установка курсора в конец текста
-    // targ.type = 'text'
-    const textLength = targ.value.length;
-    targ.setSelectionRange(textLength, textLength);
-  }
-  const handleImgClick = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    const targ = event.currentTarget as HTMLElement
-    console.log("▶ ⇛ targ:IMGiconname", targ.dataset.iconname);
+        }
+      }).catch((err) => {
+        console.warn("ERROR, Ошибка при удалении Авто", err);
+      }).finally(() => stopBackDrop())
   }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    // event.preventDefault()
+    event.preventDefault()
     const touchNumber = event.detail
-    console.log("▶ ⇛ touchNumber:", touchNumber);
-
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
+      const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
       targ.focus()
 
-      // TODO Здесь нужна проверка на то что сейчас в сторе
-      if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
+      // ! Этот вариант
+      if (dataValue === chooseInputFromStore) return
+
+      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
 
       // Установка курсора в конец текста
       if (inputType === 'number') {
@@ -80,8 +75,34 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
         const textLength = targ.value.length;
         targ.setSelectionRange(textLength, textLength);
       }
-
     }
+  }
+
+  const handleIconCarInNetClick = (e: React.MouseEvent) => {
+    const target = e.currentTarget as HTMLImageElement;
+    if (target.dataset.iconid) {
+      const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
+      setInputCarIconIdValue(chooseIconUrl?.url || '')
+    }
+    setModalOpen(false)
+  }
+
+  const makeEventData = (car: ICarObject) => {
+    const eventData: TEventForDialog = {
+      event: 'REMOVE_CAR',
+      subjectid: car.car_id,
+      msg: `Будет удален Автомобиль <br>${car.name}`
+    }
+
+    return eventData
+  }
+
+  const CAR_KEY = {
+    name: `id${car.name}-carName`,
+    imei: `id${car.imei}-carImei`,
+    altImei: `id${car.alter_imei}-altCarImei`,
+    pic: `id${car.pic}-carPic`,
+    parentPic: `id${car.car_id}-parentIcon`
   }
 
   useEffect(() => {
@@ -102,16 +123,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
   }, [inputCarNameValue, inputCarImeiValue, inputCarAlterImeiValue, inputCarIconIdValue, dispatch])
 
-  const CAR_KEY = {
-    name: `id${car.name}-carName`,
-    imei: `id${car.imei}-carImei`,
-    altImei: `id${car.alter_imei}-altCarImei`,
-    pic: `id${car.pic}-carPic`,
-    parentPic: `id${car.car_id}-parentIcon`
-  }
-
 
   return (
+    <>
+
     <Grid
       container alignItems="center" justifyContent="center"
       sx={{
@@ -150,9 +165,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             eventData={makeEventData(car)} />
 
           <input
-            onClick={handleInputClick}
-            // onTouchStart={handleTouchCarNameInput}
-            // onMouseDown={handleTouchCarNameInput}
+              onClick={handleInputClick}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `calc(${car.name.length}ch + 22px)`,
@@ -168,13 +181,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
       {/* Icon */}
       <Grid item xs={6}>
-        <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}
-          onClick={handleImgClick}
-          data-forstore={`id${car.car_id}-carIcon`}
+          <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}
         >
           <ModalWithIconsCars
-            handleIconCarInNetClick={handleIconCarInNetClick}
-            // name={`id${car.car_id}-carName`}
+              handleIconCarInNetClick={handleIconCarInNetClick}
             iconParentId={car.car_id}
             modalOpen={modalOpen}
             setModalOpen={setModalOpen}
@@ -255,6 +265,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
       </Grid>
     </Grid>
+      {BackDropComponent}
+    </>
   )
 }
 export default SmFieldCars;
