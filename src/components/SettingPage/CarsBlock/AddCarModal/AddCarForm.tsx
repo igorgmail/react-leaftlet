@@ -10,21 +10,22 @@ import Backdrop from '@mui/material/Backdrop';
 import AddModalWithIcons from "./AddModalWithIcons";
 
 import { useAppSelector } from "../../../../store";
+import { ICarObject } from "../../types/carsSettingsTypes";
 
 
 type TAddCarForm = {
   handleClose: () => void,
-  handleFormSubmit: () => void
+  handleFormSubmit: (carData: Omit<ICarObject, 'car_id'>) => void
 }
 
 
-const AddCarForm: FC<TAddCarForm> = ({ handleClose }) => {
+const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
 
 
   const [nameCar, setNameCar] = useState('')
-  const [iconCar, setIconCar] = useState<string | null>(null)
+  const [iconCar, setIconCar] = useState<string>('')
   const [imeiCar, setImeiCar] = useState('')
   const [alterImeiCar, setAlterImeiCar] = useState('')
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,23 +53,25 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose }) => {
   const clearState = () => {
     // Очистка формы
     setNameCar('');
-    setIconCar(null);
+    setIconCar('');
     setImeiCar('');
     setAlterImeiCar('');
   }
   const handleAddCarSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const carData = {
-      car_name: nameCar,
-      icon: iconCar,
+      name: nameCar,
+      pic: iconCar,
       imei: imeiCar,
       alter_imei: alterImeiCar
     }
-    console.log("▶ ⇛ carData: Для сервер", carData);
-
-    clearState()
+    handleFormSubmit(carData)
+    // clearState()
   }
-
+  const handleCancelButton = () => {
+    clearState()
+    handleClose()
+  }
 
 
   return (
@@ -173,7 +176,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose }) => {
           sx={{ marginTop: '1rem' }}
         >
           <Button type="submit">Добавить</Button>
-          <Button onClick={handleClose}>Отмена</Button>
+          <Button onClick={handleCancelButton}>Отмена</Button>
         </Stack>
       </form>
     </Stack>

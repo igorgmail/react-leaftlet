@@ -3,13 +3,14 @@ import React, { useState, useEffect, FC } from "react"
 import { Stack, Box, Grid, Divider } from "@mui/material"
 
 
-import { TRemoveDialogCallback } from "../types/carsSettingsTypes";
-
+import { TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import useRemoveDialog from "../hooks/useRemoveDialog";
 
 
 import { TPointsData } from "../types/carsSettingsTypes";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
+import useBackDrop from "../hooks/useBackdrop";
 
 
 
@@ -27,14 +28,30 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const [pointAddress, setPointAddress] = useState(onePoint.address)
   const [pointRadius, setPointRadius] = useState(onePoint.radius)
 
+  const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
-    console.log("▶ ⇛ eventData:", eventData);
+
+  const handleDialog = (eventData: TEventFromDialog) => {
+    startBackDrop()
+    sendRemove(eventData)
+      .then((data) => {
+        if (data.data) {
+          const id = data.data.data
+          dispatch(carsSettingsActions.setRemovePoint(id))
+          stopBackDrop()
+        } else {
+          console.info("При удалении Точки с сервера пришли некорректные данные");
+
+        }
+      }).catch((err) => {
+        console.warn("ERROR, Ошибка при удалении Точки", err);
+      }).finally(() => stopBackDrop())
   }
 
   const makeEventData = (point: TPointsData) => {
-    const eventData = {
+    const eventData: TEventForDialog = {
       event: 'REMOVE_POINT',
       subjectid: point.point_id,
       msg: `Будет удалена контрольная точка <br>${point.name}`
@@ -49,11 +66,14 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
+      const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
       targ.focus()
 
-      // TODO Здесь нужна проверка на то что сейчас в сторе
-      if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
+      // ! Этот вариант
+      if (dataValue === chooseInputFromStore) return
+
+      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
 
       // Установка курсора в конец текста
       if (inputType === 'number') {
@@ -144,6 +164,8 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
       </Grid>
 
       <Divider />
+      {BackDropComponent}
+
     </Grid>
   )
 }

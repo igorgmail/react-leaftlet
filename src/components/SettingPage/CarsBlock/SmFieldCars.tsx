@@ -1,16 +1,11 @@
 import { Divider, Grid, Stack, Typography } from "@mui/material"
-import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { makeEventData } from "./utils/makeEventData";
 import RemoveDialog from "../components/RemoveDialog";
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 // import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
-
-
-
-
-
 
 interface ISmFieldCarsProps {
   car: ICarObject
@@ -32,7 +27,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
+  const handleDialog = (eventData: TEventFromDialog) => {
     console.log("▶ ⇛ eventData:", eventData);
 
   }
@@ -90,7 +85,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   }
 
   useEffect(() => {
-    console.warn("Состояние изменилось");
     console.log("Текущее состояние");
     console.log("inputCarNameValue-->", inputCarNameValue);
     console.log("inputCarImeiValue-->", inputCarImeiValue);

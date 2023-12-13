@@ -57,8 +57,8 @@ export type TUsers = {
 }
 
 export type TRemoveDialogCallback = {
-  event: string | undefined;
-  subjectid: string | undefined;
+  event: 'REMOVE_CAR' | 'REMOVE_POINT' | 'REMOVE_EVENT' | 'REMOVE_USER',
+  subjectid: string,
 }
 
 type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -77,4 +77,24 @@ export type TPointDataFromServer = {
   lat: string,
   lng: string,
   radius: string
+}
+export type TEventForDialog = {
+  event: 'REMOVE_CAR' | 'REMOVE_POINT' | 'REMOVE_EVENT' | 'REMOVE_USER',
+  subjectid: string,
+  msg: string,
+}
+
+export type TEventFromDialog = {
+  event: 'REMOVE_CAR' | 'REMOVE_POINT' | 'REMOVE_EVENT' | 'REMOVE_USER',
+  subjectid: string,
+}
+export type TRemoveDialogProps = {
+  callback: (dialogEvent: TEventFromDialog) => void,
+  eventData: TEventForDialog
+}
+export type TAddCarObject = {
+  car_name: string,
+  pic: string,
+  imei: string,
+  alter_imei: string | null
 }

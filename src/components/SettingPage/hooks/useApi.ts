@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 const apiEndpoint = process.env.REACT_APP_API_SETTINGS;
 type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 

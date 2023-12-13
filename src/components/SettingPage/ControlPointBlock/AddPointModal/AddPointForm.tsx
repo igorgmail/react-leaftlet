@@ -5,6 +5,7 @@ import { LatLng } from "leaflet";
 
 import MapModalMain from "../MapModal/MapModalMain";
 import { Spinner } from "../../components/Spinner"; 
+import { carsSettingsActions, useAppDispatch } from "../../../../store";
 
 type TPointData = {
   point_name: string,
@@ -22,6 +23,7 @@ type TAddPointForm = {
 
 const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
   console.log("--Render AddPointForm");
+  const dispatch = useAppDispatch()
 
   const [pointName, setPointName] = useState('')
   const [address, setAddress] = useState<string | undefined>('')
@@ -35,10 +37,15 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
     setLat(lat)
     setLng(lng)
     setAddress(addressValue)
-    // handleFormSubmit()
   }
 
-
+  const clearState = () => {
+    setPointName('')
+    setAddress('')
+    setLat(null)
+    setLng(null)
+    setRadius('')
+  }
   const handleAddPointSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const pointData = {
@@ -50,6 +57,13 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
     }
     handleFormSubmit(pointData)
   }
+
+  const handleCancelButton = () => {
+    clearState()
+    if (lat || lng) dispatch(carsSettingsActions.setMapCenter(null))
+    handleClose()
+  }
+
 
   return (
     <Stack>
@@ -160,7 +174,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
           sx={{ marginTop: '1rem' }}
         >
           <Button type="submit">Сохранить</Button>
-          <Button onClick={handleClose}>Отмена</Button>
+          <Button onClick={handleCancelButton}>Отмена</Button>
         </Stack>
       </form>
 

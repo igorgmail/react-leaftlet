@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   ISettingsData, TCompanyData, ICarObject, TPointsData,
-  TEventsData, TTypeEvents, TIcons, TUsers, TPointDataFromServer
+  TEventsData, TTypeEvents, TIcons, TUsers, TPointDataFromServer, TAddCarObject
 } from '../../components/SettingPage/types/carsSettingsTypes';
 import { LatLng } from 'leaflet';
 
@@ -106,7 +106,7 @@ export const carsSettingsSlice = createSlice({
     setBalance: (state, action: PayloadAction<string>) => {
       state.company.balance = action.payload
     },
-    // ? CARS BLOCK --------------------------
+    // ? ALL BLOCK --------------------------
     // Установить имя выбранного интерактивного элемента(input)
     setChooseInputName: (state, action: PayloadAction<string | null>) => {
       state.config.chooseInputName = action.payload
@@ -117,11 +117,23 @@ export const carsSettingsSlice = createSlice({
     setCurrentSelectBlock: (state, action: PayloadAction<TSelectFieldCar | null>) => {
       state.config.currentSelectBlock = action.payload
     },
-
+    // ? CARS BLOCK --------------------------
+    // Удалить Авто
+    setRemoveCar: (state, action: PayloadAction<string>) => {
+      state.cars = [...state.cars].filter((point) => point.car_id !== action.payload)
+    },
+    // Создать Авто
+    setCreateCar: (state, action: PayloadAction<ICarObject>) => {
+      state.cars = [...state.cars, action.payload]
+    },
     // ? POINTS BLOCK --------------------------
-    // Установить имя выбранного интерактивного элемента(input)
-    setNewPoints: (state, action: PayloadAction<TPointsData>) => {
+    // Добавить Новую Точку
+    setNewPoint: (state, action: PayloadAction<TPointsData>) => {
       state.points = [...state.points, action.payload]
+    },
+    // Удалиить Точку по ID
+    setRemovePoint: (state, action: PayloadAction<string>) => {
+      state.points = [...state.points].filter((point) => point.point_id !== action.payload)
     },
 
     // ? MODAL WITH MAP BLOCK --------------------------

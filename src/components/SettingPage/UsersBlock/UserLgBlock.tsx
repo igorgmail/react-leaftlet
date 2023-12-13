@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, Stack } from "@mui/material"
 import { FC } from "react"
 import RemoveDialog from "../components/RemoveDialog"
-import { TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes"
+import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes"
 
 
 
@@ -14,7 +14,7 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
 
   const makeEventData = (eventObject: any) => {
 
-    const eventData = {
+    const eventData: TEventForDialog = {
       event: 'REMOVE_USER',
       subjectid: eventObject.email,
       msg: `Будет удален пользователь <br>${eventObject.email}`
@@ -23,7 +23,7 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
     return eventData
   }
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
+  const handleDialog = (eventData: TEventFromDialog) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 

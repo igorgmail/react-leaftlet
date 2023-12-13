@@ -3,7 +3,7 @@ import React, { useState, useEffect, FC } from "react"
 import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
 
 
-import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { ICarObject, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -20,7 +20,7 @@ interface IPointDataProps {
 const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
 
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
+  const handleDialog = (eventData: TEventFromDialog) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 import { Stack, Grid, Divider } from "@mui/material";
 
-import { TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import RemoveDialog from "../components/RemoveDialog";
 
@@ -15,8 +15,8 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
   const makeEventData = (eventObject: TEventsData) => {
 
-    const eventData = {
-      event: 'REMOVE_CAR',
+    const eventData: TEventForDialog = {
+      event: 'REMOVE_EVENT',
       subjectid: eventObject.event_id,
       msg: `Будет удалено событие <br>${eventObject.event}`
     }
@@ -24,7 +24,7 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
     return eventData
   }
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
+  const handleDialog = (eventData: TEventFromDialog) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
 

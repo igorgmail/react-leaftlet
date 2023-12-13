@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, Stack } from "@mui/material"
-import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 import { FC, ReactElement, ReactEventHandler, useEffect, useRef, useState } from "react";
-import { makeEventData } from "./utils/makeEventData";
+
 import RemoveDialog from "../components/RemoveDialog";
 // import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 
@@ -9,6 +9,8 @@ import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
+import useRemoveDialog from "../hooks/useRemoveDialog";
+import useBackDrop from "../hooks/useBackdrop";
 
 interface ILgFieldCarsProps {
   car: ICarObject,
@@ -27,12 +29,25 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
-
-
+  const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
-  const handleDialog = (eventData: TRemoveDialogCallback) => {
-    console.log("▶ ⇛ eventData:", eventData);
+  const handleDialog = (eventData: TEventFromDialog) => {
+    startBackDrop()
+    sendRemove(eventData)
+      .then((data) => {
+        if (data.data) {
+          const id = data.data.data
+          dispatch(carsSettingsActions.setRemoveCar(id))
+          stopBackDrop()
+        } else {
+          console.info("При удалении Авто с сервера пришли некорректные данные");
+
+        }
+      }).catch((err) => {
+        console.warn("ERROR, Ошибка при удалении Авто", err);
+      }).finally(() => stopBackDrop())
   }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
@@ -41,16 +56,25 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
+      const dataValue = targ.dataset.forstore
+      const inputType = event.currentTarget.type
       targ.focus()
 
-      // TODO Здесь нужна проверка на то что сейчас в сторе
-      if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
+      // ! Этот вариант
+      if (dataValue === chooseInputFromStore) return
+
+      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
 
       // Установка курсора в конец текста
-      // targ.type = 'text'
-      const textLength = targ.value.length;
-      targ.setSelectionRange(textLength, textLength);
-      // targ.type = 'number'
+      if (inputType === 'number') {
+        targ.type = 'text'
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+        targ.type = 'number'
+      } else {
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+      }
     }
   }
 
@@ -62,7 +86,15 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
     }
     setModalOpen(false)
   }
+  const makeEventData = (car: ICarObject) => {
+    const eventData: TEventForDialog = {
+      event: 'REMOVE_CAR',
+      subjectid: car.car_id,
+      msg: `Будет удален Автомобиль <br>${car.name}`
+    }
 
+    return eventData
+  }
   const CAR_KEY = {
     name: `id${car.name}-carName`,
     imei: `id${car.imei}-carImei`,
@@ -73,6 +105,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
 
   return (
+    <>
 
     <Grid container
       sx={{
@@ -174,6 +207,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
       </Grid>
       <Divider />
     </Grid>
+      {BackDropComponent}
+    </>
   )
 }
 

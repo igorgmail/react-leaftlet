@@ -39,6 +39,7 @@ const AddPointModal = () => {
   const handleClose = () => setOpen(false);
 
   const dispatch = useAppDispatch()
+
   const handleFormSubmit = (pointData: TPointData) => {
 
     startBackDrop()
@@ -48,10 +49,16 @@ const AddPointModal = () => {
         if (data) {
           stopBackDrop()
           const extractPointData = DataExtractor.getPointsFromServerData(data)
-          console.log("▶ ⇛ extractPointData:", extractPointData);
-          dispatch(carsSettingsActions.setNewPoints(extractPointData))
+          dispatch(carsSettingsActions.setNewPoint(extractPointData))
+          dispatch(carsSettingsActions.setMapCenter(null))
+        } else {
+          console.info("Не удалось создать точку,");
+          console.info("С сервера не пришли данные, или пришли неверные данные");
+
         }
       })
+      .catch((err) => console.log("ERROR При создании точки", err)
+      )
       .finally(() => stopBackDrop())
   }
 
@@ -68,14 +75,11 @@ const AddPointModal = () => {
       return
     }
     if (response) {
-      const pointsData = await response.data
-      const newPointData = await response.data.pointData
+      const pointsData = await response.data.data
       console.info("▶FROMSERVER ⇛ Создана новая точка");
       console.info("▶FROMSERVER ⇛ CREATE_POINT", pointsData);
-      // showAlert('Имя компании изменено успешно', 'success');
-      // setShortLink(link)
-      // dispatch(carsSettingsActions.setShortLink(link))
-      return newPointData
+
+      return pointsData
     }
   }
 

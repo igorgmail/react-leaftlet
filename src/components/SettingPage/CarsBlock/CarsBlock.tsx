@@ -27,7 +27,6 @@ const CarsBlock = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const chooseInput = useAppSelector((store) => store.carsSettings.config.chooseInputName)
-  const objectWasModified = useAppSelector((store) => store.carsSettings.config.currentSelectBlock)
 
   const dispatch = useAppDispatch()
 
@@ -35,23 +34,27 @@ const CarsBlock = () => {
 
     function handleClickOutside(event: MouseEvent) {
       const targ = event.target as HTMLElement
+      const posibleDataAttr = targ.dataset?.forstore
 
       if (chooseInput === null) return
+      if (chooseInput === posibleDataAttr) return
+      if (chooseInput) dispatch(carsSettingsActions.setChooseInputName(null))
+
       // Click на не интерактивном input(за пределами)
-      if (!targ.dataset?.interactive) {
+      // if (!targ.dataset?.interactive) {
 
-        // Если до этого уже был выбран интерактивный  эл(инпут) 
-        // И были какие то изменения в одном из блоков , то есть  objectWasModified - не пуст
-        if (chooseInput && objectWasModified) {
-          console.log("---------");
-          console.log("Будет отправлено на сервер ->", objectWasModified);
-          console.log("---------");
+      //   // Если до этого уже был выбран интерактивный  эл(инпут)
+      //   // И были какие то изменения в одном из блоков , то есть  objectWasModified - не пуст
+      //   if (chooseInput && objectWasModified) {
+      //     console.log("---------");
+      //     console.log("Будет отправлено на сервер ->", objectWasModified);
+      //     console.log("---------");
 
-        }
-        dispatch(carsSettingsActions.setChooseInputName(null))
+      //   }
+      //   dispatch(carsSettingsActions.setChooseInputName(null))
 
 
-      }
+      // }
 
 
       // const watchClick = checkWhereClick(event)

@@ -8,20 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { handlerRemoveDialog } from '../utils/handlerRemoveDialog';
-
-import { ICarObject, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { ICarObject, TRemoveDialogProps, TEventForDialog, TEventFromDialog } from "../types/carsSettingsTypes";
 import { Stack } from '@mui/material';
-
-
-type TRemoveDialogProps = {
-  callback: (dialogEvent: TRemoveDialogCallback) => void,
-  eventData: {
-    event: string,
-    subjectid: string,
-    msg: string
-  }
-}
 
 
 const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
@@ -37,8 +25,9 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
 
   const handleAgree = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget;
-    const { event, subjectid } = target.dataset
-    const dialogEvent = { event, subjectid }
+    const event = target.dataset.event as "REMOVE_CAR" | "REMOVE_POINT" | "REMOVE_EVENT" | "REMOVE_USER";
+    const subjectid = target.dataset.subjectid as string;
+    const dialogEvent: TEventFromDialog = { event, subjectid };
     if (event && subjectid) callback(dialogEvent)
     setOpen(false);
   }

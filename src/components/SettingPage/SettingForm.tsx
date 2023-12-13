@@ -59,8 +59,6 @@ const SettingForm = () => {
     getDataFromServer()
   }, [])
 
-
-
   return (
     <Stack display={'flex'} margin={'auto'} mt={'2rem'} mb={'2rem'}
       sx={{ width: { sm: "90%", md: "70%" }, }}
