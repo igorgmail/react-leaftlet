@@ -46,23 +46,35 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     console.log("▶ ⇛ event:", event);
 
   }
+  const handleInputDoubleClick = () => {
+    console.log("DOUBLE CLICK");
 
+  }
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
+    // event.preventDefault()
     const touchNumber = event.detail
+    console.log("▶ ⇛ touchNumber:", touchNumber);
+
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
+      const inputType = event.currentTarget.type
       targ.focus()
 
       // TODO Здесь нужна проверка на то что сейчас в сторе
       if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
 
       // Установка курсора в конец текста
-      // targ.type = 'text'
-      const textLength = targ.value.length;
-      targ.setSelectionRange(textLength, textLength);
-      // targ.type = 'number'
+      if (inputType === 'number') {
+        targ.type = 'text'
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+        targ.type = 'number'
+      } else {
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+      }
+
     }
   }
 
@@ -110,9 +122,10 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
           <input
             // onTouchStart={handleTouchCarNameInput}
-            // onMouseDown={handleTouchCarNameInput}
+            // onMouseDown={handleInputClick}
             onClick={handleInputClick}
-            onMouseLeave={handleMouseLeave}
+            // onMouseLeave={handleMouseLeave}
+            // onDoubleClick={() => handleInputDoubleClick()}
             onChange={(e) => setPointName(e.target.value)}
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}

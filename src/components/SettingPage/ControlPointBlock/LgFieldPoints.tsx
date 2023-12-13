@@ -49,6 +49,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
+      console.log("▶ ⇛ targ:TYPE", targ.type);
       targ.focus()
 
       // TODO Здесь нужна проверка на то что сейчас в сторе

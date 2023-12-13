@@ -12,12 +12,12 @@ import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
 
 
-interface ISmallCarsProps {
+interface ISmFieldCarsProps {
   car: ICarObject
 }
 
 
-const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
+const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   console.log("--Render SmallField");
 
   const dispatch = useAppDispatch()
@@ -235,4 +235,4 @@ const SmallCarsField: FC<ISmallCarsProps> = ({ car }) => {
     </Grid>
   )
 }
-export default SmallCarsField;
+export default SmFieldCars;

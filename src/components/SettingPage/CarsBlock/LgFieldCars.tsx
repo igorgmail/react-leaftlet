@@ -10,11 +10,11 @@ import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
 
-interface ICarsFieldProps {
+interface ILgFieldCarsProps {
   car: ICarObject,
 }
 
-const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
+const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
   console.log("--Render CarsField Large");
 
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
@@ -178,4 +178,4 @@ const LargeCarsField: FC<ICarsFieldProps> = ({ car }) => {
 }
 
 
-export default LargeCarsField
+export default LgFieldCars

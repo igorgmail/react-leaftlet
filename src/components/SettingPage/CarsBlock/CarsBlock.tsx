@@ -34,56 +34,37 @@ const CarsBlock = () => {
   useEffect(() => {
 
     function handleClickOutside(event: MouseEvent) {
-      const watchClick = checkWhereClick(event)
+      // const watchClick = checkWhereClick(event)
 
-      if (chooseInput === null) return
-
-      console.log("▶ ⇛ watchClick:", watchClick);
-      // dispatch(carsSettingsActions.setChooseInputName(null))
-      if (!watchClick) return
-
-      switch (watchClick) {
-        case 'same':
-          return
-
-        case 'similar':
-
-          const touchNumber = event.detail
-          console.log("▶ ⇛⇛USE touchNumber:", touchNumber);
-          // получаем значение атрибута data-forstore
-          const target = event.target as HTMLElement
-          const attrValue = target.dataset?.forstore
-          if (touchNumber === 2) dispatch(carsSettingsActions.setChooseInputName(attrValue!))
-
-          break
-
-      // case 'another':
-      //   dispatch(carsSettingsActions.setChooseInputName(null))
-      //   break
-
-        // default:
-        //   dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-
+      // if (chooseInput === null) return
 
       // console.log("▶ ⇛ watchClick:", watchClick);
+      // // dispatch(carsSettingsActions.setChooseInputName(null))
+      // if (!watchClick) return
 
-      // console.log("▶ ⇛Сработал  handleClickOutside:");
+      // switch (watchClick) {
+      //   case 'same':
+      //     return
 
-      // event.stopPropagation()
-      // const target = event.target as HTMLElement;
-      // const attrName = target.getAttribute('data-forstore')
+      //   case 'similar':
 
+      //     const touchNumber = event.detail
+      //     console.log("▶ ⇛⇛USE touchNumber:", touchNumber);
+      //     // получаем значение атрибута data-forstore
+      //     const target = event.target as HTMLElement
+      //     const attrValue = target.dataset?.forstore
+      //     if (touchNumber === 2) dispatch(carsSettingsActions.setChooseInputName(attrValue!))
 
-      // // Проверяем если клик не на том же инпуте то true
-      // if (attrName === chooseInput) {
-      //   console.log("Клик на том же элементе");
-      //   return
+      //     break
+
+      // // case 'another':
+      // //   dispatch(carsSettingsActions.setChooseInputName(null))
+      // //   break
+
+      //   // default:
+      //   //   dispatch(carsSettingsActions.setChooseInputName(null))
       // }
-      // console.warn("Снимаем выделение");
-      // // Удаляем имя выбранного элемента из store
-      // dispatch(carsSettingsActions.setChooseInputName(null))
-
+      return
     }
 
 
