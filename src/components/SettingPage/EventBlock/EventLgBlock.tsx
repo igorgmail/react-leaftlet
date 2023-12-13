@@ -49,17 +49,17 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
             paddingLeft: '.8rem'
           }}>
 
-          <Grid item xs={3} md={3} sx={{ borderTopLeftRadius: '8px' }}>
+          <Grid item xs={4} sx={{ borderTopLeftRadius: '8px' }}>
             <Stack >Автомообиль</Stack>
           </Grid>
-          <Grid item xs={2} md={3}>
+          <Grid item xs={4}>
             <Stack display={'flex'} alignItems={'center'}>Точка</Stack>
           </Grid>
-          <Grid item xs={3} md={3}>
-            <Stack sx={{ paddingLeft: '8px' }}>Событие</Stack>
+          <Grid item xs={2}>
+            <Stack sx={{ paddingLeft: '8px' }} display={'flex'} alignItems={'center'}>Событие</Stack>
           </Grid>
-          <Grid item xs={4} md={3}>
-            <Stack sx={{ paddingLeft: '8px' }}>Ожидание, сек</Stack>
+          <Grid item xs={2}>
+            <Stack sx={{ paddingLeft: '8px' }} display={'flex'} alignItems={'center'}>Ожидание</Stack>
           </Grid>
         </Grid>
 
