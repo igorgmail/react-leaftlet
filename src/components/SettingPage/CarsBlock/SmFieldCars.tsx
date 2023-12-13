@@ -61,6 +61,34 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
     console.log("▶ ⇛ targ:IMGiconname", targ.dataset.iconname);
   }
 
+  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+    // event.preventDefault()
+    const touchNumber = event.detail
+    console.log("▶ ⇛ touchNumber:", touchNumber);
+
+
+    if (touchNumber === 2) {
+      const targ = event.currentTarget
+      const inputType = event.currentTarget.type
+      targ.focus()
+
+      // TODO Здесь нужна проверка на то что сейчас в сторе
+      if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
+
+      // Установка курсора в конец текста
+      if (inputType === 'number') {
+        targ.type = 'text'
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+        targ.type = 'number'
+      } else {
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+      }
+
+    }
+  }
+
   useEffect(() => {
     console.warn("Состояние изменилось");
     console.log("Текущее состояние");
@@ -128,8 +156,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             eventData={makeEventData(car)} />
 
           <input
-            // onClick={handleTouchCarNameInput}  
-            onTouchStart={handleTouchCarNameInput}
+            onClick={handleInputClick}
+            // onTouchStart={handleTouchCarNameInput}
             // onMouseDown={handleTouchCarNameInput}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -191,7 +219,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
           sx={{ padding: '8px' }}
         >
           <input
-            onTouchStart={handleTouchCarNameInput}
+            onClick={handleInputClick}
             onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.imei.length}ch + 22px)` }}
@@ -207,7 +235,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
       <Grid item xs={6}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
           <input
-            onTouchStart={handleTouchCarNameInput}
+            onClick={handleInputClick}
             onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}

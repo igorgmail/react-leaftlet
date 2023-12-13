@@ -34,6 +34,26 @@ const CarsBlock = () => {
   useEffect(() => {
 
     function handleClickOutside(event: MouseEvent) {
+      const targ = event.target as HTMLElement
+
+      if (chooseInput === null) return
+      // Click на не интерактивном input(за пределами)
+      if (!targ.dataset?.interactive) {
+
+        // Если до этого уже был выбран интерактивный  эл(инпут) 
+        // И были какие то изменения в одном из блоков , то есть  objectWasModified - не пуст
+        if (chooseInput && objectWasModified) {
+          console.log("---------");
+          console.log("Будет отправлено на сервер ->", objectWasModified);
+          console.log("---------");
+
+        }
+        dispatch(carsSettingsActions.setChooseInputName(null))
+
+
+      }
+
+
       // const watchClick = checkWhereClick(event)
 
       // if (chooseInput === null) return
@@ -57,12 +77,6 @@ const CarsBlock = () => {
 
       //     break
 
-      // // case 'another':
-      // //   dispatch(carsSettingsActions.setChooseInputName(null))
-      // //   break
-
-      //   // default:
-      //   //   dispatch(carsSettingsActions.setChooseInputName(null))
       // }
       return
     }

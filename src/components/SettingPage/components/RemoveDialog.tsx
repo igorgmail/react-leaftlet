@@ -47,7 +47,6 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
     <>
       <Button
         onClick={handleClickOpen}
-        // data-CarId={carData.car_id}
         sx={{
           minWidth: '10px', width: '2rem',
           "& .MuiButton-startIcon": { margin: "auto" }
@@ -64,9 +63,9 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
           {"Удаление !!!"}
         </DialogTitle>
         <DialogContent>
-          {/* <DialogContentText id="alert-dialog-description" sx={{ textAlign: 'center' }}> */}
+
           <div dangerouslySetInnerHTML={{ __html: eventData.msg }} className='dialog-modal--content'></div>
-          {/* </DialogContentText> */}
+
         </DialogContent>
         <DialogActions >
           <Stack display={'flex'} flexDirection={'row'} justifyContent={'space-between'}

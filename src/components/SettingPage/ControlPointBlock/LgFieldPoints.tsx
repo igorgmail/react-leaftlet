@@ -49,17 +49,22 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
     if (touchNumber === 2) {
       const targ = event.currentTarget
-      console.log("▶ ⇛ targ:TYPE", targ.type);
+      const inputType = event.currentTarget.type
       targ.focus()
 
       // TODO Здесь нужна проверка на то что сейчас в сторе
       if (targ.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(targ.dataset.forstore))
 
       // Установка курсора в конец текста
-      // targ.type = 'text'
-      const textLength = targ.value.length;
-      targ.setSelectionRange(textLength, textLength);
-      // targ.type = 'number'
+      if (inputType === 'number') {
+        targ.type = 'text'
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+        targ.type = 'number'
+      } else {
+        const textLength = targ.value.length;
+        targ.setSelectionRange(textLength, textLength);
+      }
     }
   }
 
