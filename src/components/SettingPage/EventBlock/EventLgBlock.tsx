@@ -5,6 +5,7 @@ import { Stack, Grid, Divider } from "@mui/material";
 import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import RemoveDialog from "../components/RemoveDialog";
+import LgFieldEvent from "./LgFieldEvent";
 
 interface IEventBlockProps {
   eventsData: TEventsData[]
@@ -27,6 +28,7 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
   const handleDialog = (eventData: TEventFromDialog) => {
     console.log("▶ ⇛ eventData:", eventData);
   }
+
 
 
   return (
@@ -65,78 +67,7 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
 
         {eventsData.length > 0 && eventsData.map((oneEvent) => (
-          <Grid
-            key={`events-block-` + oneEvent.event_id}
-            container
-            sx={{
-              backgroundColor: 'white',
-              paddingLeft: '.8rem'
-            }}
-          >
-            {/* Автомобиль */}
-            <Grid item xs={3} md={3} display={'flex'} justifyContent={'flex-start'}>
-              <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
-
-                {/* Remove Button */}
-                <RemoveDialog callback={handleDialog} eventData={makeEventData(oneEvent)} />
-
-                <input
-                  readOnly={true}
-                  className="all-white-input-style"
-                  style={{
-                    width: `calc(${oneEvent.event.length}ch + 22px)`,
-                    // margin: 'auto'
-                  }}
-                  defaultValue={oneEvent.event}
-                />
-              </Stack>
-            </Grid>
-
-            {/* Точка */}
-            <Grid item xs={2} md={3} display={'flex'} justifyContent={'center'}>
-              <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
-
-                <input
-                  readOnly={true}
-                  className="all-white-input-style"
-                  style={{
-                    width: `calc(${oneEvent.event.length}ch + 22px)`,
-                    // margin: 'auto'
-                  }}
-                  defaultValue={oneEvent.event}
-                />
-              </Stack>
-            </Grid>
-
-            {/* Событие */}
-            <Grid item xs={3} md={3} display={'flex'} alignItems={'center'}>
-              <Stack>
-                <input
-                  className="all-white-input-style"
-                  style={{
-                    width: `calc(${oneEvent.event.length}ch + 22px)`, fontSize: '0.8rem'
-                  }}
-                  type="text"
-                  readOnly={true}
-                  defaultValue={oneEvent.event} />
-              </Stack>
-            </Grid>
-
-            {/* Ожидание */}
-            <Grid item xs={4} md={3} display={'flex'} alignItems={'center'}>
-              <Stack >
-                <input
-                  className="all-white-input-style"
-                  style={{
-                    width: `calc(${oneEvent.time_response_sec}ch + 22px)`, fontSize: '0.8rem'
-                  }}
-                  type="text"
-                  readOnly={true}
-                  defaultValue={oneEvent.time_response_sec + ` сек`} />
-              </Stack>
-            </Grid>
-            <Divider />
-          </Grid>
+          <LgFieldEvent oneEvent={oneEvent} key={`eventkey-${oneEvent.event_id}`} />
         ))
         }
 

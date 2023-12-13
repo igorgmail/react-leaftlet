@@ -11,16 +11,17 @@ import EventSmBlock from "./EventSmBlock";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import BlockHeader from "../components/BlockHeader";
+import { useAppSelector } from "../../../store";
 
 
-interface IEventBlockProps {
-  eventsData: TEventsData[]
-}
+// interface IEventBlockProps {
+//   eventsData: TEventsData[]
+// }
 
-const EventBlock: FC<IEventBlockProps> = ({ eventsData }) => {
+const EventBlock = () => {
   console.log("--Render EventsBlock");
 
-
+  const eventsData = useAppSelector((store) => store.carsSettings.events)
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 

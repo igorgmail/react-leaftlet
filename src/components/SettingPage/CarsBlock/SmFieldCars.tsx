@@ -227,7 +227,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.imei.length}ch + 22px)` }}
-            type="text"
+              type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
@@ -243,7 +243,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
-            type="text"
+              type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}

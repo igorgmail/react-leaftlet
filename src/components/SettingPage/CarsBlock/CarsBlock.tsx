@@ -1,6 +1,6 @@
-import React, { useState, useEffect, FC } from "react"
+import { useEffect } from "react"
 
-import { Container, Stack, Box, Typography, Grid } from "@mui/material"
+import { Stack } from "@mui/material"
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
@@ -14,7 +14,6 @@ import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLargeScreen from "./CarsLargeScreen";
 import AddCarModal from "./AddCarModal/AddCarModal";
 
-import { ICarObject } from "../types/carsSettingsTypes";
 
 
 const CarsBlock = () => {

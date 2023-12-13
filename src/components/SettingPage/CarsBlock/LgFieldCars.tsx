@@ -180,7 +180,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
             style={{
               width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
             }}
-            type="text"
+              type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
@@ -199,7 +199,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
             style={{
               width: `calc(${car.alter_imei?.length || 0}ch + 22px)`, fontSize: '0.8rem'
             }}
-            type="text"
+              type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
