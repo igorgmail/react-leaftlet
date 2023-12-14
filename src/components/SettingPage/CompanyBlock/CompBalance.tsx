@@ -31,9 +31,9 @@ const CompBalance = () => {
 
     const requestOptions: IRequestOptions = {
       method: 'GET',
-      body: JSON.stringify({
-        company_id: companyId
-      }),
+      // body: JSON.stringify({
+      //   company_id: companyId
+      // }),
     };
 
     const response = await sendRequest(API_ENDPOINTS.REFRESH_BALANCE, requestOptions)
@@ -41,12 +41,13 @@ const CompBalance = () => {
     if (response.error) {
       console.warn("Error in refresh balance", response.error);
       showAlert('Не удалось обновить баланс', 'error');
-      dispatch(carsSettingsActions.setRefreshCompanyData())
-      setCompBalance(companyBalance)
+      // dispatch(carsSettingsActions.setRefreshCompanyData())
+      // setCompBalance(companyBalance)
       return
     }
     if (response) {
       const { balance } = response.data
+      console.log("▶ ⇛ balance:", balance);
       console.info("Баланс--", balance)
       showAlert('Баланс компании обновлен', 'success');
       setCompBalance(balance)
@@ -67,7 +68,7 @@ const CompBalance = () => {
           }}
           type="text"
             readOnly
-          defaultValue={compBalance}>
+            value={compBalance}>
         </input>
         <Stack display={'flex'} flexDirection={'row'} alignItems={'center'}>
           RUB
