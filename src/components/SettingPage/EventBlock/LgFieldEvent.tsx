@@ -4,7 +4,7 @@ import { Stack, Grid, Divider } from "@mui/material";
 
 import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
-import SelectBlock from "./SelectBlock";
+import SelectBlock from "../components/SelectBlock";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";

@@ -1,34 +1,56 @@
 import { Box, Divider, Grid, Stack } from "@mui/material"
 import { FC } from "react"
 import RemoveDialog from "../components/RemoveDialog"
-import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes"
+import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TUsers } from "../types/carsSettingsTypes"
 
-
+import useBackDrop from "../hooks/useBackdrop";
+import useRemoveDialog from "../hooks/useRemoveDialog";
+import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
 interface IUserBlockProps {
-  usersData: { email: string, role: string }[]
+  usersData: TUsers[]
 }
 
 
 const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
 
+
+  const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { sendRemove } = useRemoveDialog()
+  const dispatch = useAppDispatch()
+
+
+  const handleDialog = (eventData: TEventFromDialog) => {
+    startBackDrop()
+    sendRemove(eventData)
+      .then((data) => {
+        if (data.data) {
+          const id = data.data.data
+          dispatch(carsSettingsActions.setRemoveUser(id))
+          stopBackDrop()
+        } else {
+          console.info("При удалении Пользователя с сервера пришли некорректные данные");
+
+        }
+      }).catch((err) => {
+        console.warn("ERROR, Ошибка при удалении Пользователя", err);
+      }).finally(() => stopBackDrop())
+  }
+
   const makeEventData = (eventObject: any) => {
 
     const eventData: TEventForDialog = {
       event: 'REMOVE_USER',
-      subjectid: eventObject.email,
+      subjectid: eventObject.user_id,
       msg: `Будет удален пользователь <br>${eventObject.email}`
     }
 
     return eventData
   }
 
-  const handleDialog = (eventData: TEventFromDialog) => {
-    console.log("▶ ⇛ eventData:", eventData);
-  }
-
 
   return (
+    <>
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
       {/* Header Cars */}
@@ -56,7 +78,7 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
 
         {usersData.length > 0 && usersData.map((oneUser) => (
           <Grid
-            key={`user-block-` + oneUser.email}
+            key={`user-block-` + oneUser.user_id}
             container
             sx={{
               backgroundColor: 'white',
@@ -103,6 +125,8 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
 
       </Stack>
     </Stack>
+      {BackDropComponent}
+    </>
   )
 }
 export default UserLgBlock

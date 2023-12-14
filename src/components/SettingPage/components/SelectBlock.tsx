@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react'
 
 import useSelectorEvents from '../hooks/useSelectorEvents'
-import './style/style.css'
+import '../styles/style_select.css'
 import { useAppSelector } from '../../../store'
 
 
 type TSelectBlock = {
   eventId?: string,
-  modifier: 'CARS' | 'POINTS' | 'EVENTS' | 'MIN',
+  modifier: 'CARS' | 'POINTS' | 'EVENTS' | 'MIN' | 'ROLE',
   selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
   selectedItem?: string
 
@@ -88,6 +88,24 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       </>
     );
   }
+  const RoleOptions = () => {
+    return (
+      <>
+        <option key={0}
+          value={`user`}
+          selected={selectedItem === 'user'}
+          // defaultValue={'user'}
+          data-option-name={'option-role'}
+        >user</option>
+        <option key={1}
+          value={`admin`}
+          selected={selectedItem === 'admin'}
+          data-option-name={'option-role'}
+        >admin</option>
+
+      </>
+    );
+  }
 
 
   return (
@@ -104,6 +122,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
           {modifier === 'POINTS' && <PointsOptions></PointsOptions>}
           {modifier === 'EVENTS' && <TypeEventsOptions></TypeEventsOptions>}
           {modifier === 'MIN' && <MinSecOptions></MinSecOptions>}
+          {modifier === 'ROLE' && <RoleOptions></RoleOptions>}
         </select>
         <svg>
           <use xlinkHref="#select-arrow-down"></use>

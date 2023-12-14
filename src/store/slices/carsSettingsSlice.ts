@@ -36,6 +36,7 @@ const initialState: IInitSettingStore = {
   events: [],
   type_of_events: [],
   icons: [],
+  users: [],
   config: {
     requestWorks: false,
     chooseInputName: null,
@@ -75,6 +76,7 @@ export const carsSettingsSlice = createSlice({
       state.events = action.payload.events
       state.type_of_events = action.payload.type_of_events
       state.icons = action.payload.icons
+      state.users = action.payload.users
     },
 
 
@@ -141,9 +143,18 @@ export const carsSettingsSlice = createSlice({
     setCreateEvent: (state, action: PayloadAction<TEventsData>) => {
       state.events = [...state.events, action.payload]
     },
-    // Удалиить событие по ID
+    // Удалить событие по ID
     setRemoveEvent: (state, action: PayloadAction<string>) => {
       state.events = [...state.events].filter((event) => event.event_id !== action.payload)
+    },
+    // ? USERS BLOCK --------------------------
+    // Добавить Нового пользователя
+    setCreateUser: (state, action: PayloadAction<TUsers>) => {
+      state.users = [...state.users, action.payload]
+    },
+    // Удалить пользователя
+    setRemoveUser: (state, action: PayloadAction<string>) => {
+      state.users = [...state.users].filter((user) => user.user_id !== action.payload)
     },
 
     // ? MODAL WITH MAP BLOCK --------------------------

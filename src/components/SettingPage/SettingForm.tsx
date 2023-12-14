@@ -69,7 +69,7 @@ const SettingForm = () => {
           <CarsBlock key={'cars'}></CarsBlock>
           <ControlPointBlock key={'control'}></ControlPointBlock>
           <EventBlock key={'events'}></EventBlock>
-          <UserBlock usersData={mockUserData.users}></UserBlock>
+          <UserBlock key={'users'}></UserBlock>
           <PreloadImages iconsUrls={settingsData.icons} />
         </>
 

@@ -6,6 +6,7 @@ export interface ISettingsData {
   events: TEventsData[],
   type_of_events: TTypeEvents,
   icons: TIcons[],
+  users: TUsers[],
 
 }
 
@@ -54,6 +55,11 @@ export type TIcons = {
 export type TUsers = {
   user_id: string,
   email: string,
+  role: string,
+}
+export type TUserRole = {
+  email: string,
+  role: string
 }
 
 export type TRemoveDialogCallback = {

@@ -9,16 +9,13 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import BlockHeader from "../components/BlockHeader";
 import UserLgBlock from "./UserLgBlock";
+import AddUserModal from "./AddModal/AddUserModal";
+import { useAppSelector, carsSettingsActions } from "../../../store";
 
-
-interface IUserBlockProps {
-  usersData: { email: string, role: string }[]
-}
-
-const UserBlock: FC<IUserBlockProps> = ({ usersData }) => {
+const UserBlock = () => {
   console.log("--Render UsersBlock");
 
-
+  const usersData = useAppSelector((store) => store.carsSettings.users)
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -33,7 +30,7 @@ const UserBlock: FC<IUserBlockProps> = ({ usersData }) => {
       ) : (
         <UserSmBlock eventsData={eventsData} />
       )} */}
-
+      <AddUserModal />
     </Stack>
   )
 }

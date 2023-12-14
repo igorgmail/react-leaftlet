@@ -10,7 +10,7 @@ import Backdrop from '@mui/material/Backdrop';
 
 import { useAppSelector } from "../../../../store";
 import { TEventsData } from "../../types/carsSettingsTypes";
-import SelectBlock from "../SelectBlock";
+import SelectBlock from "../../components/SelectBlock";
 
 
 
