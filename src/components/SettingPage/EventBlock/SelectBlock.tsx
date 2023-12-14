@@ -8,21 +8,18 @@ import { useAppSelector } from '../../../store'
 type TSelectBlock = {
   eventId: string,
   modifier: 'CARS' | 'POINTS' | 'EVENTS',
-  selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
+  selectedItem?: string
+
 }
-const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
+const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, selectChange }) => {
 
   const allCars = useAppSelector((store) => store.carsSettings.cars)
   const allPoints = useAppSelector((store) => store.carsSettings.points)
   const allTypeEvents = useAppSelector((store) => store.carsSettings.type_of_events)
 
-  // const [options, setOptions] = useState<ICarObject | undefined>([])
+  // const { getCarIdFromEventId, getPointIdFromEventId, getEventFromEventId } = useSelectorEvents()
 
-  const { getCarIdFromEventId, getPointIdFromEventId, getEventFromEventId } = useSelectorEvents()
-
-  const carIdByEvent = getCarIdFromEventId(eventId)
-  const pointIdByEventId = getPointIdFromEventId(eventId)
-  const eventPointEventId = getEventFromEventId(eventId)
 
   // useEffect(() => {
   //   if (eventId) {
@@ -37,7 +34,7 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
         {allCars.map((car) => (
           <option key={car.car_id}
             value={`${car.car_id}`}
-            selected={carIdByEvent === car.car_id}
+            selected={selectedItem === car.car_id}
             data-option-name={'event-car'}
           >{car.name}</option>
         ))}
@@ -50,7 +47,7 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
         {allPoints.map((point) => (
           <option key={point.point_id}
             value={`${point.point_id}`}
-            selected={pointIdByEventId === point.point_id}
+            selected={selectedItem === point.point_id}
             data-option-name={'event-point'}
           >{point.name}</option>
         ))}
@@ -63,7 +60,7 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
         {allTypeEvents.map((typeEv, ind) => (
           <option key={ind}
             value={`${ind}`}
-            selected={eventPointEventId === typeEv}
+            selected={selectedItem === typeEv}
             data-option-name={'event-type'}
           >{typeEv}</option>
         ))}

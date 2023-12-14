@@ -140,19 +140,16 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
         {/* Avto */}
         <Grid item xs={6}>
           <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
-
             <RemoveDialog callback={handleDialog}
               eventData={makeEventData(oneEvent)} />
-
-            <SelectBlock eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
-
+            <SelectBlock selectedItem={eventCarId} eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
         {/* Point */}
         <Grid item xs={6}>
           <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
-            <SelectBlock eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventPointId} eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
@@ -173,7 +170,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
           <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
           // sx={{ padding: '8px' }}
           >
-            <SelectBlock eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventType} eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 

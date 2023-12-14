@@ -19,7 +19,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
 
-  const [eventCarId, setEventCarId] = useState(oneEvent.car_id)
+  const [eventCarId, setEventCarId] = useState<string>(oneEvent.car_id)
   const [eventPointId, setEventPointId] = useState(oneEvent.point_id)
   const [eventType, setEventType] = useState(oneEvent.event) // <'IN' | 'OUT'>
   const [eventTimeSec, setEventTimeSec] = useState(oneEvent.time_response_sec)
@@ -92,6 +92,8 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
   }
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // ! Ложтм все в store перед эти нужна тпрака на сервер
+    // ! И проеверить
     const objectIndex = e.target.value
     // console.log("Индекс объекта", objectIndex);
 
@@ -132,21 +134,21 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
             {/* Remove Button */}
             <RemoveDialog callback={handleDialog} eventData={makeEventData(oneEvent)} />
-            <SelectBlock eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventCarId} eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
         {/* Точка */}
         <Grid item sm={4} display={'flex'} justifyContent={'center'}>
           <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
-            <SelectBlock eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventPointId} eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
         {/* Событие */}
         <Grid item sm={2} display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <Stack margin={'auto'} display={'flex'} justifyContent={'center'}>
-            <SelectBlock eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventType} eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
