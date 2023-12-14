@@ -1,21 +1,25 @@
 import React, { FC, useState } from "react";
 
-import { Stack, Grid, Divider } from "@mui/material";
+import { Stack, Grid, Divider, Typography } from "@mui/material";
 
 import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
 
 import SelectBlock from "./SelectBlock";
+
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 
 
+
+
 interface IEventBlockProps {
   oneEvent: TEventsData
 }
 
-const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
+const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
+
 
   const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
 
@@ -85,7 +89,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     const eventData: TEventForDialog = {
       event: 'REMOVE_EVENT',
       subjectid: event.event_id,
-      msg: `Будет удалена контрольная точка <br>${event.event_id}`
+      msg: `Будет удалено событие <br> Id события - ${event.event_id}`
     }
 
     return eventData
@@ -93,18 +97,10 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const objectIndex = e.target.value
-    // console.log("Индекс объекта", objectIndex);
-
     const selectedIndex = e.target.options.selectedIndex;
-    // console.log("Порядковый номер", selectedIndex);
-
     const selectedText = e.target.options[selectedIndex].text;
-    // console.log("Техт объекта:", selectedText);
-
     const selectedOption = e.target.options[selectedIndex];
     const selectedData = selectedOption.dataset.optionName;
-
-    console.log("DataAttr объекта: ", selectedData);
 
     if (selectedData === 'event-car') {
       setEventCarId(String(objectIndex))
@@ -115,44 +111,74 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     if (selectedData === 'event-type')
       setEventType(selectedText)
   }
+
   return (
     <>
-
       <Grid
         key={`events-block-` + oneEvent.event_id}
-        container
+        container alignItems="center" justifyContent="center"
         sx={{
           backgroundColor: 'white',
-          paddingLeft: '.8rem'
-        }}
-      >
-        {/* Автомобиль */}
-        <Grid item sm={4} display={'flex'} justifyContent={'flex-start'}>
-          <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
+          marginTop: '2rem',
+          borderRadius: '10px'
+        }}>
 
-            {/* Remove Button */}
-            <RemoveDialog callback={handleDialog} eventData={makeEventData(oneEvent)} />
-            <SelectBlock eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
+
+        {/* Block - 1 */}
+        <Grid item xs={6}>
+          <Stack sx={{ backgroundColor: '#078c75', color: 'white', borderTopLeftRadius: '10px', }}>
+            <Typography align="center">Автомобиль</Typography>
           </Stack>
         </Grid>
 
-        {/* Точка */}
-        <Grid item sm={4} display={'flex'} justifyContent={'center'}>
-          <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
+        <Grid item xs={6}>
+          <Stack sx={{ backgroundColor: '#078c75', color: 'white', borderTopRightRadius: '10px', }}>
+            <Typography align="center">Точка</Typography>
+          </Stack>
+        </Grid>
+
+        {/* Avto */}
+        <Grid item xs={6}>
+          <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}>
+
+            <RemoveDialog callback={handleDialog}
+              eventData={makeEventData(oneEvent)} />
+
+            <SelectBlock eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
+
+          </Stack>
+        </Grid>
+
+        {/* Point */}
+        <Grid item xs={6}>
+          <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
             <SelectBlock eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
-        {/* Событие */}
-        <Grid item sm={2} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-          <Stack margin={'auto'} display={'flex'} justifyContent={'center'}>
+        {/* Block - 2 */}
+        <Grid item xs={6}>
+          <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
+            <Typography align="center">Событие</Typography>
+          </Stack>
+        </Grid>
+        <Grid item xs={6}>
+          <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
+            <Typography align="center">Ожидание</Typography>
+          </Stack>
+        </Grid>
+
+        {/* Event */}
+        <Grid item xs={6}>
+          <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
+          // sx={{ padding: '8px' }}
+          >
             <SelectBlock eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
           </Stack>
         </Grid>
 
-        {/* Ожидание */}
-        <Grid item sm={1} display={'flex'} alignItems={'center'}>
-          <Stack margin={'auto'} display={'flex'} alignItems={'end'}>
+        <Grid item xs={4}>
+          <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
             <input
               onClick={handleInputClick}
               onChange={(e) => setEventTimeSec(e.target.value)}
@@ -170,7 +196,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
             />
           </Stack>
         </Grid>
-        <Grid item sm={1} display={'flex'} alignItems={'center'}>
+        <Grid item xs={2} display={'flex'} alignItems={'center'}>
           <Stack margin={'auto'} display={'flex'} alignItems={'end'}>
             <input
               className={"all-white-input--second"}
@@ -184,9 +210,22 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
             />
           </Stack>
         </Grid>
-        <Divider />
+
+        {/* End Block */}
+        <Grid item xs={12}>
+          <Stack sx={{
+            backgroundColor: '#bfbfbf',
+            color: 'white',
+            borderBottomRightRadius: '10px',
+            borderBottomLeftRadius: '10px',
+            height: '1.5rem',
+
+          }}>
+          </Stack>
+
+        </Grid>
       </Grid>
       {BackDropComponent}</>
   )
 }
-export default LgFieldEvent
+export default SmFieldEvent

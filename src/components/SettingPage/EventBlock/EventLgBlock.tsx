@@ -25,12 +25,6 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
     return eventData
   }
 
-  const handleDialog = (eventData: TEventFromDialog) => {
-    console.log("▶ ⇛ eventData:", eventData);
-  }
-
-
-
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
@@ -49,16 +43,16 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
             paddingLeft: '.8rem'
           }}>
 
-          <Grid item xs={4} sx={{ borderTopLeftRadius: '8px' }}>
+          <Grid item sm={4} sx={{ borderTopLeftRadius: '8px' }}>
             <Stack >Автомообиль</Stack>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item sm={4}>
             <Stack display={'flex'} alignItems={'center'}>Точка</Stack>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item sm={2}>
             <Stack sx={{ paddingLeft: '8px' }} display={'flex'} alignItems={'center'}>Событие</Stack>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item sm={2}>
             <Stack sx={{ paddingLeft: '8px' }} display={'flex'} alignItems={'center'}>Ожидание</Stack>
           </Grid>
         </Grid>

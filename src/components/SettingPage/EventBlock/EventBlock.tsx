@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import BlockHeader from "../components/BlockHeader";
 import { useAppSelector } from "../../../store";
+import AddEventModal from "./AddModal/AddEventModal";
 
 
 // interface IEventBlockProps {
@@ -34,7 +35,7 @@ const EventBlock = () => {
       ) : (
         <EventSmBlock eventsData={eventsData} />
       )}
-      {/* <AddCarModal /> */}
+      <AddEventModal />
     </Stack>
   )
 }

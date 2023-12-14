@@ -38,6 +38,7 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
           <option key={car.car_id}
             value={`${car.car_id}`}
             selected={carIdByEvent === car.car_id}
+            data-option-name={'event-car'}
           >{car.name}</option>
         ))}
       </>
@@ -50,6 +51,7 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
           <option key={point.point_id}
             value={`${point.point_id}`}
             selected={pointIdByEventId === point.point_id}
+            data-option-name={'event-point'}
           >{point.name}</option>
         ))}
       </>
@@ -60,8 +62,9 @@ const SelectBlock: FC<TSelectBlock> = ({ eventId, modifier, selectChange }) => {
       <>
         {allTypeEvents.map((typeEv, ind) => (
           <option key={ind}
-            value={`${ind + 1}`}
+            value={`${ind}`}
             selected={eventPointEventId === typeEv}
+            data-option-name={'event-type'}
           >{typeEv}</option>
         ))}
       </>

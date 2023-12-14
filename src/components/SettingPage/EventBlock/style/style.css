@@ -1,6 +1,6 @@
 .select {
   position: relative;
-  min-width: 100%;
+  /* min-width: 100%; */
 }
 
 .select svg {
@@ -59,4 +59,10 @@
   height: 0;
   pointer-events: none;
   user-select: none;
+}
+.all-white-input--second {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  border: none;
 }

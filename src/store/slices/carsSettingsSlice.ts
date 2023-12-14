@@ -136,6 +136,16 @@ export const carsSettingsSlice = createSlice({
       state.points = [...state.points].filter((point) => point.point_id !== action.payload)
     },
 
+    // ? EVENTS BLOCK --------------------------
+    // Добавить Новое событие
+    setCreateEvent: (state, action: PayloadAction<TEventsData>) => {
+      state.events = [...state.events, action.payload]
+    },
+    // Удалиить событие по ID
+    setRemoveEvent: (state, action: PayloadAction<string>) => {
+      state.events = [...state.events].filter((event) => event.event_id !== action.payload)
+    },
+
     // ? MODAL WITH MAP BLOCK --------------------------
     // Карта двигается в данный момент или нет (true | false)
     setMapMove: (state, action: PayloadAction<boolean>) => {
