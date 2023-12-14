@@ -117,6 +117,8 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     if (selectedData === 'event-type')
       setEventType(selectedText)
   }
+
+
   return (
     <>
 

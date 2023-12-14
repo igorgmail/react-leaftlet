@@ -6,13 +6,13 @@ import { useAppSelector } from '../../../store'
 
 
 type TSelectBlock = {
-  eventId: string,
-  modifier: 'CARS' | 'POINTS' | 'EVENTS',
+  eventId?: string,
+  modifier: 'CARS' | 'POINTS' | 'EVENTS' | 'MIN',
   selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
   selectedItem?: string
 
 }
-const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, selectChange }) => {
+const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange }) => {
 
   const allCars = useAppSelector((store) => store.carsSettings.cars)
   const allPoints = useAppSelector((store) => store.carsSettings.points)
@@ -31,6 +31,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, select
   const CarsOptions = () => {
     return (
       <>
+        <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите автомобиль</option>
         {allCars.map((car) => (
           <option key={car.car_id}
             value={`${car.car_id}`}
@@ -44,6 +45,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, select
   const PointsOptions = () => {
     return (
       <>
+        <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите точку</option>
         {allPoints.map((point) => (
           <option key={point.point_id}
             value={`${point.point_id}`}
@@ -57,6 +59,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, select
   const TypeEventsOptions = () => {
     return (
       <>
+        <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите событие</option>
         {allTypeEvents.map((typeEv, ind) => (
           <option key={ind}
             value={`${ind}`}
@@ -64,6 +67,24 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, select
             data-option-name={'event-type'}
           >{typeEv}</option>
         ))}
+      </>
+    );
+  }
+  const MinSecOptions = () => {
+    return (
+      <>
+
+        <option key={0}
+          value={`sec`}
+          selected
+          data-option-name={'option-min'}
+        >сек</option>
+        <option key={1}
+          value={`мин`}
+          // selected
+          data-option-name={'option-min'}
+        >мин</option>
+
       </>
     );
   }
@@ -82,7 +103,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, eventId, modifier, select
           {modifier === 'CARS' && <CarsOptions></CarsOptions>}
           {modifier === 'POINTS' && <PointsOptions></PointsOptions>}
           {modifier === 'EVENTS' && <TypeEventsOptions></TypeEventsOptions>}
-
+          {modifier === 'MIN' && <MinSecOptions></MinSecOptions>}
         </select>
         <svg>
           <use xlinkHref="#select-arrow-down"></use>

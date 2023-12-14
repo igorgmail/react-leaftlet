@@ -10,41 +10,106 @@ import Backdrop from '@mui/material/Backdrop';
 
 import { useAppSelector } from "../../../../store";
 import { TEventsData } from "../../types/carsSettingsTypes";
+import SelectBlock from "../SelectBlock";
 
 
 
 type TAddEventForm = {
   handleClose: () => void,
-  handleFormSubmit: (carData: Omit<TEventsData, 'event_id'>) => void
+  handleFormSubmit: (eventData: Omit<TEventsData, 'event_id'>) => void
 }
 
 
 const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) => {
 
-  const [nameCar, setNameCar] = useState('')
-  const [iconCar, setIconCar] = useState<string>('')
-  const [imeiCar, setImeiCar] = useState('')
-  const [alterImeiCar, setAlterImeiCar] = useState('')
-  const [modalOpen, setModalOpen] = useState(false);
+  const [eventCarId, setEventCarId] = useState<string>('')
+  const [eventPointId, setEventPointId] = useState('')
+  const [eventType, setEventType] = useState('')
+  const [eventWait, setEventWait] = useState('')
+  const [eventWaitType, setEventWaitType] = useState<'сек' | 'мин'>('сек');
+
+  const allTypeEvents = useAppSelector((store) => store.carsSettings.type_of_events)
+  const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
+
+  const handlerEventWait = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const num = e.target.value
+    if (num.length <= 4 && num.length >= 0) {
+      setEventWait(num)
+    }
+  }
+  const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    // ! Ложим все в store перед этим нужна тправка на сервер
+    // ! И проверить
+    const objectIndex = e.target.value
+    console.log("Индекс объекта", objectIndex);
+
+    const selectedIndex = e.target.options.selectedIndex;
+    console.log("Порядковый номер", selectedIndex);
+
+    const selectedText = e.target.options[selectedIndex].text;
+    console.log("Техт объекта:", selectedText);
+
+    const selectedOption = e.target.options[selectedIndex];
+    const selectedData = selectedOption.dataset.optionName;
+
+    console.log("DataAttr объекта: ", selectedData);
+
+    if (selectedData === 'event-car') {
+      setEventCarId(String(objectIndex))
+    }
+    if (selectedData === 'event-point') {
+      setEventPointId(objectIndex)
+    }
+    if (selectedData === 'event-type') {
+      console.log("▶ ⇛ allTypeEvents:", allTypeEvents);
+      console.log("▶ ⇛ allTypeEvents[Number(selectedText):", allTypeEvents[Number(selectedText)]);
+      setEventType(allTypeEvents[Number(objectIndex)])
+    }
+    if (selectedData === 'option-min') {
+      if (selectedText === 'сек' || selectedText === 'мин') {
+        setEventWaitType(selectedText)
+      }
+    }
+  }
 
 
   const clearState = () => {
     // Очистка формы
-    setNameCar('');
-    setIconCar('');
-    setImeiCar('');
-    setAlterImeiCar('');
+    setEventCarId('')
+    setEventPointId('')
+    setEventType('')
+    setEventWait('')
+    setEventWaitType('сек')
   }
-  const handleAddCarSubmit = (e: React.FormEvent) => {
+
+  const handleAddEventSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const carData = {
-      name: nameCar,
-      pic: iconCar,
-      imei: imeiCar,
-      alter_imei: alterImeiCar
+
+    const countTimeWait = (time: string) => {
+      if (eventWaitType === 'мин') {
+        return String(Number(time) * 60)
+      }
+      return time
     }
-    // handleFormSubmit(carData)
-    // clearState()
+    console.log("▶ ⇛ eventCarId:", eventCarId);
+
+    console.log("▶ ⇛ eventPointId:", eventPointId);
+
+    console.log("▶ ⇛ eventType:", eventType);
+
+    console.log("▶ ⇛ eventWait:", eventWait);
+
+    console.log("▶ ⇛ eventWaitType:", eventWaitType);
+
+    const eventData = {
+      company_id: companyId,
+      car_id: eventCarId,
+      point_id: eventPointId,
+      event: eventType,
+      time_response_sec: countTimeWait(eventWait)
+    }
+    handleFormSubmit(eventData)
+    clearState()
   }
   const handleCancelButton = () => {
     clearState()
@@ -53,97 +118,78 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
 
   return (
     <Stack>
-      <form onSubmit={handleAddCarSubmit}>
+      <form onSubmit={handleAddEventSubmit}>
         <Grid container
           rowSpacing={1}
 
         >
+          {/* Автомобиль */}
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }} display={'flex'} alignItems={'center'}>
             <Stack >
-              <label htmlFor="carNameInput">Автомобиль</label>
+              <label>Автомобиль</label>
             </Stack>
           </Grid>
-          {/* Name */}
+
           <Grid item xs={9}>
             <Stack display={'flex'}>
-              <input
-                onChange={(e) => setNameCar(e.target.value)}
-                id="carNameInput"
-                // readOnly={true}
-                className="modal-input"
-
-                value={nameCar}
-                required
-              />
+              <SelectBlock selectedItem={eventCarId} modifier={'CARS'} selectChange={selectChange} />
             </Stack>
           </Grid>
 
           {/* Точка */}
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }} display={'flex'} alignItems={'center'}>
             <Stack >
-              <label htmlFor="carImeiInput">Точка</label>
+              <label>Точка</label>
             </Stack>
           </Grid>
+
           <Grid item xs={9}>
             <Stack display={'flex'}>
-              <input
-                onChange={(e) => setImeiCar(e.target.value)}
-                id="carImeiInput"
-                // readOnly={true}
-                className="modal-input"
-
-                value={imeiCar}
-                required
-                type="number"
-                minLength={15}
-                maxLength={15}
-              />
+              <SelectBlock selectedItem={eventPointId} modifier={'POINTS'} selectChange={selectChange} />
             </Stack>
           </Grid>
 
           {/* Событие */}
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }} display={'flex'} alignItems={'center'}>
             <Stack >
-              <label htmlFor="carImeiInput">Событие</label>
+              <label>Событие</label>
             </Stack>
           </Grid>
+
           <Grid item xs={9}>
             <Stack display={'flex'}>
-              <input
-                onChange={(e) => setImeiCar(e.target.value)}
-                id="carImeiInput"
-                // readOnly={true}
-                className="modal-input"
-
-                value={imeiCar}
-                required
-                type="number"
-                minLength={15}
-                maxLength={15}
-              />
+              <SelectBlock selectedItem={eventType} modifier={'EVENTS'} selectChange={selectChange} />
             </Stack>
           </Grid>
 
           {/* Ожидание */}
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }} display={'flex'} alignItems={'center'}>
             <Stack >
-              <label htmlFor="carAlterImeiInput">Ожидание</label>
+              <label>Ожидание</label>
             </Stack>
           </Grid>
-          <Grid item xs={9}>
-            <Stack display={'flex'}>
+
+          <Grid item xs={3} display={'flex'} alignItems={'center'}>
+            <Stack display={'flex'} sx={{ pl: '8px' }}>
               <input
-                onChange={(e) => setAlterImeiCar(e.target.value)}
-                id="carAlterImeiInput"
+                onChange={(e) => handlerEventWait(e)}
                 // readOnly={true}
                 className="modal-input"
-
-                value={alterImeiCar}
-                required
+                style={{ width: '100%' }}
+                value={eventWait || ''}
                 type="number"
-                minLength={15}
-                maxLength={15}
               />
+            </Stack>
+          </Grid>
+
+          <Grid item xs={2}>
+            {/* empty */}
+          </Grid>
+
+          {/* MIN SEC */}
+          <Grid item xs={4}>
+            <Stack display={'flex'} sx={{ pl: '8px' }}>
+              <SelectBlock modifier={'MIN'} selectChange={selectChange} />
             </Stack>
           </Grid>
         </Grid>
