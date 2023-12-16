@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import { Stack } from "@mui/material"
+import { Backdrop, Stack } from "@mui/material"
 import CarsBlock from "./CarsBlock/CarsBlock"
 import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
 import EventBlock from "./EventBlock/EventBlock"
@@ -10,6 +10,7 @@ import { useAppDispatch, carsSettingsActions } from '../../store';
 
 import { mockUserData } from "./mockData"
 import { Spinner } from "./components/Spinner"
+import Loader from "./components/Loader/Loader"
 import PreloadImages from "./components/PreloadImage"
 
 import { IRequestOptions, ISettingsData } from "./types/carsSettingsTypes"
@@ -74,7 +75,15 @@ const SettingForm = () => {
 
       {alertComponent}
     </Stack>
-      : <Spinner />
+
+      :
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open
+      >
+        <Loader />
+      </Backdrop>
+
   )
 }
 export default SettingForm
