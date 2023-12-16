@@ -26,12 +26,8 @@ const OneCarMarker: FC<OneCarProps> = ({ carStartData }) => {
   const parc_id = useAppSelector((state) => state.carsMap.companyName?.company_id)
 
   const [oneCarData, setOneCarData] = useState<ICarObject>(carStartData)
-  type CustomNodeEnv = 'development' | 'production' | 'test' | 'preview';
-  function getImgUrl(id: string) {
-    if ((process.env.NODE_ENV as CustomNodeEnv) === 'preview') {
-      return getCarIconUrl(id);
-    }
 
+  function getImgUrl(id: string) {
     return (process.env.NODE_ENV === 'production') ? oneCarData.pic : getCarIconUrl(id)
   }
 
