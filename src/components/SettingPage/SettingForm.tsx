@@ -60,22 +60,21 @@ const SettingForm = () => {
   }, [])
 
   return (
+    settingsData ?
     <Stack display={'flex'} margin={'auto'} mt={'2rem'} mb={'2rem'}
       sx={{ width: { sm: "90%", md: "70%" }, }}
-    >
-      {settingsData ? (
-        <>
+      >
+        <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
           <CompanyBlock key={'company'}></CompanyBlock>
           <CarsBlock key={'cars'}></CarsBlock>
           <ControlPointBlock key={'control'}></ControlPointBlock>
           <EventBlock key={'events'}></EventBlock>
           <UserBlock key={'users'}></UserBlock>
-          <PreloadImages iconsUrls={settingsData.icons} />
-        </>
+        <PreloadImages iconsUrls={settingsData.icons} />
 
-      ) : <Spinner />}
       {alertComponent}
     </Stack>
+      : <Spinner />
   )
 }
 export default SettingForm
