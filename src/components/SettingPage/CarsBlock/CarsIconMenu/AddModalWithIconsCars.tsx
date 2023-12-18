@@ -50,6 +50,7 @@ const ModalWithIconsCars: FC<TModalWithIconsProps> = ({ children, handleIconCarI
     <>
       <Button
         onClick={(e: React.SyntheticEvent) => handleOpen(e)}
+        name={'car_pic'} 
         data-forstore={`id${iconParentId}-carParentIcon`}
         data-interactive
         data-interactive-image

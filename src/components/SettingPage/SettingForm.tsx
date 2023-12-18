@@ -6,7 +6,7 @@ import ControlPointBlock from "./ControlPointBlock/ControlPointBlock"
 import EventBlock from "./EventBlock/EventBlock"
 import CompanyBlock from "./CompanyBlock/CompanyBlock"
 import UserBlock from "./UsersBlock/UserBlock"
-import { useAppDispatch, carsSettingsActions } from '../../store';
+import { useAppDispatch, carsSettingsActions, useAppSelector, store } from '../../store';
 
 import { mockUserData } from "./mockData"
 import { Spinner } from "./components/Spinner"
@@ -17,34 +17,28 @@ import { IRequestOptions, ISettingsData } from "./types/carsSettingsTypes"
 import API_ENDPOINTS from "./utils/apiEndpoints"
 import useApi from './hooks/useApi'
 import useAlert from "./hooks/useAlert"
+import useUpdateData from "./hooks/useUpdateData"
 
-
+import OutsideClickListener from "./OutsideClickListener "
 
 const SettingForm = () => {
   console.log("--Render Setting Form");
 
 
   const [settingsData, setSettingsData] = useState<ISettingsData>()
+  const [updateForm, setUpdateForm] = useState<boolean>(false)
   const dispatch = useAppDispatch()
 
   const { sendRequest } = useApi()
   const { showAlert, alertComponent } = useAlert()
-  // const carsSettingsData = useAppSelector((state) => state.carsMap.carsMapConfig.variant);
+  // const { updateDataRequest } = useUpdateData()
 
 
-  // const companyData = settingsData?.company
-  // const carsData = useMemo(() => settingsData.cars, [settingsData.cars]) // Автомобили
-  // const controlPointData = settingsData.points // Контрольные точки
-  // const eventsData = settingsData.events // События
-  // const typeOfEventsData = settingsData.type_of_events // Типы события  [ "IN", "OUT"]
-  // const iconsData = settingsData.icons // {icon_id: " ",url: " "}
   const getDataFromServer = async () => {
     const requestOptions: IRequestOptions = {
       method: 'GET',
     };
-
     const response = await sendRequest(API_ENDPOINTS.GET_SETTINGS, requestOptions)
-
     if (response.error) {
       console.warn("Error in get settings", response.error);
       showAlert('Не удалось получить данные с сервера', 'error');
@@ -58,13 +52,14 @@ const SettingForm = () => {
 
   useEffect(() => {
     getDataFromServer()
-  }, [])
+  }, [updateForm])
 
   return (
     settingsData ?
     <Stack display={'flex'} margin={'auto'} mt={'2rem'} mb={'2rem'}
       sx={{ width: { sm: "90%", md: "70%" }, }}
       >
+        <OutsideClickListener setUpdateForm={setUpdateForm} />
         <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
           <CompanyBlock key={'company'}></CompanyBlock>
           <CarsBlock key={'cars'}></CarsBlock>

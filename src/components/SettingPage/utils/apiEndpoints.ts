@@ -3,7 +3,7 @@ const API_ENDPOINTS = {
   SAVE_COMPANY_NAME: "/save_company_name", //"Сохранить имя компании"
   REFRESH_BALANCE: "/refresh_balance",// "Обновить баланс компании"
   DELETE_SHORT_LINK: "/delete_short_link", // "Удалить короткую ссылку"
-  REFRESH_SHOT_LINK: "/refresh_short_link", // "Обновить короткую ссылку"
+  REFRESH_SHORT_LINK: "/refresh_short_link", // "Обновить короткую ссылку"
   CREATE_SHORT_LINK: "/create_short_link", // "Создать короткую ссылку"
   DELETE_CAR: "/delete_car", // "Удалить запись об автомобиле"
   CREATE_CAR: "/create_car", // "Создать запись об автомобиле"

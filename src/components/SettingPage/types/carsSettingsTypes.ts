@@ -15,13 +15,21 @@ export type TCompanyData = {
   company_id: string,
   name: string,
   short_link: string,
-  balance: string
+  balance: string,
+  currency: string
 }
 
 // Объект car приходит с сервера
 export type ICarObject = {
   car_id: string,
   name: string,
+  pic: string,
+  imei: string,
+  alter_imei: string | null
+}
+export type ICarObjectTwo = {
+  car_id: string,
+  car_name: string,
   pic: string,
   imei: string,
   alter_imei: string | null

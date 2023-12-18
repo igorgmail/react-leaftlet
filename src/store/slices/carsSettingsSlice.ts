@@ -30,7 +30,7 @@ interface IInitSettingStore extends ISettingsData {
 
 
 const initialState: IInitSettingStore = {
-  company: { company_id: '', name: '', short_link: '', balance: '' },
+  company: { company_id: '', name: '', short_link: '', balance: '', currency: "RUB" },
   cars: [],
   points: [],
   events: [],
@@ -80,18 +80,14 @@ export const carsSettingsSlice = createSlice({
     },
 
 
-    //  предусмотрена для отображения загрузки и блокирования страницы
-    setRequestWorks: (state, action: PayloadAction<boolean>) => {
-      state.config.requestWorks = action.payload
-    },
     // ? COMPANY BLOCK--------------------------
     // Обновить состояние компании
     setRefreshCompanyData: (state) => {
       state.company = { ...state.company }
     },
     // Имя компании установить
-    setCompanyName: (state, action: PayloadAction<TCompanyData>) => {
-      state.company.name = action.payload.name
+    setCompanyName: (state, action: PayloadAction<string>) => {
+      state.company.name = action.payload
     },
 
     // Установить shortLink
@@ -109,6 +105,11 @@ export const carsSettingsSlice = createSlice({
       state.company.balance = action.payload
     },
     // ? ALL BLOCK --------------------------
+    //  предусмотрена для отображения загрузки и блокирования страницы
+    setRequestWorks: (state, action: PayloadAction<boolean>) => {
+      state.config.requestWorks = action.payload
+    },
+
     // Установить имя выбранного интерактивного элемента(input)
     setChooseInputName: (state, action: PayloadAction<string | null>) => {
       state.config.chooseInputName = action.payload
@@ -127,6 +128,17 @@ export const carsSettingsSlice = createSlice({
     // Создать Авто
     setCreateCar: (state, action: PayloadAction<ICarObject>) => {
       state.cars = [...state.cars, action.payload]
+    },
+
+    // Обновить Авто
+    setUpdateCar: (state, action: PayloadAction<ICarObject>) => {
+      const index = state.cars.findIndex((car) => car.car_id === action.payload.car_id)
+      if (index !== -1) {
+        state.cars[index] = action.payload
+      } else {
+        state.cars = [...state.cars]
+
+      }
     },
     // ? POINTS BLOCK --------------------------
     // Добавить Новую Точку

@@ -18,9 +18,11 @@ const CompBalance = () => {
 
 
   const companyBalance = useAppSelector((store) => store.carsSettings.company.balance);
+  const currencyStore = useAppSelector((store) => store.carsSettings.company.currency);
   const companyId = useAppSelector((store) => store.carsSettings.company.company_id);
 
   const [compBalance, setCompBalance] = useState(companyBalance)
+  const [currency, setCurrency] = useState(currencyStore)
   const { sendRequest } = useApi();
   const { showAlert, alertComponent } = useAlert();
 
@@ -31,28 +33,25 @@ const CompBalance = () => {
 
     const requestOptions: IRequestOptions = {
       method: 'GET',
-      // body: JSON.stringify({
-      //   company_id: companyId
-      // }),
     };
 
     const response = await sendRequest(API_ENDPOINTS.REFRESH_BALANCE, requestOptions)
 
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in refresh balance", response.error);
-      showAlert('Не удалось обновить баланс', 'error');
-      // dispatch(carsSettingsActions.setRefreshCompanyData())
-      // setCompBalance(companyBalance)
+      showAlert(response.data.message, 'error');
+
       return
     }
-    if (response) {
+    if (response.data.status === 'Ok') {
       const { balance } = response.data
-      console.log("▶ ⇛ balance:", balance);
-      console.info("Баланс--", balance)
       showAlert('Баланс компании обновлен', 'success');
       setCompBalance(balance)
+      setCurrency(response.data.currency)
       dispatch(carsSettingsActions.setBalance(balance))
+      return
     }
+    showAlert(response.data.message, 'error');
 
   }
 
@@ -71,7 +70,7 @@ const CompBalance = () => {
             value={compBalance}>
         </input>
         <Stack display={'flex'} flexDirection={'row'} alignItems={'center'}>
-          RUB
+            {currency}
         </Stack>
         <Stack>
           <Button

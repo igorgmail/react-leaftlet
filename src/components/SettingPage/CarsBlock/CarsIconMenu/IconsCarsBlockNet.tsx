@@ -21,6 +21,7 @@ const IconsCarsBlockNet: React.FC<TIconsNetProps> = ({ iconObject, handleIconCar
       <Paper>
 
       <Stack
+
         className='cars-popup--item'
         data-iconid={iconObject.icon_id}
           onClick={(e) => handleIconCarInNetClick(e)}>

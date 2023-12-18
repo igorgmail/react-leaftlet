@@ -21,6 +21,7 @@ const CompName = () => {
 
   const [readonlyName, setReadolyName] = useState(true)
   const [compName, setCompName] = useState(companyName)
+
   const nameInputRef = useRef<HTMLInputElement>(null)
   const { sendRequest } = useApi();
   const { showAlert, alertComponent } = useAlert();
@@ -44,28 +45,33 @@ const CompName = () => {
 
   const submitData = async () => {
     const requestOptions: IRequestOptions = {
-      method: 'POST',
-      body: JSON.stringify({
-        company_name: compName,
-        company_id: companyId
-      }),
+      method: 'GET',
+      // body: JSON.stringify({
+      //   company_name: compName,
+      //   // company_id: companyId
+      // }),
     };
 
-    const response = await sendRequest(API_ENDPOINTS.SAVE_COMPANY_NAME, requestOptions)
+    const response = await sendRequest(API_ENDPOINTS.SAVE_COMPANY_NAME + `?company_name=${compName}`, requestOptions)
 
-    if (response.error) {
-      console.warn("Error in save company name", response.error);
+    console.log("▶ ⇛ response:", response);
+    if (response.data.status === 'error') {
+      console.warn("Error in save company name", response.data.message);
       showAlert('Имя компании не изменено', 'error');
       dispatch(carsSettingsActions.setRefreshCompanyData())
       setCompName(companyName)
       return
     }
-    if (response) {
-      const { company_name } = response.data
+    if (response.data.status === 'Ok') {
+    // const { company_name } = response.data
       showAlert('Имя компании изменено успешно', 'success');
-      setCompName(company_name)
-      dispatch(carsSettingsActions.setCompanyName(company_name))
+      setCompName(compName)
+      dispatch(carsSettingsActions.setCompanyName(compName))
+      return
     }
+    showAlert('Имя компании не изменено', 'error');
+    dispatch(carsSettingsActions.setRefreshCompanyData())
+    setCompName(companyName)
   };
 
   return (
@@ -81,7 +87,7 @@ const CompName = () => {
             onChange={(e) => handleNameInput(e)}
             ref={nameInputRef}
           style={{
-            width: `calc(${compName.length}ch + 22px)`
+            width: `calc(${compName.length}ch + 32px)`
           }}
           type="text"
             readOnly={readonlyName}

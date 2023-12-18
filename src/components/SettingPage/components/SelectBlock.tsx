@@ -13,21 +13,10 @@ type TSelectBlock = {
 
 }
 const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange }) => {
-  console.log("▶ ⇛ selectedItem:", selectedItem);
 
   const allCars = useAppSelector((store) => store.carsSettings.cars)
   const allPoints = useAppSelector((store) => store.carsSettings.points)
   const allTypeEvents = useAppSelector((store) => store.carsSettings.type_of_events)
-
-  // const { getCarIdFromEventId, getPointIdFromEventId, getEventFromEventId } = useSelectorEvents()
-
-
-  // useEffect(() => {
-  //   if (eventId) {
-  //     const cars = getCarById(eventId)//.then(data => setOptions(data))
-  //     setOptions(cars)
-  //   }
-  // }, [eventId, getCarById])
 
   const CarsOptions = () => {
     return (

@@ -98,10 +98,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   }
 
   const CAR_KEY = {
-    name: `id${car.name}-carName`,
-    imei: `id${car.imei}-carImei`,
-    altImei: `id${car.alter_imei}-altCarImei`,
-    pic: `id${car.pic}-carPic`,
+    name: `id${car.car_id}-carName`,
+    imei: `id${car.car_id}-carImei`,
+    altImei: `id${car.car_id}-altCarImei`,
+    pic: `id${car.car_id}-carPic`,
     parentPic: `id${car.car_id}-parentIcon`
   }
 
@@ -123,6 +123,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
   }, [inputCarNameValue, inputCarImeiValue, inputCarAlterImeiValue, inputCarIconIdValue, dispatch])
 
+
+  useEffect(() => {
+    setInputCarNameValue(car.name)
+    setInputCarImeiValue(car.imei)
+    setInputCarAlterImeiValue(car.alter_imei)
+    setInputCarIconIdValue(car.pic)
+
+  }, [car])
 
   return (
     <>
@@ -168,7 +176,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClick}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
-              width: `calc(${car.name.length}ch + 22px)`,
+              textAlign: 'center',
+              width: `100%`,
+              // width: `calc(${car.name.length}ch + 22px)`,
             }}
             type="text"
             readOnly={chooseInputFromStore !== CAR_KEY.name}
@@ -226,7 +236,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             onClick={handleInputClick}
             onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
-            style={{ width: `calc(${car.imei.length}ch + 22px)` }}
+              style={{
+                textAlign: 'center',
+                width: `100%`,
+                // width: `calc(${car.imei.length}ch + 22px)` 
+              }}
               type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
@@ -242,7 +256,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             onClick={handleInputClick}
             onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
-            style={{ width: `calc(${car.alter_imei?.length || 0}ch + 22px)` }}
+              style={{
+                textAlign: 'center',
+                width: `100%`,
+                // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
+              }}
               type="number"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}

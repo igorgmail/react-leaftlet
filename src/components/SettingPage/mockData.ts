@@ -6,6 +6,7 @@ export const mockData = {
     name: "Компания АБС",
     short_link: "http://89.108.99.163/~HA9D4KXLWG",
     balance: '550',
+    currency: 'RUB'
   },
   cars: [
     {

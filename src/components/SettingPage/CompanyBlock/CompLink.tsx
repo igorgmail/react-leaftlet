@@ -77,19 +77,19 @@ const CompLink = () => {
 
     const response = await sendRequest(API_ENDPOINTS.CREATE_SHORT_LINK, requestOptions)
 
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in create short link", response.error);
       showAlert('Неудалось создать короткую ссылку', 'error');
       dispatch(carsSettingsActions.setRefreshCompanyData())
       // setShortLink('')
       return
     }
-    if (response) {
-      const { link } = response.data
-      console.log("▶ ⇛ new_link:", link);
+    if (response.data.status === 'Ok') {
+      const { short_link } = response.data
+
       // showAlert('Имя компании изменено успешно', 'success');
-      setShortLink(link)
-      dispatch(carsSettingsActions.setShortLink(link))
+      dispatch(carsSettingsActions.setShortLink(short_link))
+      setShortLink(short_link)
     }
   };
 
@@ -101,46 +101,49 @@ const CompLink = () => {
       }),
     };
 
-    const response = await sendRequest(API_ENDPOINTS.REFRESH_SHOT_LINK, requestOptions)
+    const response = await sendRequest(API_ENDPOINTS.REFRESH_SHORT_LINK, requestOptions)
 
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in refresh short link", response.error);
-      // showAlert('Имя компании не изменено', 'error');
+      showAlert('Не удалось обновить', 'error');
       dispatch(carsSettingsActions.setRefreshCompanyData())
       setShortLink(inStoreShortLink)
       return
     }
-    if (response) {
-      const { new_link } = response.data
-      // showAlert('Имя компании изменено успешно', 'success');
-      setShortLink(new_link)
-      dispatch(carsSettingsActions.setShortLink(new_link))
+    if (response.data.status === 'Ok') {
+      const { short_link } = response.data
+      showAlert('Короткая ссылка обновлена', 'success');
+      setShortLink(short_link)
+      dispatch(carsSettingsActions.setShortLink(short_link))
     }
   };
 
   const deleteLink = async () => {
     const requestOptions: IRequestOptions = {
       method: 'DELETE',
-      body: JSON.stringify({
-        company_id: companyId
-      }),
+      // body: JSON.stringify({
+      //   company_id: companyId
+      // }),
     };
 
     const response = await sendRequest(API_ENDPOINTS.DELETE_SHORT_LINK, requestOptions)
 
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in delete short link", response.error);
-      // showAlert('Имя компании не изменено', 'error');
+      showAlert('Ошибка при удалении короткой ссылки', 'error');
       dispatch(carsSettingsActions.setRefreshCompanyData())
       setShortLink(inStoreShortLink)
       return
     }
-    if (response) {
+    if (response.data.status === 'Ok') {
       // const { new_link } = response.data
-      // showAlert('Имя компании изменено успешно', 'success');
+      showAlert('Короткая ссылка удалена', 'success');
       setShortLink('')
       dispatch(carsSettingsActions.setRemoveShortLink())
+      return
     }
+    dispatch(carsSettingsActions.setRefreshCompanyData())
+    setShortLink(inStoreShortLink)
   };
 
   useEffect(() => {
@@ -152,7 +155,7 @@ const CompLink = () => {
       // input.focus();
       // input.blur();
     }
-  }, [inStoreShortLink]); // Обновление при изменении shortLink
+  }, [shortLink]); // Обновление при изменении shortLink
 
 
 
