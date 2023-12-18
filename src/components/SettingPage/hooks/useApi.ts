@@ -8,6 +8,9 @@ interface IRequestOptions {
 
 function useApi() {
 
+  const username = 'test';
+  const password = '123';
+
   const sendRequest = async (url: string, options: IRequestOptions) => {
     let responseData;
     const abortController = new AbortController();
@@ -16,7 +19,9 @@ function useApi() {
         method: options.method,
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          // 'Authorization': `Basic ${username}:${password}`
+          'Authorization': 'Basic ' + btoa(username + ":" + password)
         },
         credentials: 'same-origin',
         body: options.body,

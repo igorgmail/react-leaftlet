@@ -13,6 +13,7 @@ type TSelectBlock = {
 
 }
 const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange }) => {
+  console.log("▶ ⇛ selectedItem:", selectedItem);
 
   const allCars = useAppSelector((store) => store.carsSettings.cars)
   const allPoints = useAppSelector((store) => store.carsSettings.points)
@@ -33,9 +34,9 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите автомобиль</option>
         {allCars.map((car) => (
-          <option key={car.car_id}
+          <option
+            key={car.car_id}
             value={`${car.car_id}`}
-            selected={selectedItem === car.car_id}
             data-option-name={'event-car'}
           >{car.name}</option>
         ))}
@@ -47,9 +48,10 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите точку</option>
         {allPoints.map((point) => (
-          <option key={point.point_id}
+          <option
+            key={point.point_id}
             value={`${point.point_id}`}
-            selected={selectedItem === point.point_id}
+            // selected={selectedItem === point.point_id}
             data-option-name={'event-point'}
           >{point.name}</option>
         ))}
@@ -61,9 +63,11 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите событие</option>
         {allTypeEvents.map((typeEv, ind) => (
-          <option key={ind}
-            value={`${ind}`}
-            selected={selectedItem === typeEv}
+          <option
+            key={ind}
+            value={`${typeEv}`}
+          // value={selectedItem}
+          // selected={selectedItem === typeEv}
             data-option-name={'event-type'}
           >{typeEv}</option>
         ))}
@@ -76,12 +80,11 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
 
         <option key={0}
           value={`sec`}
-          selected
+        // selected
           data-option-name={'option-min'}
         >сек</option>
         <option key={1}
           value={`мин`}
-          // selected
           data-option-name={'option-min'}
         >мин</option>
 
@@ -93,13 +96,13 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       <>
         <option key={0}
           value={`user`}
-          selected={selectedItem === 'user'}
-          // defaultValue={'user'}
+        // selected={selectedItem === 'user'}
           data-option-name={'option-role'}
         >user</option>
+
         <option key={1}
           value={`admin`}
-          selected={selectedItem === 'admin'}
+        // selected={selectedItem === 'admin'}
           data-option-name={'option-role'}
         >admin</option>
 
@@ -115,7 +118,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
           onChange={selectChange}
           id="slct"
           required
-
+          value={selectedItem}
         >
           {/* <option value="" disabled selected>Select option</option> */}
           {modifier === 'CARS' && <CarsOptions></CarsOptions>}
