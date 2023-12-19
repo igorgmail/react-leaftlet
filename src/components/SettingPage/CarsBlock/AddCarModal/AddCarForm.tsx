@@ -33,10 +33,14 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
   const handleImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const re = /^[0-9\b]+$/; // Регулярное выражение для проверки на число
-
-    if (value === '' || re.test(value)) {
-      setImeiCar(value);
+    if (value.length <= 15) {
+      setImeiCar(value)
+    }
+  };
+  const handleAlterImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= 15) {
+      setAlterImeiCar(value)
     }
   };
 
@@ -61,16 +65,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
     e.preventDefault()
 
     const getShortIconUrl = (url: string) => {
-
       const result = url.replace(/.*\/(pics\/car\d+\.png)$/, "$1");
-
-      console.log("result", result)
-      // if (result && result[1]) {
-      //   console.log("▶ ⇛ result[1]:", result[1]);
-      //   return result[1]; // pics/car9.png
-      // } else {
-      //   return ''
-      // }
       return result
     }
 
@@ -84,6 +79,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
     handleFormSubmit(carData)
     // clearState()
   }
+
   const handleCancelButton = () => {
     clearState()
     handleClose()
@@ -150,7 +146,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
-                onChange={(e) => setImeiCar(e.target.value)}
+                onChange={(e) => handleImeiChange(e)}
                 id="carImeiInput"
                 // readOnly={true}
                 className="modal-input"
@@ -173,7 +169,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
-                onChange={(e) => setAlterImeiCar(e.target.value)}
+                onChange={(e) => handleAlterImeiChange(e)}
                 id="carAlterImeiInput"
                 // readOnly={true}
                 className="modal-input"

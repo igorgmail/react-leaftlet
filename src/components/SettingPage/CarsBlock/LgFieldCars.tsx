@@ -130,12 +130,16 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'car_imei') {
-        setInputCarImeiValue(event.target.value)
-        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
+        if (event.target.value.length <= 15) {
+          setInputCarImeiValue(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
+        }
       }
       if (itemName === 'car_alterimei') {
-        setInputCarAlterImeiValue(event.target.value)
-        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
+        if (event.target.value.length <= 15) {
+          setInputCarAlterImeiValue(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
+        }
       }
 
     }
