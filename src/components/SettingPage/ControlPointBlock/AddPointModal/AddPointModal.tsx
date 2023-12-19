@@ -36,6 +36,7 @@ const AddPointModal = () => {
   const { sendRequest } = useApi();
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { showAlert, alertComponent } = useAlert()
   const handleClose = () => setOpen(false);
 
   const dispatch = useAppDispatch()
@@ -57,7 +58,7 @@ const AddPointModal = () => {
         } else {
           console.info("Не удалось создать точку,");
           console.info("С сервера не пришли данные, или пришли неверные данные");
-
+          showAlert('Не удалось создать Авто', 'error')
         }
       })
       .catch((err) => console.log("ERROR При создании точки", err)
@@ -91,6 +92,7 @@ const AddPointModal = () => {
 
 
   return (
+    <>
 
     <Stack display={'flex'} flexDirection={'row'} justifyContent={'flex-start'}
       sx={{ width: '80%' }}
@@ -102,9 +104,10 @@ const AddPointModal = () => {
 
       </ModalWrap>
 
+      </Stack >
       {BackDropComponent}
-    </Stack >
-
+      {alertComponent}
+    </>
   );
 
 }

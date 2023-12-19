@@ -1,4 +1,4 @@
-import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData } from "../types/carsSettingsTypes"
+import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData, TEventsData, TEventsDataForServer } from "../types/carsSettingsTypes"
 
 class DataExtractor {
 
@@ -17,8 +17,17 @@ class DataExtractor {
     const { car_id, pic, imei, alter_imei, car_name: name } = { ...data }
     return { car_id, pic, imei, alter_imei, name }
   }
+  static createEventDataForServer(data: Omit<TEventsData, 'event_id'>): TEventsDataForServer {
+    const { company_id, car_id, point_id, event, time_response_sec, point_id: user_id } = { ...data }
+    return { car_id, event, time_response_sec, user_id }
+  }
 
-
+  // event_id: string;
+  // company_id: string;
+  // car_id: string;
+  // point_id: string;
+  // event: string;
+  // time_response_sec:
   // При получении первичных данных обрабатываем строку ссылки на иконку
   // Получаем строку вида :  "CONCAT('https://gpson.ru/',pic)": "https://gpson.ru/pics/car1.png",
   // Возвращаем : "https://gpson.ru/pics/car1.png"

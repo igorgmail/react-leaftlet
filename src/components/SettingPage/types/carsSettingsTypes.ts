@@ -59,6 +59,12 @@ export type TEventsData = {
   event: string,
   time_response_sec: string,
 }
+export type TEventsDataForServer = {
+  car_id: string,
+  user_id: string, // типа point_id
+  event: string,
+  time_response_sec: string,
+}
 
 export type TTypeEvents = string[]
 

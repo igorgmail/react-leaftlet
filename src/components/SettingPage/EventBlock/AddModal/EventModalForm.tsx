@@ -92,13 +92,9 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
       return time
     }
     console.log("▶ ⇛ eventCarId:", eventCarId);
-
     console.log("▶ ⇛ eventPointId:", eventPointId);
-
     console.log("▶ ⇛ eventType:", eventType);
-
     console.log("▶ ⇛ eventWait:", eventWait);
-
     console.log("▶ ⇛ eventWaitType:", eventWaitType);
 
     const eventData = {
