@@ -41,15 +41,18 @@ const AddPointModal = () => {
   const dispatch = useAppDispatch()
 
   const handleFormSubmit = (pointData: TPointData) => {
+    console.log("▶ ⇛handleFormSubmit pointData:", pointData);
 
     startBackDrop()
     setOpen(false)
+
     fetchAddNewPoint(pointData)
       .then((data) => {
         if (data) {
+          console.log("▶ ⇛ data:", data);
           stopBackDrop()
-          const extractPointData = DataExtractor.getPointsFromServerData(data)
-          dispatch(carsSettingsActions.setNewPoint(extractPointData))
+          // const extractPointData = DataExtractor.getPointsFromServerData(data)
+          dispatch(carsSettingsActions.setNewPoint(data))
           dispatch(carsSettingsActions.setMapCenter(null))
         } else {
           console.info("Не удалось создать точку,");
@@ -66,16 +69,17 @@ const AddPointModal = () => {
   const fetchAddNewPoint = async (data: TPointData) => {
     const requestOptions: IRequestOptions = {
       method: 'POST',
-      body: JSON.stringify({ ...data }),
+      // body: JSON.stringify({ ...data }),
     };
-    const response = await sendRequest(API_ENDPOINTS.CREATE_POINT, requestOptions)
+    const url = `?point_name=${data.point_name}&address=${data.address}&lat=${data.lat}&lng=${data.lng}&radius=${data.radius}`
+    const response = await sendRequest(API_ENDPOINTS.CREATE_POINT + url, requestOptions)
 
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in create new point", response.error);
       return
     }
-    if (response) {
-      const pointsData = await response.data.data
+    if (response.data.status === 'Ok') {
+      const pointsData = await response.data.point
       console.info("▶FROMSERVER ⇛ Создана новая точка");
       console.info("▶FROMSERVER ⇛ CREATE_POINT", pointsData);
 

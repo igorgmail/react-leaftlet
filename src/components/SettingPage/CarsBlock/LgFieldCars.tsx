@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../st
 
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
+import useAlert from "../hooks/useAlert";
 
 interface ILgFieldCarsProps {
   car: ICarObject,
@@ -29,6 +30,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
   console.log("--Render CarsField Large");
 
+  const { showAlert, alertComponent } = useAlert();
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -53,6 +55,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
           stopBackDrop()
         } else {
           console.info("При удалении Авто с сервера пришли некорректные данные");
+          showAlert('Не удалось удалить точку', 'error')
         }
       }).catch((err) => {
         console.warn("ERROR, Ошибка при удалении Авто", err);
@@ -273,6 +276,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
       <Divider />
     </Grid>
       {BackDropComponent}
+      {alertComponent}
     </>
   )
 }

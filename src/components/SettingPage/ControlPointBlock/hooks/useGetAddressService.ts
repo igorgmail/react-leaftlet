@@ -1,19 +1,25 @@
 // import React, { FC, useEffect, useState } from 'react';
 
+import { LatLng } from 'leaflet';
 import { useAppSelector } from '../../../../store';
+
 
 function useGetAddressService() {
 
-  const centerFromStore = useAppSelector((store) => store.carsSettings.config.mapCenter)
+  // const centerFromStore = useAppSelector((store) => store.carsSettings.config.mapCenter)
 
-  const getAddress = async () => {
+  const getAddress = async (coordinates: LatLng | null) => {
     const abortController = new AbortController();
     const url = 'https://nominatim.openstreetmap.org/reverse?'
     const lang = 'ru'
 
+    const lat = coordinates?.lat
+    const lon = coordinates?.lng
+
+
     try {
       const response = await fetch(
-        `${url}lat=${centerFromStore?.lat}&lon=${centerFromStore?.lng}&format=jsonv2&accept-language=${lang}`, {
+        `${url}lat=${lat}&lon=${lon}&format=jsonv2&accept-language=${lang}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

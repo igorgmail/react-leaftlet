@@ -39,13 +39,9 @@ const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
 
       {pointData.map((point) => (
-
-        <SmFieldPoints onePoint={point} key={`smpoint-${point.point_id}`} />
+        <SmFieldPoints onePoint={point} key={`point-${point.point_id}`} />
       ))
       }
-
-
-
 
     </Box >
   )

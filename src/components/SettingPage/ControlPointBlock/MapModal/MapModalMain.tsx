@@ -67,7 +67,8 @@ const MapModalMain: FC<TMapModalMain> = ({ handleSaveModal }) => {
 
   useEffect(() => {
     if (open && isMapMove === false) {
-      getAddress()
+      const coordinates = store.getState().carsSettings.config.mapCenter
+      getAddress(coordinates)
         .then((data) => extractFullAddress(data))
         .then(data => {
           setAddressValue(data)

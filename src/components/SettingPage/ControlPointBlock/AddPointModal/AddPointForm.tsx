@@ -34,8 +34,8 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
 
   const handleSaveModal = (coord: LatLng, addressValue: string | undefined) => {
     const { lat, lng } = coord
-    setLat(lat)
-    setLng(lng)
+    setLat(Number(lat.toFixed(7)))
+    setLng(Number(lng.toFixed(7)))
     setAddress(addressValue)
   }
 

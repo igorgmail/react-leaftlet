@@ -73,6 +73,7 @@ function useRemoveDialog() {
         throw new Error(`Ошибка: ${responseData.message}`);
       }
       if (responseData.status === 'Ok')
+        // Возвращаем индекс сущности
         return { data: body[key], error: null }
     } catch (err: any) {
       return { data: null, error: err.message || 'Произошла неизвестная ошибка' };

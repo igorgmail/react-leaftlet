@@ -11,6 +11,10 @@ import { TPointsData } from "../types/carsSettingsTypes";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
+import useGetAddressService from "./hooks/useGetAddressService";
+import { LatLng } from "leaflet";
+import useAlert from "../hooks/useAlert";
+
 
 
 
@@ -22,6 +26,7 @@ interface ILgFieldPointsProps {
 const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   console.log("--Render lgFieldPoint");
 
+  const { showAlert, alertComponent } = useAlert();
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const [pointName, setPointName] = useState(onePoint.name)
@@ -31,7 +36,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
-
+  const { getAddress } = useGetAddressService()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -43,7 +48,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
           stopBackDrop()
         } else {
           console.info("При удалении Точки с сервера пришли некорректные данные");
-
+          showAlert('Не удалось удалить точку', 'error')
         }
       }).catch((err) => {
         console.warn("ERROR, Ошибка при удалении Точки", err);
@@ -59,6 +64,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
     return eventData
   }
+
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -94,7 +100,24 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
     radius: `id${onePoint.point_id}-pointRadius`,
   }
 
+  type WithDisplayName<T extends { display_name?: string }> = T;
+  const extractFullAddress = <T extends { display_name?: string }>(data: WithDisplayName<T>): string | undefined => {
+    return data.display_name;
+  };
+
+  useEffect(() => {
+    const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
+    getAddress(coordinates)
+      .then((data) => extractFullAddress(data))
+      .then(data => {
+        setPointAddress(data)
+      })
+  }, [onePoint])
+
+
   return (
+    <>
+
     <Grid
       container
       sx={{
@@ -163,10 +186,12 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
         {/* </Stack> */}
       </Grid>
 
-      <Divider />
-      {BackDropComponent}
+        <Divider />
 
     </Grid>
+      {BackDropComponent}
+      {alertComponent}
+    </>
   )
 }
 export default LgFieldPoints

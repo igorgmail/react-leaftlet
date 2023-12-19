@@ -10,6 +10,7 @@ import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
+import useAlert from "../hooks/useAlert";
 
 interface ISmFieldCarsProps {
   car: ICarObject
@@ -19,6 +20,7 @@ interface ISmFieldCarsProps {
 const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   console.log("--Render SmallField");
 
+  const { showAlert, alertComponent } = useAlert();
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -43,6 +45,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
         stopBackDrop()
       } else {
         console.info("При удалении Авто с сервера пришли некорректные данные");
+        showAlert('Не удалось удалить точку', 'error')
       }
     }).catch((err) => {
       console.warn("ERROR, Ошибка при удалении Авто", err);
@@ -283,6 +286,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
       </Grid>
     </Grid>
       {BackDropComponent}
+      {alertComponent}
     </>
   )
 }

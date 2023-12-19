@@ -12,6 +12,9 @@ import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../st
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
+import { LatLng } from "leaflet";
+import useGetAddressService from "./hooks/useGetAddressService";
+import useAlert from "../hooks/useAlert";
 
 
 
@@ -22,10 +25,12 @@ interface ISmFieldPointsProps {
 
 const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
+  const { showAlert, alertComponent } = useAlert();
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { sendRemove } = useRemoveDialog()
+  const { getAddress } = useGetAddressService()
 
   const [pointName, setPointName] = useState(onePoint.name)
   const [pointAddress, setPointAddress] = useState(onePoint.address)
@@ -42,7 +47,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
           stopBackDrop()
         } else {
           console.info("При удалении Точки с сервера пришли некорректные данные");
-
+          showAlert('Не удалось удалить точку', 'error')
         }
       }).catch((err) => {
         console.warn("ERROR, Ошибка приудалении Точки", err);
@@ -92,6 +97,20 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     address: `id${onePoint.address}-pointAddress`,
     radius: `id${onePoint.point_id}-pointRadius`,
   }
+
+  type WithDisplayName<T extends { display_name?: string }> = T;
+  const extractFullAddress = <T extends { display_name?: string }>(data: WithDisplayName<T>): string | undefined => {
+    return data.display_name;
+  };
+
+  useEffect(() => {
+    const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
+    getAddress(coordinates)
+      .then((data) => extractFullAddress(data))
+      .then(data => {
+        setPointAddress(data)
+      })
+  }, [onePoint])
 
   return (
     <>
@@ -211,6 +230,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
       </Grid>
     </Grid>
       {BackDropComponent}
+      {alertComponent}
     </>
   )
 }

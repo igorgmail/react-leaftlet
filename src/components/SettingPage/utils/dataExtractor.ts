@@ -2,6 +2,7 @@ import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData } from "
 
 class DataExtractor {
 
+  // Заменяем point_name на name
   static getPointsFromServerData(data: TPointDataFromServer) {
     const { address, point_id, lat, lng, radius, point_name: name } = { ...data }
     return { address, point_id, lat, lng, radius, name };

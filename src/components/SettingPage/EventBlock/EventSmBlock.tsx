@@ -36,7 +36,7 @@ const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
       {eventsData.map((oneEvent) => (
 
-        <SmFieldEvent oneEvent={oneEvent} />
+        <SmFieldEvent oneEvent={oneEvent} key={`eventblock-${oneEvent.event_id}`} />
       ))
       }
 
