@@ -34,6 +34,13 @@ export type ICarObjectTwo = {
   imei: string,
   alter_imei: string | null
 }
+export type ICarObjectThree = {
+  car_id: string,
+  car_name: string,
+  icon: string,
+  imei: string,
+  alter_imei: string | null
+}
 
 export type TPointsData = {
   point_id: string,

@@ -40,8 +40,8 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
-        if (data.data) {
-          const id = data.data.data
+        if (data?.data) {
+          const id = data.data
           dispatch(carsSettingsActions.setRemoveEvent(id))
           stopBackDrop()
         } else {

@@ -1,4 +1,4 @@
-import { ICarObject, ICarObjectTwo, TPointDataFromServer } from "../types/carsSettingsTypes"
+import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData } from "../types/carsSettingsTypes"
 
 class DataExtractor {
 
@@ -16,6 +16,34 @@ class DataExtractor {
     const { car_id, pic, imei, alter_imei, car_name: name } = { ...data }
     return { car_id, pic, imei, alter_imei, name }
   }
+
+
+  // При получении первичных данных обрабатываем строку ссылки на иконку
+  // Получаем строку вида :  "CONCAT('https://gpson.ru/',pic)": "https://gpson.ru/pics/car1.png",
+  // Возвращаем : "https://gpson.ru/pics/car1.png"
+
+  static createDataWithPicHref(data: ISettingsData) {
+
+    const newCarData = data.cars.map((car: any) => {
+      if (car["CONCAT('https://gpson.ru/',pic)"]) {
+        // Преобразование значения поля "CONCAT('https://gpson.ru/',pic)"
+        const concatenatedValue = car["CONCAT('https://gpson.ru/',pic)"];
+        const url = concatenatedValue.replace(/^CONCAT\('([^']*)',pic\)$/, '$1');
+        // Замена значения поля на преобразованную ссылку
+        car.pic = url;
+        // Удаление оригинального поля
+        delete car["CONCAT('https://gpson.ru/',pic)"];
+        return car
+      }
+      return car
+    })
+    return { ...data, cars: newCarData }
+  }
+
+  static createiconPath(href: string) {
+    return `https://gpson.ru/${href}`
+  }
+
 }
 
 export default DataExtractor;

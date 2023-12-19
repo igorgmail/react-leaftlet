@@ -36,8 +36,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
-        if (data.data) {
-          const id = data.data.data
+        if (data?.data) {
+          const id = data.data
           dispatch(carsSettingsActions.setRemovePoint(id))
           stopBackDrop()
         } else {

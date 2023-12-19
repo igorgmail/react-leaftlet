@@ -25,38 +25,55 @@ function useRemoveDialog() {
     REMOVE_USER: API_ENDPOINTS.DELETE_USER,
   }
 
-  const itemIdKEy: { [key: string]: string } = {
+  const itemIdKey: { [key: string]: string } = {
     REMOVE_CAR: 'car_id',
     REMOVE_POINT: 'point_id',
     REMOVE_EVENT: 'event_id',
     REMOVE_USER: 'user_id',
   }
 
+
+  // interface TEvent {
+  //   event: string;
+  //   subjectid: string;
+  //   // Другие поля вашего TEvent
+  // }
+
+  interface ApiResponse {
+    status: string;
+    // Другие поля вашего ответа
+  }
+
+  type SendRemoveResponse = { data: ApiResponse | null, error: string | null };
+
   const sendRemove = async (event: TEvent) => {
     let responseData;
     const url = eventApi[event.event]
-    const key = itemIdKEy[event.event];
+    const key = itemIdKey[event.event];
     const body: { [key: string]: string } = {};
+    console.log("▶ ⇛ body:", body);
     body[key] = event.subjectid;
 
     const abortController = new AbortController();
     try {
-      const response = await fetch(`${apiEndpoint}${url}`, {
+      const response = await fetch(`${apiEndpoint}${url}?${key}=${body[key]}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify(body),
+        // body: JSON.stringify(body),
         signal: abortController?.signal
       });
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status}`);
-      }
 
       responseData = await response.json();
-      return { data: responseData, error: null };
+
+      if (responseData.status === 'error') {
+        throw new Error(`Ошибка: ${responseData.message}`);
+      }
+      if (responseData.status === 'Ok')
+        return { data: body[key], error: null }
     } catch (err: any) {
       return { data: null, error: err.message || 'Произошла неизвестная ошибка' };
 

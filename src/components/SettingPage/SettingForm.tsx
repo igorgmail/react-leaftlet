@@ -20,6 +20,7 @@ import useAlert from "./hooks/useAlert"
 import useUpdateData from "./hooks/useUpdateData"
 
 import OutsideClickListener from "./OutsideClickListener "
+import DataExtractor from "./utils/dataExtractor"
 
 const SettingForm = () => {
   console.log("--Render Setting Form");
@@ -39,14 +40,15 @@ const SettingForm = () => {
       method: 'GET',
     };
     const response = await sendRequest(API_ENDPOINTS.GET_SETTINGS, requestOptions)
-    if (response.error) {
+    if (response.data.status === 'error') {
       console.warn("Error in get settings", response.error);
       showAlert('Не удалось получить данные с сервера', 'error');
       return
     }
-    if (response) {
-      dispatch(carsSettingsActions.setInitialSettingsData(response.data))
-      setSettingsData(response.data)
+    if (response.data) {
+      const settingsData = DataExtractor.createDataWithPicHref(response.data)
+      dispatch(carsSettingsActions.setInitialSettingsData(settingsData))
+      setSettingsData(settingsData)
     }
   };
 

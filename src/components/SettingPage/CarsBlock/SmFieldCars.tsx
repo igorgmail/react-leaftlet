@@ -37,17 +37,16 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
-        if (data.data) {
-          const id = data.data.data
-          dispatch(carsSettingsActions.setRemoveCar(id))
-          stopBackDrop()
-        } else {
-          console.info("При удалении Авто с сервера пришли некорректные данные");
-
-        }
-      }).catch((err) => {
-        console.warn("ERROR, Ошибка при удалении Авто", err);
-      }).finally(() => stopBackDrop())
+      if (data?.data) {
+        const id = data.data
+        dispatch(carsSettingsActions.setRemoveCar(id))
+        stopBackDrop()
+      } else {
+        console.info("При удалении Авто с сервера пришли некорректные данные");
+      }
+    }).catch((err) => {
+      console.warn("ERROR, Ошибка при удалении Авто", err);
+    }).finally(() => stopBackDrop())
   }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {

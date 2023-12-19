@@ -10,12 +10,12 @@ import Backdrop from '@mui/material/Backdrop';
 import AddModalWithIcons from "./AddModalWithIcons";
 
 import { useAppSelector } from "../../../../store";
-import { ICarObject } from "../../types/carsSettingsTypes";
+import { ICarObject, ICarObjectThree } from "../../types/carsSettingsTypes";
 
 
 type TAddCarForm = {
   handleClose: () => void,
-  handleFormSubmit: (carData: Omit<ICarObject, 'car_id'>) => void
+  handleFormSubmit: (carData: Omit<ICarObjectThree, 'car_id'>) => void
 }
 
 
@@ -59,9 +59,25 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
   }
   const handleAddCarSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    const getShortIconUrl = (url: string) => {
+
+      const result = url.replace(/.*\/(pics\/car\d+\.png)$/, "$1");
+
+      console.log("result", result)
+      // if (result && result[1]) {
+      //   console.log("▶ ⇛ result[1]:", result[1]);
+      //   return result[1]; // pics/car9.png
+      // } else {
+      //   return ''
+      // }
+      return result
+    }
+
     const carData = {
-      name: nameCar,
-      pic: iconCar,
+      car_name: nameCar,
+      // icon: iconCar,
+      icon: getShortIconUrl(iconCar),
       imei: imeiCar,
       alter_imei: alterImeiCar
     }

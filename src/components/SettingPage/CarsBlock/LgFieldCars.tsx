@@ -26,6 +26,7 @@ type TSelectFieldCar = {
 }
 
 const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
+
   console.log("--Render CarsField Large");
 
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
@@ -46,13 +47,12 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
-        if (data.data) {
-          const id = data.data.data
+        if (data?.data) {
+          const id = data.data
           dispatch(carsSettingsActions.setRemoveCar(id))
           stopBackDrop()
         } else {
           console.info("При удалении Авто с сервера пришли некорректные данные");
-
         }
       }).catch((err) => {
         console.warn("ERROR, Ошибка при удалении Авто", err);
