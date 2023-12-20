@@ -71,8 +71,9 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
     const carData = {
       car_name: nameCar,
-      // icon: iconCar,
-      icon: getShortIconUrl(iconCar),
+      icon: iconCar,
+      // На сервер отправляем короткую ссылку
+      // icon: getShortIconUrl(iconCar),
       imei: imeiCar,
       alter_imei: alterImeiCar
     }

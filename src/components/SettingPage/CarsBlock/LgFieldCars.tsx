@@ -21,7 +21,7 @@ type TPointsDataWithAddress = TPointsData & {
   address: string;
 };
 
-type TSelectFieldCar = {
+type TSelectedFieldChanged = {
   typeField: 'cars' | 'points' | 'events' | 'users',
   selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
 }
@@ -114,7 +114,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
     pic: `id${car.car_id}-carPic`,
     parentPic: `id${car.car_id}-parentIcon`
   }
-  const carObject: TSelectFieldCar = {
+  const carObject: TSelectedFieldChanged = {
     typeField: 'cars',
     selectBlockObject: {
       car_id: String(car.car_id),

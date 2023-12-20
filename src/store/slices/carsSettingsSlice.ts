@@ -137,7 +137,6 @@ export const carsSettingsSlice = createSlice({
         state.cars[index] = action.payload
       } else {
         state.cars = [...state.cars]
-
       }
     },
     // ? POINTS BLOCK --------------------------
@@ -149,7 +148,15 @@ export const carsSettingsSlice = createSlice({
     setRemovePoint: (state, action: PayloadAction<string>) => {
       state.points = [...state.points].filter((point) => point.point_id !== action.payload)
     },
-
+    // Обновить Точку
+    setUpdatePoint: (state, action: PayloadAction<TPointsData>) => {
+      const index = state.points.findIndex((point) => point.point_id === action.payload.point_id)
+      if (index !== -1) {
+        state.points[index] = action.payload
+      } else {
+        state.points = [...state.points]
+      }
+    },
     // ? EVENTS BLOCK --------------------------
     // Добавить Новое событие
     setCreateEvent: (state, action: PayloadAction<TEventsData>) => {

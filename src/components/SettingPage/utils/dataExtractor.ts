@@ -39,6 +39,7 @@ class DataExtractor {
         // Преобразование значения поля "CONCAT('https://gpson.ru/',pic)"
         const concatenatedValue = car["CONCAT('https://gpson.ru/',pic)"];
         const url = concatenatedValue.replace(/^CONCAT\('([^']*)',pic\)$/, '$1');
+        console.log("▶ ⇛ url:", url);
         // Замена значения поля на преобразованную ссылку
         car.pic = url;
         // Удаление оригинального поля

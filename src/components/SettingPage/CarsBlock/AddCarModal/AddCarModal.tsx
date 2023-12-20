@@ -34,7 +34,9 @@ const AddCarModal = () => {
         if (data.status === 'Ok') {
           stopBackDrop()
           const newIconPath = DataExtractor.createiconPath(data.car.pic)
+          // console.log("▶ ⇛ newIconPath:", newIconPath);
           dispatch(carsSettingsActions.setCreateCar({ ...data.car, pic: newIconPath }))
+          // dispatch(carsSettingsActions.setCreateCar({ ...data.car }))
         } else {
           console.info("Не удалось создать Авто,");
           console.info("С сервера не пришли данные, или пришли неверные данные");

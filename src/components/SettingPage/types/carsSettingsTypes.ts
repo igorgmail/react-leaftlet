@@ -125,3 +125,12 @@ export type TAddCarObject = {
   imei: string,
   alter_imei: string | null
 }
+
+export type TPointsDataWithAddress = TPointsData & {
+  address: string;
+};
+
+export type TSelectedFieldChanged = {
+  typeField: 'cars' | 'points' | 'events' | 'users',
+  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
+}

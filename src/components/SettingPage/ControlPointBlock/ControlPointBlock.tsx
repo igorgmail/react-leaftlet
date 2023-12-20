@@ -13,7 +13,7 @@ import ControlBlockLgScreen from "./ControlBlockLgScreen";
 import AddPointModal from "./AddPointModal/AddPointModal";
 import { TPointsData } from "../types/carsSettingsTypes";
 import BlockHeader from "../components/BlockHeader";
-import { useAppSelector } from "../../../store";
+import { store, useAppSelector } from "../../../store";
 
 
 interface IPointDataProps {
@@ -24,15 +24,21 @@ const ControlPointBlock: FC<IPointDataProps> = () => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const pointData = useAppSelector((store) => store.carsSettings.points)
+  const pointDataFromStore = useAppSelector((store) => store.carsSettings.points)
+
+  const [pointsData, setPointsData] = useState(pointDataFromStore);
+
+  useEffect(() => {
+    setPointsData(store.getState().carsSettings.points)
+  }, [pointDataFromStore])
 
   return (
     <Stack sx={{ whidth: '100%' }}>
       <BlockHeader header={"Контрольные точки"} />
       {!isSmallScreen ? (
-        <ControlBlockLgScreen pointData={pointData} />
+        <ControlBlockLgScreen pointData={pointsData} />
       ) : (
-        <ControlBlockSmScreen pointData={pointData} />
+          <ControlBlockSmScreen pointData={pointsData} />
       )}
       <AddPointModal />
     </Stack>

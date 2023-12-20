@@ -40,7 +40,7 @@ const SettingForm = () => {
       method: 'GET',
     };
     const response = await sendRequest(API_ENDPOINTS.GET_SETTINGS, requestOptions)
-    if (response.data.status === 'error') {
+    if (response.data?.status === 'error') {
       console.warn("Error in get settings", response.error);
       showAlert('Не удалось получить данные с сервера', 'error');
       return

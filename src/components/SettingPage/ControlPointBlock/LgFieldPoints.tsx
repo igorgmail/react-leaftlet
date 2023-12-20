@@ -3,11 +3,11 @@ import React, { useState, useEffect, FC } from "react"
 import { Stack, Box, Grid, Divider } from "@mui/material"
 
 
-import { TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { TEventForDialog, TEventFromDialog } from "../types/carsSettingsTypes";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 
 
-import { TPointsData } from "../types/carsSettingsTypes";
+import { TPointsData, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
@@ -21,7 +21,10 @@ import useAlert from "../hooks/useAlert";
 interface ILgFieldPointsProps {
   onePoint: TPointsData
 }
-
+// type TSelectedFieldChanged = {
+//   typeField: 'cars' | 'points' | 'events' | 'users',
+//   selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
+// }
 
 const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   console.log("--Render lgFieldPoint");
@@ -29,9 +32,13 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const { showAlert, alertComponent } = useAlert();
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
+  const [pointId, setPointId] = useState(onePoint.point_id)
   const [pointName, setPointName] = useState(onePoint.name)
   const [pointAddress, setPointAddress] = useState(onePoint.address)
   const [pointRadius, setPointRadius] = useState(onePoint.radius)
+
+  const [pointLat, setPointLat] = useState(onePoint.lat)
+  const [pointLng, setPointLng] = useState(onePoint.lng)
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { sendRemove } = useRemoveDialog()
@@ -64,6 +71,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
     return eventData
   }
+
 
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
@@ -105,6 +113,44 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
     return data.display_name;
   };
 
+  const pointObject: TSelectedFieldChanged = {
+    typeField: 'points',
+    selectBlockObject: {
+      point_id: String(onePoint.point_id),
+      name: pointName,
+      lat: pointLat,
+      lng: pointLng,
+      address: pointAddress || '',
+      radius: pointRadius
+    }
+  }
+
+  const handleFieldChange = (event: React.SyntheticEvent) => {
+    if (event.target instanceof HTMLInputElement) {
+
+      const itemName = (event.target as HTMLInputElement).getAttribute('name')
+      if (itemName === 'point_name') {
+        setPointName(event.target.value)
+        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, name: event.target.value } }))
+      }
+      if (itemName === 'point_address') {
+        if (event.target.value.length <= 15) {
+          setPointAddress(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, address: event.target.value } }))
+        }
+      }
+      if (itemName === 'point_radius') {
+        if (event.target.value.length <= 15) {
+          setPointRadius(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
+        }
+      }
+
+    }
+
+
+  }
+
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
     getAddress(coordinates)
@@ -114,6 +160,14 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
       })
   }, [onePoint])
 
+  useEffect(() => {
+    setPointId(onePoint.point_id)
+    setPointName(onePoint.name)
+    setPointAddress(onePoint.address)
+    setPointRadius(onePoint.radius)
+    setPointLat(onePoint.lat)
+    setPointLng(onePoint.lng)
+  }, [onePoint])
 
   return (
     <>
@@ -135,12 +189,15 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
           />
 
           <input
+              name={'point_name'}
             onClick={handleInputClick}
-            onChange={(e) => setPointName(e.target.value)}
+              onChange={handleFieldChange}
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
-              width: `calc(${onePoint.name.length}ch + 30px)`,
+              width: `100%`,
+              textAlign: 'left',
+              // width: `calc(${onePoint.name.length}ch + 30px)`,
             }}
             value={pointName}
             data-forstore={POINT_KEY.name}
@@ -154,8 +211,9 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
         <Box margin={'auto'} display={'flex'} alignItems={'center'} width={'100%'}>
           {pointAddress?.length &&
             <input
+              name={'point_address'}
               onClick={handleInputClick}
-              onChange={(e) => setPointAddress(e.target.value)}
+              onChange={handleFieldChange}
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
@@ -173,10 +231,16 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
       <Grid item xs={2} display={'flex'} justifyContent={'center'}>
         {/* <Stack display={'flex'} alignItems={'center'}> */}
         <input
+            name={'point_radius'}
           onClick={handleInputClick}
-          onChange={(e) => setPointRadius(e.target.value)}
+            onChange={handleFieldChange}
           className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
-          style={{ width: `calc(${onePoint.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
+            style={{
+              width: `100%`,
+              textAlign: 'center',
+              // width: `calc(${onePoint.radius.length}ch + 22px)`, 
+              fontSize: '0.8rem'
+            }}
           type="number"
           readOnly={chooseInputFromStore !== POINT_KEY.radius}
           value={pointRadius}

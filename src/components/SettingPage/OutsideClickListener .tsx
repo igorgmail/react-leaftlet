@@ -19,13 +19,17 @@ const OutsideClickListener: FC<TOutsideClickProps> = ({ setUpdateForm }) => {
 
 
   function startUpdate() {
+    console.log("▶ ⇛ IN startUpdate:");
 
     // startBackDrop()
     updateDataRequest().then((data) => {
-      if (data.error) {
-        showAlert('Ошибка', data.error.message)
-        setUpdateForm((cur) => !cur)
-      }
+      console.log("▶ ⇛ updateDataRequestdata:", data);
+
+    }).catch((err) => {
+      console.warn("При обновлении произошла ошибка ", err);
+
+      showAlert('Ошибка при обновлении', 'error')
+      setUpdateForm((cur) => !cur)
     })
   }
 

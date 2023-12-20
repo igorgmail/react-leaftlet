@@ -3,7 +3,7 @@ import React, { useState, useEffect, FC } from "react"
 import { Stack, Box, Grid, Divider, Typography } from "@mui/material"
 
 
-import { TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { TEventForDialog, TEventFromDialog, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 
 
 
@@ -32,9 +32,13 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
   const { sendRemove } = useRemoveDialog()
   const { getAddress } = useGetAddressService()
 
+  const [pointId, setPointId] = useState(onePoint.point_id)
   const [pointName, setPointName] = useState(onePoint.name)
   const [pointAddress, setPointAddress] = useState(onePoint.address)
   const [pointRadius, setPointRadius] = useState(onePoint.radius)
+
+  const [pointLat, setPointLat] = useState(onePoint.lat)
+  const [pointLng, setPointLng] = useState(onePoint.lng)
 
   const dispatch = useAppDispatch()
   const handleDialog = (eventData: TEventFromDialog) => {
@@ -98,10 +102,46 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     radius: `id${onePoint.point_id}-pointRadius`,
   }
 
+
   type WithDisplayName<T extends { display_name?: string }> = T;
   const extractFullAddress = <T extends { display_name?: string }>(data: WithDisplayName<T>): string | undefined => {
     return data.display_name;
   };
+
+  const pointObject: TSelectedFieldChanged = {
+    typeField: 'points',
+    selectBlockObject: {
+      point_id: String(onePoint.point_id),
+      name: pointName,
+      lat: pointLat,
+      lng: pointLng,
+      address: pointAddress || '',
+      radius: pointRadius
+    }
+  }
+
+  const handleFieldChange = (event: React.SyntheticEvent) => {
+    if (event.target instanceof HTMLInputElement) {
+
+      const itemName = (event.target as HTMLInputElement).getAttribute('name')
+      if (itemName === 'point_name') {
+        setPointName(event.target.value)
+        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, name: event.target.value } }))
+      }
+      if (itemName === 'point_address') {
+        if (event.target.value.length <= 15) {
+          setPointAddress(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, address: event.target.value } }))
+        }
+      }
+      if (itemName === 'point_radius') {
+        if (event.target.value.length <= 15) {
+          setPointRadius(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
@@ -110,6 +150,15 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
       .then(data => {
         setPointAddress(data)
       })
+  }, [onePoint])
+
+  useEffect(() => {
+    setPointId(onePoint.point_id)
+    setPointName(onePoint.name)
+    setPointAddress(onePoint.address)
+    setPointRadius(onePoint.radius)
+    setPointLat(onePoint.lat)
+    setPointLng(onePoint.lng)
   }, [onePoint])
 
   return (
@@ -150,16 +199,19 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             eventData={makeEventData(onePoint)} />
 
           <input
+              name={'point_name'}
             // onTouchStart={handleTouchCarNameInput}
             // onMouseDown={handleInputClick}
             onClick={handleInputClick}
             // onMouseLeave={handleMouseLeave}
             // onDoubleClick={() => handleInputDoubleClick()}
-            onChange={(e) => setPointName(e.target.value)}
+              onChange={handleFieldChange}
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
-              width: `calc(${onePoint.name.length}ch + 30px)`,
+              width: `100%`,
+              textAlign: 'center',
+              // width: `calc(${onePoint.name.length}ch + 30px)`,
             }}
             value={pointName}
             data-forstore={POINT_KEY.name}
@@ -172,10 +224,16 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
       <Grid item xs={6}>
         <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <input
+              name={'point_radius'}
             onClick={handleInputClick}
-            onChange={(e) => setPointRadius(e.target.value)}
+              onChange={handleFieldChange}
             className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
-            style={{ width: `calc(${onePoint.radius.length}ch + 22px)`, fontSize: '0.8rem' }}
+              style={{
+                width: `100%`,
+                textAlign: 'center',
+                // width: `calc(${onePoint.radius.length}ch + 22px)`, 
+                fontSize: '0.8rem'
+              }}
             type="number"
             readOnly={chooseInputFromStore !== POINT_KEY.radius}
             value={pointRadius}
@@ -200,8 +258,9 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
           {pointAddress?.length &&
             <input
+              name={'point_address'}
               onClick={handleInputClick}
-              onChange={(e) => setPointAddress(e.target.value)}
+              onChange={handleFieldChange}
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
