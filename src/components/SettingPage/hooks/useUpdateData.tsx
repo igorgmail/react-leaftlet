@@ -57,6 +57,7 @@ function useUpdateData() {
     };
 
     if (selectBlock?.typeField === 'points') {
+      console.log("▶ ⇛ selectBlock: points");
       const point = selectBlock.selectBlockObject as TPointsData
       param = `?point_id=${point.point_id}&point_name=${point.name}&address=${point.address}&lat=${point.lat}&lng=${point.lng}&radius=${point.radius}`
       url = API_ENDPOINTS.SAVE_POINT + param
@@ -68,7 +69,8 @@ function useUpdateData() {
 
       if (response.data.status === 'Ok') {
         const pointData = await response.data.point
-
+        dispatch(carsSettingsActions.setUpdatePoint(pointData))
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         // const newData = DataExtractor.createCarDataFromServer(carData)
 
         dispatch(carsSettingsActions.setUpdatePoint(pointData))

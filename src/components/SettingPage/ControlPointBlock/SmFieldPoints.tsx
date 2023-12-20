@@ -98,7 +98,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
   const POINT_KEY = {
     name: `id${onePoint.point_id}-pointName`,
-    address: `id${onePoint.address}-pointAddress`,
+    address: `id${onePoint.point_id}-pointAddress`,
     radius: `id${onePoint.point_id}-pointRadius`,
   }
 

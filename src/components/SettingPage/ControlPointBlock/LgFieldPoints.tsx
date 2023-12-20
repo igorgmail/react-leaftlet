@@ -104,7 +104,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
   const POINT_KEY = {
     name: `id${onePoint.point_id}-pointName`,
-    address: `id${onePoint.address}-pointAddress`,
+    address: `id${onePoint.point_id}-pointAddress`,
     radius: `id${onePoint.point_id}-pointRadius`,
   }
 
@@ -134,16 +134,12 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'point_address') {
-        if (event.target.value.length <= 15) {
           setPointAddress(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, address: event.target.value } }))
-        }
       }
       if (itemName === 'point_radius') {
-        if (event.target.value.length <= 15) {
           setPointRadius(event.target.value)
-          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
-        }
+        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
       }
 
     }
