@@ -8,7 +8,7 @@ import EventModalForm from "./EventModalForm";
 
 import useBackDrop from "../../hooks/useBackdrop";
 import useApi from "../../hooks/useApi";
-import { ICarObject, IRequestOptions, TAddCarObject, TEventsData, TEventsDataForServer } from "../../types/carsSettingsTypes";
+import { ICarObject, IRequestOptions, TAddCarObject, TEventsData } from "../../types/carsSettingsTypes";
 import API_ENDPOINTS from "../../utils/apiEndpoints";
 import { carsSettingsActions, useAppDispatch } from "../../../../store";
 import DataExtractor from "../../utils/dataExtractor";
@@ -30,18 +30,12 @@ const AddEventModal = () => {
   const handleFormSubmit = (eventData: Omit<TEventsData, 'event_id'>) => {
     startBackDrop()
     setOpen(false)
-    // const cardataForServer = DataExtractor.createEventDataForServer(eventData)
+
 
     fetchAddNewEvent(eventData)
       .then((data) => {
-        if (data.status === 'Ok') {
           stopBackDrop()
-          dispatch(carsSettingsActions.setCreateEvent(data.point))
-        } else {
-          console.info("Не удалось создать Событие,");
-          console.info("С сервера не пришли данные, или пришли неверные данные");
-          showAlert('Не удалось создать событие', 'error')
-        }
+        dispatch(carsSettingsActions.setCreateEvent(data))
       })
       .catch((err) => console.log("ERROR При создании События", err)
       )
@@ -58,6 +52,7 @@ const AddEventModal = () => {
 
     if (response.data.status === 'error') {
       console.warn("Error in create new Event", response.error);
+      showAlert('Не удалось создать Событие', 'error')
       return response.data
     }
     if (response.data.status === 'Ok') {

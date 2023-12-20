@@ -60,8 +60,9 @@ export type TEventsData = {
   time_response_sec: string,
 }
 export type TEventsDataForServer = {
+  event_id: string,
   car_id: string,
-  user_id: string, // типа point_id
+  point_id: string,
   event: string,
   time_response_sec: string,
 }
@@ -132,5 +133,5 @@ export type TPointsDataWithAddress = TPointsData & {
 
 export type TSelectedFieldChanged = {
   typeField: 'cars' | 'points' | 'events' | 'users',
-  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
+  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsDataForServer | TUsers
 }

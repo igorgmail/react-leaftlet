@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 
 import { Stack, Grid, Divider } from "@mui/material";
 
-import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 
 import SelectBlock from "../components/SelectBlock";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
@@ -19,6 +19,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
 
+  const [eventId, setEventId] = useState<string>(oneEvent.event_id)
   const [eventCarId, setEventCarId] = useState<string>(oneEvent.car_id)
   const [eventPointId, setEventPointId] = useState(oneEvent.point_id)
   const [eventType, setEventType] = useState(oneEvent.event) // <'IN' | 'OUT'>
@@ -40,6 +41,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
+        console.log("▶ ⇛ data:handleDialog", data);
         if (data?.data) {
           const id = data.data
           dispatch(carsSettingsActions.setRemoveEvent(id))
@@ -91,33 +93,64 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     return eventData
   }
 
-  const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const eventObject: TSelectedFieldChanged = {
+    typeField: 'events',
+    selectBlockObject: {
+      event_id: eventId,
+      car_id: eventCarId,
+      point_id: eventPointId,
+      event: eventType,
+      time_response_sec: eventTimeSec
+
+    }
+  }
+
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     // ! Ложтм все в store перед эти нужна тпрака на сервер
     // ! И проеверить
-    const objectIndex = e.target.value
-    // console.log("Индекс объекта", objectIndex);
+    const target = e.target as HTMLSelectElement
+    console.log("▶ ⇛ target:", target);
 
-    const selectedIndex = e.target.options.selectedIndex;
-    // console.log("Порядковый номер", selectedIndex);
+    const objectIndex = target.value
+    console.log("Индекс объекта", objectIndex);
 
-    const selectedText = e.target.options[selectedIndex].text;
+    const selectedIndex = target.options.selectedIndex;
+    console.log("Порядковый номер", selectedIndex);
+
+    // const selectedText = target.options[selectedIndex].text;
     // console.log("Техт объекта:", selectedText);
 
-    const selectedOption = e.target.options[selectedIndex];
+    const selectedOption = target.options[selectedIndex];
     const selectedData = selectedOption.dataset.optionName;
 
     console.log("DataAttr объекта: ", selectedData);
 
     if (selectedData === 'event-car') {
       setEventCarId(String(objectIndex))
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, car_id: objectIndex } }))
     }
     if (selectedData === 'event-point') {
       setEventPointId(objectIndex)
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, point_id: objectIndex } }))
     }
-    if (selectedData === 'event-type')
-      setEventType(selectedText)
+    if (selectedData === 'event-type') {
+      setEventType(objectIndex)
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, event: objectIndex } }))
+    }
+    if (selectedData === 'event-time') {
+      setEventTimeSec(objectIndex)
+      console.log("▶ ⇛ objectIndex:", objectIndex);
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: objectIndex } }))
+    }
   }
 
+  const handleTimeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = e.target.value
+    console.log("▶ ⇛ time:", time);
+    setEventTimeSec(time)
+    dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
+  }
 
   return (
     <>
@@ -136,21 +169,21 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
             {/* Remove Button */}
             <RemoveDialog callback={handleDialog} eventData={makeEventData(oneEvent)} />
-            <SelectBlock selectedItem={eventCarId} eventId={oneEvent.event_id} modifier={'CARS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventCarId} eventId={oneEvent.event_id} modifier={'CARS'} selectChange={handleSelectChange} />
           </Stack>
         </Grid>
 
         {/* Точка */}
         <Grid item sm={4} display={'flex'} justifyContent={'center'}>
           <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
-            <SelectBlock selectedItem={eventPointId} eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventPointId} eventId={oneEvent.event_id} modifier={'POINTS'} selectChange={handleSelectChange} />
           </Stack>
         </Grid>
 
         {/* Событие */}
         <Grid item sm={2} display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <Stack margin={'auto'} display={'flex'} justifyContent={'center'}>
-            <SelectBlock selectedItem={eventType} eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={selectChange} />
+            <SelectBlock selectedItem={eventType} eventId={oneEvent.event_id} modifier={'EVENTS'} selectChange={handleSelectChange} />
           </Stack>
         </Grid>
 
@@ -158,8 +191,9 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
         <Grid item sm={1} display={'flex'} alignItems={'center'}>
           <Stack margin={'auto'} display={'flex'} alignItems={'end'}>
             <input
+              data-option-name={'event-time'}
               onClick={handleInputClick}
-              onChange={(e) => setEventTimeSec(e.target.value)}
+              onChange={handleTimeInputChange}
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 width: '100%',

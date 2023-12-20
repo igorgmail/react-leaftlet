@@ -32,13 +32,6 @@ function useRemoveDialog() {
     REMOVE_USER: 'user_id',
   }
 
-
-  // interface TEvent {
-  //   event: string;
-  //   subjectid: string;
-  //   // Другие поля вашего TEvent
-  // }
-
   interface ApiResponse {
     status: string;
     // Другие поля вашего ответа
@@ -51,6 +44,7 @@ function useRemoveDialog() {
     const url = eventApi[event.event]
     const key = itemIdKey[event.event];
     const body: { [key: string]: string } = {};
+
     console.log("▶ ⇛ body:", body);
     body[key] = event.subjectid;
 

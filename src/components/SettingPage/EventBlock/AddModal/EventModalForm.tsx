@@ -62,8 +62,8 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
     }
     if (selectedData === 'event-type') {
       console.log("▶ ⇛ allTypeEvents:", allTypeEvents);
-      console.log("▶ ⇛ allTypeEvents[Number(selectedText):", allTypeEvents[Number(selectedText)]);
-      setEventType(allTypeEvents[Number(objectIndex)])
+      console.log("▶ ⇛ allTypeEvents[Number(selectedText):", allTypeEvents[Number(objectIndex)]);
+      setEventType(selectedText)
     }
     if (selectedData === 'option-min') {
       if (selectedText === 'сек' || selectedText === 'мин') {

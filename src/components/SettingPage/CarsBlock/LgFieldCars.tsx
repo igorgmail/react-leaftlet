@@ -1,5 +1,5 @@
 import { Divider, Grid, Stack } from "@mui/material"
-import { ICarObject, TEventForDialog, TEventFromDialog, TEventsData, TPointsData, TUsers } from "../types/carsSettingsTypes";
+import { ICarObject, TEventForDialog, TEventFromDialog, TEventsData, TPointsData, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes";
 import { FC, useCallback, useEffect, useState } from "react";
 
 import RemoveDialog from "../components/RemoveDialog";
@@ -17,14 +17,6 @@ interface ILgFieldCarsProps {
   car: ICarObject,
 }
 
-type TPointsDataWithAddress = TPointsData & {
-  address: string;
-};
-
-type TSelectedFieldChanged = {
-  typeField: 'cars' | 'points' | 'events' | 'users',
-  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
-}
 
 const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 

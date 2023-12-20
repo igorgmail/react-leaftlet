@@ -1,28 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
   ISettingsData, TCompanyData, ICarObject, TPointsData,
-  TEventsData, TTypeEvents, TIcons, TUsers, TPointDataFromServer, TAddCarObject
+  TEventsData, TTypeEvents, TIcons, TUsers, TPointDataFromServer, TAddCarObject, TSelectedFieldChanged
 } from '../../components/SettingPage/types/carsSettingsTypes';
 import { LatLng } from 'leaflet';
 
-type TPointsDataWithAddress = TPointsData & {
-  address: string;
-};
 
-type TSelectFieldCar = {
-  typeField: 'cars' | 'points' | 'events' | 'users',
-  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
-}
-
-type TMapCenter = {
-  lat: string,
-  lng: string
-}
 interface IInitSettingStore extends ISettingsData {
   config: {
     requestWorks: boolean,
     chooseInputName: string | null,
-    currentSelectBlock: TSelectFieldCar | null,
+    currentSelectBlock: TSelectedFieldChanged | null,
     mapMove: boolean | undefined,
     mapCenter: LatLng | null
   }
@@ -117,7 +105,7 @@ export const carsSettingsSlice = createSlice({
 
     // Установить текущее состояние выбора (какой инпут меняем, сюда ложим весь объект чье это поле
     // С указанием типа объекта - cars | points | events | users
-    setCurrentSelectBlock: (state, action: PayloadAction<TSelectFieldCar | null>) => {
+    setCurrentSelectBlock: (state, action: PayloadAction<TSelectedFieldChanged | null>) => {
       state.config.currentSelectBlock = action.payload
     },
     // ? CARS BLOCK --------------------------
