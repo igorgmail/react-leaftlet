@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import { Stack, Grid, Divider, Typography } from "@mui/material";
 
@@ -10,15 +10,18 @@ import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../st
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
+import useUpdateData from "../hooks/useUpdateData";
+import useAlert from "../hooks/useAlert";
 
 
 
 
 interface IEventBlockProps {
-  oneEvent: TEventsData
+  oneEvent: TEventsData,
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
+const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
 
 
   const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
@@ -37,7 +40,9 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
+  const { updateDataRequest } = useUpdateData()
   const dispatch = useAppDispatch()
 
 
@@ -113,13 +118,12 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     // ! Ложтм все в store перед эти нужна тпрака на сервер
     // ! И проеверить
     const target = e.target as HTMLSelectElement
-    console.log("▶ ⇛ target:", target);
 
     const objectIndex = target.value
-    console.log("Индекс объекта", objectIndex);
+    // console.log("Индекс объекта", objectIndex);
 
     const selectedIndex = target.options.selectedIndex;
-    console.log("Порядковый номер", selectedIndex);
+    // console.log("Порядковый номер", selectedIndex);
 
     // const selectedText = target.options[selectedIndex].text;
     // console.log("Техт объекта:", selectedText);
@@ -127,33 +131,51 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
     const selectedOption = target.options[selectedIndex];
     const selectedData = selectedOption.dataset.optionName;
 
-    console.log("DataAttr объекта: ", selectedData);
-
     if (selectedData === 'event-car') {
       setEventCarId(String(objectIndex))
       dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, car_id: objectIndex } }))
+      startUpdate()
     }
     if (selectedData === 'event-point') {
       setEventPointId(objectIndex)
       dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, point_id: objectIndex } }))
+      startUpdate()
     }
     if (selectedData === 'event-type') {
       setEventType(objectIndex)
       dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, event: objectIndex } }))
-    }
-    if (selectedData === 'event-time') {
-      setEventTimeSec(objectIndex)
-      console.log("▶ ⇛ objectIndex:", objectIndex);
-      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: objectIndex } }))
+      startUpdate()
     }
   }
 
   const handleTimeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const time = e.target.value
-    console.log("▶ ⇛ time:", time);
     setEventTimeSec(time)
     dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
   }
+
+  function startUpdate() {
+    console.log("▶ ⇛ IN startUpdate:");
+
+    // startBackDrop()
+    updateDataRequest().then((data) => {
+      console.log("▶ ⇛ updateDataRequestdata:", data);
+
+    }).catch((err) => {
+      console.warn("При обновлении произошла ошибка ", err);
+
+      showAlert('Ошибка при обновлении', 'error')
+      setUpdateForm((cur) => !cur)
+    })
+  }
+
+  useEffect(() => {
+    setEventId(oneEvent.event_id)
+    setEventCarId(oneEvent.car_id)
+    setEventPointId(oneEvent.point_id)
+    setEventType(oneEvent.event)
+    setEventTimeSec(oneEvent.time_response_sec)
+  }, [oneEvent])
 
   return (
     <>
@@ -265,7 +287,9 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
         </Grid>
       </Grid>
-      {BackDropComponent}</>
+      {BackDropComponent}
+      {alertComponent}
+    </>
   )
 }
 export default SmFieldEvent

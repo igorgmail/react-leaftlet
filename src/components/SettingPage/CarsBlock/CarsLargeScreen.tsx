@@ -9,10 +9,11 @@ import { ICarObject } from "../types/carsSettingsTypes";
 
 interface ICarsBlockProps {
   carsData: ICarObject[],
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
+const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData, setUpdateForm }) => {
 
 
   return (
@@ -47,7 +48,7 @@ const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
           </Grid>
         </Grid>
 
-        {carsData.length > 0 && carsData.map((car) => (<LgFieldCars car={car} key={`cars-block-` + car.car_id} />))
+        {carsData.length > 0 && carsData.map((car) => (<LgFieldCars car={car} key={`cars-block-` + car.car_id} setUpdateForm={setUpdateForm} />))
         }
 
       </Stack>

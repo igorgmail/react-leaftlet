@@ -11,29 +11,34 @@ import EventSmBlock from "./EventSmBlock";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import BlockHeader from "../components/BlockHeader";
-import { useAppSelector } from "../../../store";
+import { useAppSelector, store } from "../../../store";
 import AddEventModal from "./AddModal/AddEventModal";
 
 
-// interface IEventBlockProps {
-//   eventsData: TEventsData[]
-// }
+interface IEventBlockProps {
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-const EventBlock = () => {
+const EventBlock: FC<IEventBlockProps> = ({ setUpdateForm }) => {
   console.log("--Render EventsBlock");
+  const eventsFromStore = useAppSelector((store) => store.carsSettings.events)
 
-  const eventsData = useAppSelector((store) => store.carsSettings.events)
+  const [eventsData, setEventsData] = useState(eventsFromStore)
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
+
+  useEffect(() => {
+    setEventsData(store.getState().carsSettings.events)
+  }, [eventsFromStore])
 
   return (
     <Stack sx={{ whidth: '100%' }}>
       <BlockHeader header={"События"} />
       {!isSmallScreen ? (
-        <EventLgBlock eventsData={eventsData} />
+        <EventLgBlock eventsData={eventsData} setUpdateForm={setUpdateForm} />
       ) : (
-        <EventSmBlock eventsData={eventsData} />
+          <EventSmBlock eventsData={eventsData} setUpdateForm={setUpdateForm} />
       )}
       <AddEventModal />
     </Stack>

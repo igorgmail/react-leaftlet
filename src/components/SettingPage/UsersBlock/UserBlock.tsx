@@ -12,7 +12,10 @@ import UserLgBlock from "./UserLgBlock";
 import AddUserModal from "./AddModal/AddUserModal";
 import { useAppSelector, carsSettingsActions } from "../../../store";
 
-const UserBlock = () => {
+type TUserBlockProps = {
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
+}
+const UserBlock: FC<TUserBlockProps> = ({ setUpdateForm }) => {
   console.log("--Render UsersBlock");
 
   const usersData = useAppSelector((store) => store.carsSettings.users)
@@ -24,7 +27,7 @@ const UserBlock = () => {
     <Stack sx={{ whidth: '100%' }}>
       <BlockHeader header={"Пользователи"} />
 
-      <UserLgBlock usersData={usersData}></UserLgBlock>
+      <UserLgBlock usersData={usersData} setUpdateForm={setUpdateForm}></UserLgBlock>
       {/* {!isSmallScreen ? (
         <UserLgBlock eventsData={eventsData} />
       ) : (

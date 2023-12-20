@@ -131,13 +131,13 @@ export const mockData = {
   users: [
     {
       user_id: '1',
-      email: 'kenherli@gmail.com',
-      role: 'admin'
+      user_email: 'kenherli@gmail.com',
+      user_role: 'admin'
     },
     {
       user_id: '2',
-      email: 'petrov@mail.pl',
-      role: 'user'
+      user_email: 'petrov@mail.pl',
+      user_role: 'user'
     },
 
   ]
@@ -146,14 +146,14 @@ export const mockData = {
 export const mockUserData = {
   users: [
     {
-      id: '1',
-      email: 'kenherli@gmail.com',
-      role: 'admin'
+      user_id: '1',
+      user_email: 'kenherli@gmail.com',
+      user_role: 'admin'
     },
     {
-      id: '2',
-      email: 'petrov@mail.pl',
-      role: 'user'
+      user_id: '2',
+      user_email: 'petrov@mail.pl',
+      user_role: 'user'
     },
 
   ]

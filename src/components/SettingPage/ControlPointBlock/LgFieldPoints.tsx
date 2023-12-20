@@ -14,7 +14,7 @@ import useBackDrop from "../hooks/useBackdrop";
 import useGetAddressService from "./hooks/useGetAddressService";
 import { LatLng } from "leaflet";
 import useAlert from "../hooks/useAlert";
-
+import configAdminPage from "../config";
 
 
 
@@ -149,11 +149,17 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
+
+    if (!onePoint.address) {
     getAddress(coordinates)
       .then((data) => extractFullAddress(data))
       .then(data => {
+        // if()
         setPointAddress(data)
       })
+    } else {
+      setPointAddress(onePoint.address)
+    }
   }, [onePoint])
 
   useEffect(() => {

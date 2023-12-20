@@ -129,27 +129,29 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'point_address') {
-        if (event.target.value.length <= 15) {
           setPointAddress(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, address: event.target.value } }))
-        }
       }
       if (itemName === 'point_radius') {
-        if (event.target.value.length <= 15) {
           setPointRadius(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
-        }
       }
     }
   }
 
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
+
+    if (!onePoint.address) {
     getAddress(coordinates)
       .then((data) => extractFullAddress(data))
       .then(data => {
+        // if()
         setPointAddress(data)
       })
+    } else {
+      setPointAddress(onePoint.address)
+    }
   }, [onePoint])
 
   useEffect(() => {
@@ -200,12 +202,12 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
           <input
               name={'point_name'}
-            // onTouchStart={handleTouchCarNameInput}
-            // onMouseDown={handleInputClick}
-            onClick={handleInputClick}
-            // onMouseLeave={handleMouseLeave}
-            // onDoubleClick={() => handleInputDoubleClick()}
+              onClick={handleInputClick}
               onChange={handleFieldChange}
+            // onTouchStart={handleTouchCarNameInput}
+              // onMouseDown={handleInputClick}
+            // onMouseLeave={handleMouseLeave}
+              // onDoubleClick={() => handleInputDoubleClick()}
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{

@@ -3,7 +3,7 @@ import useApi from "./useApi";
 
 import API_ENDPOINTS from "../utils/apiEndpoints";
 import DataExtractor from "../utils/dataExtractor";
-import { ICarObject, TPointsData } from "../types/carsSettingsTypes";
+import { ICarObject, TEventsDataForServer, TPointsData, TUsers } from "../types/carsSettingsTypes";
 
 
 const apiEndpoint = process.env.REACT_APP_API_SETTINGS;
@@ -72,11 +72,55 @@ function useUpdateData() {
         dispatch(carsSettingsActions.setUpdatePoint(pointData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         // const newData = DataExtractor.createCarDataFromServer(carData)
-
-        dispatch(carsSettingsActions.setUpdatePoint(pointData))
-        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
-
         return pointData
+      } else {
+        console.warn("Error in update new car", response.data.message);
+        throw new Error(response.data.message);
+      }
+    };
+
+    if (selectBlock?.typeField === 'events') {
+      console.log("▶ ⇛ selectBlock: events");
+      const event = selectBlock.selectBlockObject as TEventsDataForServer
+      // ?event_id=1&car_id=1&point_id=1&event=IN&time_response_sec=5
+      param = `?event_id=${event.event_id}&car_id=${event.car_id}&point_id=${event.point_id}&event=${event.event}&time_response_sec=${event.time_response_sec}`
+      url = API_ENDPOINTS.SAVE_EVENT + param
+      options = {
+        method: 'POST',
+        // body: JSON.stringify(selectBlock?.selectBlockObject),
+      }
+      const response = await sendRequest(url, options)
+
+      if (response.data.status === 'Ok') {
+        const eventData = await response.data.event
+        dispatch(carsSettingsActions.setUpdateEvent(eventData))
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
+        // const newData = DataExtractor.createCarDataFromServer(carData)
+        return eventData
+      } else {
+        console.warn("Error in update new car", response.data.message);
+        throw new Error(response.data.message);
+      }
+    };
+
+    if (selectBlock?.typeField === 'users') {
+
+      const user = selectBlock.selectBlockObject as TUsers
+      // ?event_id=1&car_id=1&point_id=1&event=IN&time_response_sec=5
+      param = `?user_id=${user.user_id}&user_email=${user.user_email}&user_role=${user.user_role}`
+      url = API_ENDPOINTS.SAVE_USER + param
+      options = {
+        method: 'POST',
+        // body: JSON.stringify(selectBlock?.selectBlockObject),
+      }
+      const response = await sendRequest(url, options)
+
+      if (response.data.status === 'Ok') {
+        const userData = await response.data.user
+        dispatch(carsSettingsActions.setUpdateUser(userData))
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
+        // const newData = DataExtractor.createCarDataFromServer(carData)
+        return userData
       } else {
         console.warn("Error in update new car", response.data.message);
         throw new Error(response.data.message);

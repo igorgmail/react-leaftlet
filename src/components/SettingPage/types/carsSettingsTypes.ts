@@ -53,7 +53,7 @@ export type TPointsData = {
 
 export type TEventsData = {
   event_id: string,
-  company_id: string,
+  company_id?: string,
   car_id: string,
   point_id: string,
   event: string,
@@ -76,12 +76,12 @@ export type TIcons = {
 
 export type TUsers = {
   user_id: string,
-  email: string,
-  role: string,
+  user_email: string,
+  user_role: string,
 }
 export type TUserRole = {
-  email: string,
-  role: string
+  user_email: string,
+  user_role: string
 }
 
 export type TRemoveDialogCallback = {

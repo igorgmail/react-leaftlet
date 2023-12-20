@@ -10,10 +10,11 @@ import SmFieldEvent from "./SmFieldEvent";
 
 
 interface IEventBlockProps {
-  eventsData: TEventsData[]
+  eventsData: TEventsData[],
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
+const EventSmBlock: FC<IEventBlockProps> = ({ eventsData, setUpdateForm }) => {
 
   const makeEventData = (eventObject: TEventsData) => {
 
@@ -36,7 +37,7 @@ const EventSmBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
       {eventsData.map((oneEvent) => (
 
-        <SmFieldEvent oneEvent={oneEvent} key={`eventblock-${oneEvent.event_id}`} />
+        <SmFieldEvent oneEvent={oneEvent} setUpdateForm={setUpdateForm} key={`eventblock-${oneEvent.event_id}`} />
       ))
       }
 

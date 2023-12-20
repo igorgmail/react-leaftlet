@@ -9,21 +9,22 @@ import LgFieldEvent from "./LgFieldEvent";
 
 interface IEventBlockProps {
   eventsData: TEventsData[]
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
+const EventLgBlock: FC<IEventBlockProps> = ({ eventsData, setUpdateForm }) => {
 
 
-  const makeEventData = (eventObject: TEventsData) => {
+  // const makeEventData = (eventObject: TEventsData) => {
 
-    const eventData: TEventForDialog = {
-      event: 'REMOVE_EVENT',
-      subjectid: eventObject.event_id,
-      msg: `Будет удалено событие <br>${eventObject.event}`
-    }
+  //   const eventData: TEventForDialog = {
+  //     event: 'REMOVE_EVENT',
+  //     subjectid: eventObject.event_id,
+  //     msg: `Будет удалено событие <br>${eventObject.event}`
+  //   }
 
-    return eventData
-  }
+  //   return eventData
+  // }
 
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -61,7 +62,7 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData }) => {
 
 
         {eventsData.length > 0 && eventsData.map((oneEvent) => (
-          <LgFieldEvent oneEvent={oneEvent} key={`eventkey-${oneEvent.event_id}`} />
+          <LgFieldEvent oneEvent={oneEvent} key={`eventkey-${oneEvent.event_id}`} setUpdateForm={setUpdateForm} />
         ))
         }
 

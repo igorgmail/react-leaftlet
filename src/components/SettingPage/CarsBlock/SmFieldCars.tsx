@@ -1,5 +1,5 @@
 import { Grid, Stack, Typography } from "@mui/material"
-import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
+import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 import { FC, useEffect, useState } from "react";
 
 import RemoveDialog from "../components/RemoveDialog";
@@ -11,27 +11,30 @@ import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
+import useUpdateData from "../hooks/useUpdateData";
 
 interface ISmFieldCarsProps {
-  car: ICarObject
+  car: ICarObject,
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
+const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   console.log("--Render SmallField");
 
-  const { showAlert, alertComponent } = useAlert();
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
-  const [carIdValue, setCarIdValue] = useState(car.car_id);
+  // const [carIdValue, setCarIdValue] = useState(car.car_id);
   const [inputCarNameValue, setInputCarNameValue] = useState(car.name);
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
@@ -85,6 +88,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
     if (target.dataset.iconid) {
       const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
       setInputCarIconIdValue(chooseIconUrl?.url || '')
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, pic: chooseIconUrl?.url || '' } }))
+      startUpdate()
     }
     setModalOpen(false)
   }
@@ -107,24 +112,63 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
     parentPic: `id${car.car_id}-parentIcon`
   }
 
-  useEffect(() => {
-    console.log("Текущее состояние");
-    console.log("inputCarNameValue-->", inputCarNameValue);
-    console.log("inputCarImeiValue-->", inputCarImeiValue);
-    console.log("inputCarAlterImeiValue-->", inputCarAlterImeiValue);
-    console.log("inputCarIconIdValue-->", inputCarIconIdValue);
-
-    const selectObject = {
-      car_id: carIdValue,
+  const carObject: TSelectedFieldChanged = {
+    typeField: 'cars',
+    selectBlockObject: {
+      car_id: String(car.car_id),
       name: inputCarNameValue,
       pic: inputCarIconIdValue,
       imei: inputCarImeiValue,
       alter_imei: inputCarAlterImeiValue
     }
-    dispatch(carsSettingsActions.setCurrentSelectBlock({ typeField: 'cars', selectBlockObject: selectObject }))
+  }
+  const handleFieldChange = (event: React.SyntheticEvent) => {
+    if (event.target instanceof HTMLInputElement) {
 
-  }, [inputCarNameValue, inputCarImeiValue, inputCarAlterImeiValue, inputCarIconIdValue, dispatch])
+      const itemName = (event.target as HTMLInputElement).getAttribute('name')
+      if (itemName === 'car_name') {
+        setInputCarNameValue(event.target.value)
+        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
+      }
+      if (itemName === 'car_imei') {
+        if (event.target.value.length <= 15) {
+          setInputCarImeiValue(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
+        }
+      }
+      if (itemName === 'car_alterimei') {
+        if (event.target.value.length <= 15) {
+          setInputCarAlterImeiValue(event.target.value)
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
+        }
+      }
+      // на мобильных не работает
+      // if (event.currentTarget.hasAttribute('data-iconid')) {
+      //   console.log("▶ ⇛ data-iconid:");
+      //   const target = event.currentTarget as HTMLElement;
+      //   const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
+      //   console.log("▶ ⇛ chooseIconUrl:", chooseIconUrl);
+      //   setInputCarIconIdValue(chooseIconUrl?.url || '')
+      //   dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, pic: chooseIconUrl?.url || '' } }))
+      //   startUpdate()
+      // }
+    }
+  }
 
+  function startUpdate() {
+    console.log("▶ ⇛ IN startUpdate:");
+
+    // startBackDrop()
+    updateDataRequest().then((data) => {
+      console.log("▶ ⇛ updateDataRequestdata:", data);
+
+    }).catch((err) => {
+      console.warn("При обновлении произошла ошибка ", err);
+
+      showAlert('Ошибка при обновлении', 'error')
+      setUpdateForm((cur) => !cur)
+    })
+  }
 
   useEffect(() => {
     setInputCarNameValue(car.name)
@@ -136,7 +180,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
   return (
     <>
-
     <Grid
       container alignItems="center" justifyContent="center"
       sx={{
@@ -175,7 +218,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             eventData={makeEventData(car)} />
 
           <input
+              name={'car_name'}
               onClick={handleInputClick}
+              onChange={(e) => setInputCarNameValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -183,8 +228,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
             type="text"
-            readOnly={chooseInputFromStore !== CAR_KEY.name}
-            onChange={(e) => setInputCarNameValue(e.target.value)}
+              readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
           />
@@ -235,8 +279,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
           sx={{ padding: '8px' }}
         >
           <input
-            onClick={handleInputClick}
-            onChange={(e) => setInputCarImeiValue(e.target.value)}
+              name={'car_imei'}
+              onClick={handleInputClick}
+              onChange={(e) => handleFieldChange(e)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
@@ -247,6 +292,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
+              data-interactive
           />
         </Stack>
       </Grid>
@@ -255,8 +301,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
       <Grid item xs={6}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
           <input
+              name={'car_alterimei'}
             onClick={handleInputClick}
-            onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
+              onChange={(e) => handleFieldChange(e)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
@@ -267,6 +314,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
+              data-interactive
           />
         </Stack>
       </Grid>

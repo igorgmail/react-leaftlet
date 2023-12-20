@@ -61,8 +61,8 @@ const UserModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) => 
     e.preventDefault()
 
     const userData = {
-      email: userEmail,
-      role: userRole,
+      user_email: userEmail,
+      user_role: userRole,
     }
     handleFormSubmit(userData)
     // clearState()

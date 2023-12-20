@@ -12,17 +12,17 @@ import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../st
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
+import useUpdateData from "../hooks/useUpdateData";
 
 interface ILgFieldCarsProps {
   car: ICarObject,
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
-
+const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
   console.log("--Render CarsField Large");
 
-  const { showAlert, alertComponent } = useAlert();
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -33,7 +33,9 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
+  const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
@@ -106,6 +108,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
     pic: `id${car.car_id}-carPic`,
     parentPic: `id${car.car_id}-parentIcon`
   }
+
   const carObject: TSelectedFieldChanged = {
     typeField: 'cars',
     selectBlockObject: {
@@ -143,8 +146,24 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
       const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
       setInputCarIconIdValue(chooseIconUrl?.url || '')
       dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, pic: chooseIconUrl?.url || '' } }))
+      startUpdate()
     }
 
+  }
+
+  function startUpdate() {
+    console.log("▶ ⇛ IN startUpdate:");
+
+    // startBackDrop()
+    updateDataRequest().then((data) => {
+      console.log("▶ ⇛ updateDataRequestdata:", data);
+
+    }).catch((err) => {
+      console.warn("При обновлении произошла ошибка ", err);
+
+      showAlert('Ошибка при обновлении', 'error')
+      setUpdateForm((cur) => !cur)
+    })
   }
 
   useEffect(() => {
@@ -173,8 +192,9 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
           <RemoveDialog callback={handleDialog} eventData={makeEventData(car)} />
 
           <input
-              onClick={handleInputClick}
               name={'car_name'}
+              onClick={handleInputClick}
+              onChange={(e) => handleFieldChange(e)}
               // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -184,7 +204,6 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
             }}
             readOnly={chooseInputFromStore !== CAR_KEY.name}
               // onChange={(e) => setInputCarNameValue(e.target.value)}
-              onChange={(e) => handleFieldChange(e)}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
             data-interactive
@@ -226,8 +245,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
       <Grid item xs={3} md={3} display={'flex'} alignItems={'center'}>
         <Stack>
           <input
-            onClick={handleInputClick}
               name={'car_imei'}
+              onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               // onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -248,8 +267,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
       <Grid item xs={4} md={3} display={'flex'} alignItems={'center'}>
         <Stack >
           <input
-            onClick={handleInputClick}
               name={'car_alterimei'}
+              onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               // onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}

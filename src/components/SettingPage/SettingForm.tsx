@@ -64,10 +64,10 @@ const SettingForm = () => {
         <OutsideClickListener setUpdateForm={setUpdateForm} />
         <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
           <CompanyBlock key={'company'}></CompanyBlock>
-          <CarsBlock key={'cars'}></CarsBlock>
+        <CarsBlock key={'cars'} setUpdateForm={setUpdateForm}></CarsBlock>
           <ControlPointBlock key={'control'}></ControlPointBlock>
-          <EventBlock key={'events'}></EventBlock>
-          <UserBlock key={'users'}></UserBlock>
+        <EventBlock key={'events'} setUpdateForm={setUpdateForm}></EventBlock>
+        <UserBlock key={'users'} setUpdateForm={setUpdateForm}></UserBlock>
         <PreloadImages iconsUrls={settingsData.icons} />
 
       {alertComponent}

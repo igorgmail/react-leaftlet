@@ -31,11 +31,11 @@ const AddCarModal = () => {
     // const cardataForServer = DataExtractor.createCarDataForServer(carData)
     fetchAddNewCar(carData)
       .then((data) => {
-        if (data.status === 'Ok') {
+        if (data) {
           stopBackDrop()
-          const newIconPath = DataExtractor.createiconPath(data.car.pic)
+          const newIconPath = DataExtractor.createiconPath(data.pic)
           // console.log("▶ ⇛ newIconPath:", newIconPath);
-          dispatch(carsSettingsActions.setCreateCar({ ...data.car, pic: newIconPath }))
+          dispatch(carsSettingsActions.setCreateCar({ ...data, pic: newIconPath }))
           // dispatch(carsSettingsActions.setCreateCar({ ...data.car }))
         } else {
           console.info("Не удалось создать Авто,");
@@ -60,14 +60,14 @@ const AddCarModal = () => {
 
     if (response.data.status === 'error') {
       console.warn("Error in create new car", response.data.message)
-      return response.data
+      return null
     }
     if (response.data.status === 'Ok') {
       const carData = await response.data.car
       console.info("▶FROMSERVER ⇛ Создан новый авто");
       console.info("▶FROMSERVER ⇛ CREATE_CAR", carData);
 
-      return response.data
+      return carData
     }
   }
 

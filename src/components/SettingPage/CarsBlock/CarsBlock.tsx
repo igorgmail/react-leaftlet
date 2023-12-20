@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { FC, useEffect, useState } from "react"
 
 import { Stack } from "@mui/material"
 
@@ -14,9 +14,11 @@ import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLargeScreen from "./CarsLargeScreen";
 import AddCarModal from "./AddCarModal/AddCarModal";
 
+type TCarsBlockProps = {
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-
-const CarsBlock = () => {
+const CarsBlock: FC<TCarsBlockProps> = ({ setUpdateForm }) => {
   console.log("--Render CarsBlock");
 
   const dataFromStore = useAppSelector((store) => store.carsSettings.cars);
@@ -36,11 +38,11 @@ const CarsBlock = () => {
 
       {!isSmallScreen ? (
 
-        <CarsLargeScreen carsData={carsData} />
+        <CarsLargeScreen carsData={carsData} setUpdateForm={setUpdateForm} />
 
       ) : (
 
-        <CarsSmallScreen carsData={carsData} />
+          <CarsSmallScreen carsData={carsData} setUpdateForm={setUpdateForm} />
 
       )}
 

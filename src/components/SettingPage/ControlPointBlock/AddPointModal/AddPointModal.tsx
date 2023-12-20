@@ -50,7 +50,6 @@ const AddPointModal = () => {
     fetchAddNewPoint(pointData)
       .then((data) => {
         if (data) {
-          console.log("▶ ⇛ data:", data);
           stopBackDrop()
           // const extractPointData = DataExtractor.getPointsFromServerData(data)
           dispatch(carsSettingsActions.setNewPoint(data))
@@ -58,7 +57,6 @@ const AddPointModal = () => {
         } else {
           console.info("Не удалось создать точку,");
           console.info("С сервера не пришли данные, или пришли неверные данные");
-          showAlert('Не удалось создать Авто', 'error')
         }
       })
       .catch((err) => console.log("ERROR При создании точки", err)
@@ -76,8 +74,9 @@ const AddPointModal = () => {
     const response = await sendRequest(API_ENDPOINTS.CREATE_POINT + url, requestOptions)
 
     if (response.data.status === 'error') {
-      console.warn("Error in create new point", response.error);
-      return
+      console.warn("Error in create new Point", response.data?.message);
+      showAlert('Не удалось создать Точку', 'error')
+      return null
     }
     if (response.data.status === 'Ok') {
       const pointsData = await response.data.point

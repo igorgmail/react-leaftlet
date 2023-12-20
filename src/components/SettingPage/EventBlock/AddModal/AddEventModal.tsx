@@ -51,15 +51,14 @@ const AddEventModal = () => {
     const response = await sendRequest(API_ENDPOINTS.CREATE_EVENT + url, requestOptions)
 
     if (response.data.status === 'error') {
-      console.warn("Error in create new Event", response.error);
+      console.warn("Error in create new Event", response.data?.message);
       showAlert('Не удалось создать Событие', 'error')
-      return response.data
+      return null
     }
     if (response.data.status === 'Ok') {
       const eventData = await response.data.event
       console.info("▶FROMSERVER ⇛ Создано новое событие");
       console.info("▶FROMSERVER ⇛ CREATE_EVENTS", eventData);
-
       return eventData
     }
   }

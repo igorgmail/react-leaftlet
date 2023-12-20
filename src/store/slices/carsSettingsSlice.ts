@@ -154,6 +154,16 @@ export const carsSettingsSlice = createSlice({
     setRemoveEvent: (state, action: PayloadAction<string>) => {
       state.events = [...state.events].filter((event) => event.event_id !== action.payload)
     },
+    // Обновить Событие
+    setUpdateEvent: (state, action: PayloadAction<Omit<TEventsData, 'company_id'>>) => {
+      const index = state.events.findIndex((event) => event.event_id === action.payload.event_id)
+      console.log("▶ ⇛ payload.event_id:", action.payload.event_id);
+      if (index !== -1) {
+        state.events[index] = action.payload
+      } else {
+        state.events = [...state.events]
+      }
+    },
     // ? USERS BLOCK --------------------------
     // Добавить Нового пользователя
     setCreateUser: (state, action: PayloadAction<TUsers>) => {
@@ -163,7 +173,15 @@ export const carsSettingsSlice = createSlice({
     setRemoveUser: (state, action: PayloadAction<string>) => {
       state.users = [...state.users].filter((user) => user.user_id !== action.payload)
     },
-
+    // Обновить Пользователя
+    setUpdateUser: (state, action: PayloadAction<TUsers>) => {
+      const index = state.users.findIndex((user) => user.user_id === action.payload.user_id)
+      if (index !== -1) {
+        state.users[index] = action.payload
+      } else {
+        state.users = [...state.users]
+      }
+    },
     // ? MODAL WITH MAP BLOCK --------------------------
     // Карта двигается в данный момент или нет (true | false)
     setMapMove: (state, action: PayloadAction<boolean>) => {

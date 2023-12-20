@@ -10,11 +10,12 @@ import SelectBlock from "../components/SelectBlock";
 import UserField from "./UserField";
 
 interface IUserBlockProps {
-  usersData: TUsers[]
+  usersData: TUsers[],
+  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
+const UserLgBlock: FC<IUserBlockProps> = ({ usersData, setUpdateForm }) => {
 
   return (
     <>
@@ -43,7 +44,7 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
       </Grid>
           </Grid>
           {usersData.length > 0 && usersData.map((oneUser) => (
-            <UserField oneUser={oneUser} key={`userblock-${oneUser.user_id}`}
+            <UserField oneUser={oneUser} setUpdateForm={setUpdateForm} key={`userblock-${oneUser.user_id}`}
             />
         ))
         }
