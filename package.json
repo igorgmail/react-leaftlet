@@ -5,7 +5,7 @@
   "scripts": {
     "start": "env-cmd -f .env.development react-scripts start",
     "start:local": "env-cmd -f .env.local react-scripts start",
-    "build:dev": "GENERATE_SOURCEMAP=false env-cmd -f .env.development react-scripts build",
+    "build:dev": "set GENERATE_SOURCEMAP=false && env-cmd -f .env.development react-scripts build",
     "build": "env-cmd -f .env.production react-scripts build",
     "start:prod": "env-cmd -f .env.production react-scripts start",
     "format:check": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
