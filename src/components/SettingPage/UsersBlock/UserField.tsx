@@ -126,7 +126,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
     const eventData: TEventForDialog = {
       event: 'REMOVE_USER',
       subjectid: eventObject.user_id,
-      msg: `Будет удален пользователь <br>${eventObject.email}`
+      msg: `Будет удален пользователь <br>${eventObject.user_email}`
     }
 
     return eventData
