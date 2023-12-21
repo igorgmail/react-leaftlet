@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Stack } from "@mui/material"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import RemoveDialog from "../components/RemoveDialog"
 import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes"
 
@@ -115,7 +115,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
     }
   }
 
-  const handleTimeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value
     setUserEmail(email)
     dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, user_email: email } }))
@@ -132,6 +132,11 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
     return eventData
   }
 
+  useEffect(() => {
+    setUserId(oneUser.user_id)
+    setUserEmail(oneUser.user_email)
+    setUserRole(oneUser.user_role)
+  }, [oneUser])
   return (
     <>
       <Grid
@@ -153,7 +158,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
 
             <input
               onClick={handleInputClick}
-              onChange={handleTimeInputChange}
+              onChange={handleEmailInputChange}
               // className="all-white-input-style"
               readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
               className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}

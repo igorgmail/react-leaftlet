@@ -32,6 +32,7 @@ const AddUserModal = () => {
     setOpen(false)
     // const cardataForServer = DataExtractor.(eventData)
     fetchAddNewUser(userData)
+
       .then((data) => {
         if (data) {
           stopBackDrop()
@@ -65,9 +66,8 @@ const AddUserModal = () => {
     if (response.data.status === 'Ok') {
       const userData = await response.data.user
       console.info("▶FROMSERVER ⇛ Создан новый пользователь");
-      console.info("▶FROMSERVER ⇛ CREATE_USER", userData);
 
-      return userData
+      return userData[0]
     }
   }
 
