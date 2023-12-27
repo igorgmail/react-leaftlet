@@ -160,7 +160,6 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
     if (e.key === 'Enter') {
-      console.log("ENTER");
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
         dispatch(carsSettingsActions.setChooseInputName(null))
@@ -276,7 +275,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               width: '100%',
               // width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
             }}
-              type="number"
+              // type="number"
+              type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
