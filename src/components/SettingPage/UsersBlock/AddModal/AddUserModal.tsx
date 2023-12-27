@@ -67,6 +67,7 @@ const AddUserModal = () => {
       const userData = await response.data.user
       console.info("▶FROMSERVER ⇛ Создан новый пользователь");
 
+
       return userData[0]
     }
   }

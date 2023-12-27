@@ -30,6 +30,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
   const [alterImeiCar, setAlterImeiCar] = useState('')
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [butDisabled, setButDisabled] = useState(true)
 
   const handleImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -37,6 +38,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
       setImeiCar(value)
     }
   };
+
   const handleAlterImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length <= 15) {
@@ -86,6 +88,25 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
     handleClose()
   }
 
+  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    (evt.key === 'e'
+      || evt.key === '-'
+      || evt.key === '+')
+      && evt.preventDefault()
+  }
+
+  useEffect(() => {
+    if (nameCar.length > 2 && iconCar && imeiCar.length === 15) {
+      if (alterImeiCar.length === 0 || alterImeiCar.length === 15) {
+        console.log("▶ ⇛ alterImeiCar.length:", alterImeiCar.length);
+        setButDisabled(false)
+      } else {
+        setButDisabled(true)
+      }
+    } else {
+      setButDisabled(true)
+    }
+  }, [nameCar, iconCar, imeiCar, alterImeiCar])
 
   return (
 
@@ -103,12 +124,13 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           {/* Name */}
           <Grid item xs={9}>
             <Stack display={'flex'}>
+
               <input
                 onChange={(e) => setNameCar(e.target.value)}
                 id="carNameInput"
                 // readOnly={true}
                 className="modal-input"
-                placeholder="имя автомобиля"
+                placeholder="минимум 3 символа"
                 value={nameCar}
                 required
               />
@@ -129,7 +151,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
               setModalOpen={setModalOpen}
             >
 
-              <Stack className="modal-input modal-input--car-icon" sx={{ width: '100%' }}>
+              <Stack className="modal-input--car-icon" sx={{ width: '100%' }}>
                 {iconCar ? (
                   <img src={iconCar} className='icon-car--in-modal'></img>
                 ) : <DirectionsCarIcon />
@@ -147,14 +169,18 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
+                // onInput={(e) => handleImeiChange(e)}
+                // onKeyDown={(e) => handleImeiChange(e)}
                 onChange={(e) => handleImeiChange(e)}
+                onKeyDown={(evt) => handleNumberValidate(evt)}
                 id="carImeiInput"
                 // readOnly={true}
                 className="modal-input"
-                placeholder="imei"
+                placeholder="15 символов"
                 value={imeiCar}
                 required
                 type="number"
+                pattern="[0-9]"
                 minLength={15}
                 maxLength={15}
               />
@@ -171,12 +197,13 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
             <Stack display={'flex'}>
               <input
                 onChange={(e) => handleAlterImeiChange(e)}
+                onKeyDown={(evt) => handleNumberValidate(evt)}
                 id="carAlterImeiInput"
                 // readOnly={true}
                 className="modal-input"
-                placeholder="альтернативный imei"
+                placeholder="15 символов"
                 value={alterImeiCar}
-                required
+                // required
                 type="number"
                 minLength={15}
                 maxLength={15}
@@ -188,7 +215,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
         <Stack display={'flex'} flexDirection={'row'} justifyContent={'center'} gap={'2rem'}
           sx={{ marginTop: '1rem' }}
         >
-          <Button type="submit">Добавить</Button>
+          <Button type="submit" disabled={butDisabled}>Добавить</Button>
           <Button onClick={handleCancelButton}>Отмена</Button>
         </Stack>
       </form>

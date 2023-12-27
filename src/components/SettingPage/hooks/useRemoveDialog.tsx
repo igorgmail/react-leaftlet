@@ -32,20 +32,12 @@ function useRemoveDialog() {
     REMOVE_USER: 'user_id',
   }
 
-  interface ApiResponse {
-    status: string;
-    // Другие поля вашего ответа
-  }
-
-  type SendRemoveResponse = { data: ApiResponse | null, error: string | null };
-
   const sendRemove = async (event: TEvent) => {
     let responseData;
     const url = eventApi[event.event]
     const key = itemIdKey[event.event];
     const body: { [key: string]: string } = {};
 
-    console.log("▶ ⇛ body:", body);
     body[key] = event.subjectid;
 
     const abortController = new AbortController();
@@ -64,7 +56,7 @@ function useRemoveDialog() {
       responseData = await response.json();
 
       if (responseData.status === 'error') {
-        throw new Error(`Ошибка: ${responseData.message}`);
+        return { data: null, error: responseData.message }
       }
       if (responseData.status === 'Ok')
         // Возвращаем индекс сущности

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import { Stack, Grid, Divider } from "@mui/material";
 
@@ -14,8 +14,7 @@ interface IEventBlockProps {
 
 const EventLgBlock: FC<IEventBlockProps> = ({ eventsData, setUpdateForm }) => {
 
-
-  // const makeEventData = (eventObject: TEventsData) => {
+  const [eventsDataState, setEventsDataState] = useState(eventsData)  // const makeEventData = (eventObject: TEventsData) => {
 
   //   const eventData: TEventForDialog = {
   //     event: 'REMOVE_EVENT',
@@ -25,6 +24,10 @@ const EventLgBlock: FC<IEventBlockProps> = ({ eventsData, setUpdateForm }) => {
 
   //   return eventData
   // }
+  // useEffect(() => {
+
+  // }, [eventsData])
+
 
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>

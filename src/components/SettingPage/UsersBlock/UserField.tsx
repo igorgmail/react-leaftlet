@@ -35,12 +35,16 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
+        console.log("▶ ⇛ data:", data);
+
         if (data?.data) {
           const id = data.data
           dispatch(carsSettingsActions.setRemoveUser(id))
           stopBackDrop()
         } else {
-          console.info("При удалении Пользователя с сервера пришли некорректные данные");
+          console.info(data?.error);
+          console.info("Или при удалении Пользователя с сервера пришли некорректные данные");
+          showAlert('Не удалось удалить Пользователя', 'error')
 
         }
       }).catch((err) => {
