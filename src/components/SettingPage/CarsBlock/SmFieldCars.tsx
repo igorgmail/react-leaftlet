@@ -56,7 +56,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
+    // event.preventDefault()
     const touchNumber = event.detail
 
     if (touchNumber === 2) {
@@ -65,7 +65,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       const inputType = event.currentTarget.type
       targ.focus()
 
-      // ! Этот вариант
       if (dataValue === chooseInputFromStore) return
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
@@ -149,16 +148,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
         }
       }
-      // на мобильных не работает
-      // if (event.currentTarget.hasAttribute('data-iconid')) {
-      //   console.log("▶ ⇛ data-iconid:");
-      //   const target = event.currentTarget as HTMLElement;
-      //   const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
-      //   console.log("▶ ⇛ chooseIconUrl:", chooseIconUrl);
-      //   setInputCarIconIdValue(chooseIconUrl?.url || '')
-      //   dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, pic: chooseIconUrl?.url || '' } }))
-      //   startUpdate()
-      // }
     }
   }
 
