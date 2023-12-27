@@ -223,7 +223,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               // type="text"
-              type="tel" inputMode="numeric" pattern="\d*"
+              type="text" inputMode="numeric" pattern="\d*"
               readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
