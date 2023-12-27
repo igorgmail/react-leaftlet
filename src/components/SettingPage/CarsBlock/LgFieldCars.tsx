@@ -7,7 +7,7 @@ import RemoveDialog from "../components/RemoveDialog";
 
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
-import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
+import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
 
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
@@ -68,7 +68,6 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
       const inputType = event.currentTarget.type
       targ.focus()
 
-      // ! Этот вариант
       if (dataValue === chooseInputFromStore) return
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
@@ -84,6 +83,13 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
         targ.setSelectionRange(textLength, textLength);
       }
     }
+  }
+
+  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    (evt.key === 'e'
+      || evt.key === '-'
+      || evt.key === '+')
+      && evt.preventDefault()
   }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
@@ -151,6 +157,20 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    if (e.key === 'Enter') {
+      console.log("ENTER");
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+    }
+  };
+
   function startUpdate() {
     console.log("▶ ⇛ IN startUpdate:");
 
@@ -195,6 +215,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={handleKeyDown}
               // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -248,6 +269,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -270,6 +292,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{

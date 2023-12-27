@@ -83,6 +83,13 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
+  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    (evt.key === 'e'
+      || evt.key === '-'
+      || evt.key === '+')
+      && evt.preventDefault()
+  }
+
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLImageElement;
     if (target.dataset.iconid) {
@@ -156,8 +163,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   }
 
   function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
-
     // startBackDrop()
     updateDataRequest().then((data) => {
       console.log("▶ ⇛ updateDataRequestdata:", data);
@@ -221,6 +226,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => setInputCarNameValue(e.target.value)}
+              onTouchStart={handleInputClick}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -282,6 +288,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={(evt) => handleNumberValidate(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
@@ -304,6 +311,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={(evt) => handleNumberValidate(evt)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',

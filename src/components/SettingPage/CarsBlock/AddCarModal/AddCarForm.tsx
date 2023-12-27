@@ -201,7 +201,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
                 id="carAlterImeiInput"
                 // readOnly={true}
                 className="modal-input"
-                placeholder="15 символов"
+                placeholder="15 или 0 символов"
                 value={alterImeiCar}
                 // required
                 type="number"
