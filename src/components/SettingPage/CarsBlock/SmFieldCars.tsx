@@ -222,8 +222,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               width: `100%`,
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
-              // type="text"
-              type="text" inputMode="numeric" pattern="\d*"
+              type="text"
               readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
@@ -285,7 +284,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
                 width: `100%`,
                 // width: `calc(${car.imei.length}ch + 22px)` 
               }}
-              type="number"
+              // type="number"
+              type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
