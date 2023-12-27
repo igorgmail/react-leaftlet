@@ -276,7 +276,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
             }}
               // type="number"
-              type="text" inputMode="numeric" pattern="\d*"
+              type="tel" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
