@@ -204,7 +204,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     setTest(String(key))
   }
   useEffect(() => {
-    document.addEventListener('keydown', detectKey, true)
+    document.addEventListener('keypress', detectKey, true)
   }, [])
 
   return (
