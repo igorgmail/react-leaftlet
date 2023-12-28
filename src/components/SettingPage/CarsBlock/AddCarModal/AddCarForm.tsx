@@ -34,6 +34,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
   const handleImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    // if (!/^\d+$/.test(value)) return
     if (value.length <= 15) {
       setImeiCar(value)
     }
@@ -97,19 +98,21 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
       && evt.preventDefault()
   }
 
-  const handleNumberValidate2 = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    const target = evt.target as HTMLInputElement;
-    const value = target.value;
-    if (value === '') {
-      evt.preventDefault()
-    }
-    if (!['e', '-', '+', '.', ',', 'space'].find((el) => el === value)) evt.preventDefault()
-    if (!/^\d+$/.test(value)) evt.preventDefault()
-    const newValue = value.replace(/[^0-9]/g, ''); // Удаляет все, кроме цифр
-    if (value !== newValue) {
-      target.value = newValue;
-    }
-  };
+  // const handleNumberValidate2 = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  //   console.log("▶ ⇛ evt.keyCode:", evt.keyCode);
+  //   if (evt.key === 'Enter') return
+  //   const target = evt.target as HTMLInputElement;
+  //   const value = target.value;
+  //   if (value === '') {
+  //     evt.preventDefault()
+  //   }
+  //   if (!['e', '-', '+', '.', ',', 'space'].find((el) => el === value)) evt.preventDefault()
+  //   if (!/^\d+$/.test(value)) evt.preventDefault()
+  //   const newValue = value.replace(/[^0-9]/g, ''); // Удаляет все, кроме цифр
+  //   if (value !== newValue) {
+  //     target.value = newValue;
+  //   }
+  // };
 
   useEffect(() => {
     if (nameCar.length > 2 && iconCar && imeiCar.length === 15) {
@@ -185,19 +188,17 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
-                onInput={handleNumberValidate2}
-                // onInput={(e) => handleImeiChange(e)}
-                // onKeyDown={(e) => handleImeiChange(e)}
+                // onInput={handleNumberValidate2}
                 onChange={(e) => handleImeiChange(e)}
-                onKeyDown={(evt) => handleNumberValidate(evt)}
+                // onKeyDown={(evt) => handleNumberValidate(evt)}
                 id="carImeiInput"
                 // readOnly={true}
                 className="modal-input"
                 placeholder="15 символов"
                 value={imeiCar}
                 required
-                type="number"
-                pattern="[0-9]"
+                // type="number"
+                type="text" inputMode="numeric" pattern="\d*"
                 minLength={15}
                 maxLength={15}
               />
@@ -214,13 +215,13 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
             <Stack display={'flex'}>
               <input
                 onChange={(e) => handleAlterImeiChange(e)}
-                onKeyDown={(evt) => handleNumberValidate(evt)}
+                // onKeyDown={(evt) => handleNumberValidate(evt)}
                 id="carAlterImeiInput"
                 // readOnly={true}
                 className="modal-input"
                 placeholder="15 или 0 символов"
                 value={alterImeiCar}
-                // required
+                required
                 type="number"
                 minLength={15}
                 maxLength={15}

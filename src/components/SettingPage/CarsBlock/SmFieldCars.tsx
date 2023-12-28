@@ -222,7 +222,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => setInputCarNameValue(e.target.value)}
-              onTouchStart={handleInputClick}
+              // onTouchStart={handleInputClick}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -284,8 +284,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={(evt) => handleNumberValidate(evt)}
-              onTouchStart={(evt) => handleNumberValidateTouch(evt)}
+              // onKeyDown={(evt) => handleNumberValidate(evt)}
+              // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
@@ -309,7 +309,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={(evt) => handleNumberValidate(evt)}
+              // onKeyDown={(evt) => handleNumberValidate(evt)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',

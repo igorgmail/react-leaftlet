@@ -85,15 +85,16 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
-  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    (evt.key === 'e'
-      || evt.key === '-'
-      || evt.key === '+'
-      || evt.key === '.'
-      || evt.key === ','
-      || evt.key === 'space')
-      && evt.preventDefault()
-  }
+  // const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  //   console.log("▶ ⇛ evt.key:", evt.key);
+  //   (evt.key === 'e'
+  //     || evt.key === '-'
+  //     || evt.key === '+'
+  //     || evt.key === '.'
+  //     || evt.key === ','
+  //     || evt.key === 'space')
+  //     && evt.preventDefault()
+  // }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     handleFieldChange(e)
@@ -160,18 +161,18 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    if (e.key === 'Enter') {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   // Проверяем, была ли нажата клавиша "Enter"
+  //   if (e.key === 'Enter') {
+  //     const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+  //     if (isModifiedData) {
+  //       dispatch(carsSettingsActions.setChooseInputName(null))
+  //       startUpdate()
+  //     } else {
+  //       dispatch(carsSettingsActions.setChooseInputName(null))
+  //     }
+  //   }
+  // };
 
   function startUpdate() {
     console.log("▶ ⇛ IN startUpdate:");
@@ -217,7 +218,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
+              // onKeyDown={handleKeyDown} // Enter
               // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -271,7 +272,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={(evt) => handleNumberValidate(evt)}
+              // onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -295,7 +296,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={(evt) => handleNumberValidate(evt)}
+              // onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
