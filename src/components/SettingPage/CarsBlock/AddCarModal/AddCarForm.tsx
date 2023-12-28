@@ -97,6 +97,15 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
       && evt.preventDefault()
   }
 
+  const handleNumberValidate2 = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    const target = evt.target as HTMLInputElement;
+    const value = target.value;
+    const newValue = value.replace(/[^0-9]/g, ''); // Удаляет все, кроме цифр
+    if (value !== newValue) {
+      target.value = newValue;
+    }
+  };
+
   useEffect(() => {
     if (nameCar.length > 2 && iconCar && imeiCar.length === 15) {
       if (alterImeiCar.length === 0 || alterImeiCar.length === 15) {
@@ -171,6 +180,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
+                onInput={handleNumberValidate2}
                 // onInput={(e) => handleImeiChange(e)}
                 // onKeyDown={(e) => handleImeiChange(e)}
                 onChange={(e) => handleImeiChange(e)}
