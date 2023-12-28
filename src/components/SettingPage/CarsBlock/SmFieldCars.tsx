@@ -63,6 +63,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
     if (touchNumber === 1) {
       const targ = event.currentTarget
+      console.log("▶ ⇛ targ:", targ);
+      targ.removeAttribute('readonly');
       const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
 
