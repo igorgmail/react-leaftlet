@@ -74,12 +74,12 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       const inputType = event.currentTarget.type
 
       if (dataValue === chooseInputFromStore) return
-      targ.blur()
       targ.removeAttribute('readonly');
-      setTimeout(() => targ.focus())
+      targ.blur()
+      // setTimeout(() => targ.focus())
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-
+      targ.focus()
       // Установка курсора в конец текста
       if (inputType === 'number') {
         targ.type = 'text'
@@ -147,6 +147,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
   const handleFieldChange = (event: React.SyntheticEvent) => {
+    event.preventDefault()
     if (event.target instanceof HTMLInputElement) {
 
       const itemName = (event.target as HTMLInputElement).getAttribute('name')
@@ -155,14 +156,15 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'car_imei') {
-        if (!/^\d+$/.test(event.target.value)) return
+        console.log("▶ ⇛ event.target.value:", event.target.value);
+        if (!/^\d*$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
         }
       }
       if (itemName === 'car_alterimei') {
-        if (!/^\d+$/.test(event.target.value)) return
+        if (!/^\d*$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarAlterImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
@@ -171,21 +173,21 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    const key = e.key || e.keyCode || e.which;
-    setTest(key)
-    e.preventDefault()
-    if (e.key === 'Enter') {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-    }
-  };
+  // const handleKeyDown = (e: KeyboardEvent) => {
+  //   // Проверяем, была ли нажата клавиша "Enter"
+  //   const key = e.key || e.keyCode || e.which;
+  //   setTest(key)
+  //   e.preventDefault()
+  //   if (e.key === 'Enter') {
+  //     const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+  //     if (isModifiedData) {
+  //       dispatch(carsSettingsActions.setChooseInputName(null))
+  //       startUpdate()
+  //     } else {
+  //       dispatch(carsSettingsActions.setChooseInputName(null))
+  //     }
+  //   }
+  // };
 
   function startUpdate() {
     // startBackDrop()
@@ -208,14 +210,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   }, [car])
 
-  const detectKey = (e: KeyboardEvent) => {
-    // const key = e.key || e.keyCode || e.which;
-    const key = e.keyCode || e.which;
-    setTest(key)
-  }
-  useEffect(() => {
-    document.addEventListener('keydown', detectKey, true)
-  }, [])
+  // const detectKey = (e: KeyboardEvent) => {
+  //   // const key = e.key || e.keyCode || e.which;
+  //   const key = e.keyCode || e.which;
+  //   setTest(key)
+  // }
+  // useEffect(() => {
+  //   document.addEventListener('keydown', detectKey, true)
+  // }, [])
 
   return (
     <>
@@ -256,8 +258,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
           <RemoveDialog callback={handleDialog}
             eventData={makeEventData(car)} />
 
-          <input
-              autoFocus 
+            <input
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
@@ -270,10 +271,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               type="text"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.name}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
+              autoComplete="off"
           />
         </Stack>
           {/*  TEST*/}
@@ -326,8 +328,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}
           sx={{ padding: '8px' }}
         >
-          <input
-              autoFocus
+            <input
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
@@ -342,11 +343,12 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               }}
               // type="number"
               type="tel" inputMode="numeric" pattern="\d*"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.imei}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
               data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>
@@ -367,13 +369,13 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
                 // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
               }}
               // type="number"
-              autoComplete="off"
               type="tel" inputMode="numeric" pattern="\d*"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.altImei}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
               data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>
