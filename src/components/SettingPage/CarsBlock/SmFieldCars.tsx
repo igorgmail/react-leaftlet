@@ -260,6 +260,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
               // onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -269,7 +270,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               type="text"
-              readOnly={chooseInputFromStore !== CAR_KEY.name}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
           />
@@ -329,6 +331,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
               // onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter
               // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
@@ -356,6 +359,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
               // onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -367,7 +371,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // type="number"
               autoComplete="off"
               type="tel" inputMode="numeric" pattern="\d*"
-            readOnly={chooseInputFromStore !== CAR_KEY.altImei}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
               data-interactive
