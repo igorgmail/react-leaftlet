@@ -32,6 +32,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [test, setTest] = useState('test');
+
   const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -163,6 +165,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
     e.preventDefault()
+    setTest(e.key)
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
@@ -252,6 +255,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
             data-forstore={CAR_KEY.name}
           />
         </Stack>
+          {/*  TEST*/}
+          <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
+            <Typography align="center">{test}</Typography>
+          </Stack>
+          {/* TEST */}
       </Grid>
 
       {/* Icon */}
