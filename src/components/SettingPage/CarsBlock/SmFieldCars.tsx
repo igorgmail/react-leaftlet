@@ -61,7 +61,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     // event.preventDefault()
     const touchNumber = event.detail
 
-    if (touchNumber === 2) {
+    if (touchNumber === 1) {
       const targ = event.currentTarget
       const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
