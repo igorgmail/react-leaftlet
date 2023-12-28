@@ -166,7 +166,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     // Проверяем, была ли нажата клавиша "Enter"
     const key = e.key || e.keyCode || e.which;
     e.preventDefault()
-    setTest(key)
+    setTest(String(key))
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
