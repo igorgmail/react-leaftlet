@@ -251,6 +251,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
             eventData={makeEventData(car)} />
 
           <input
+              autoFocus 
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
@@ -319,6 +320,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
           sx={{ padding: '8px' }}
         >
           <input
+              autoFocus
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
@@ -345,6 +347,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       <Grid item xs={6}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
           <input
+              autoFocus
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
