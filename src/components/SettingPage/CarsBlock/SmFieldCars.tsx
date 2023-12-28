@@ -329,7 +329,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
                 // width: `calc(${car.imei.length}ch + 22px)` 
               }}
               // type="number"
-              type="text" inputMode="numeric" pattern="\d*"
+              type="tel" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
@@ -355,7 +355,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               }}
               // type="number"
               autoComplete="off"
-              type="text" inputMode="numeric" pattern="\d*"
+              type="tel" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
