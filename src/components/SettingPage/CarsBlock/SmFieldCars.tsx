@@ -32,7 +32,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [test, setTest] = useState<number>();
+  const [test, setTest] = useState<string | number>();
 
   const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
@@ -162,10 +162,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     // Проверяем, была ли нажата клавиша "Enter"
     const key = e.key || e.keyCode || e.which;
-    // setTest(String(key))
+    setTest(key)
     e.preventDefault()
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
@@ -319,8 +319,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
-              onKeyUp={handleKeyDown} // Enter
+              // onKeyDown={handleKeyDown} // Enter
+              // onKeyUp={handleKeyDown} // Enter
               // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -345,8 +345,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
-              onKeyUp={handleKeyDown} // Enter
+              // onKeyDown={handleKeyDown} // Enter
+              // onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
