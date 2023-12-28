@@ -32,7 +32,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [test, setTest] = useState('test');
+  const [test, setTest] = useState<number>();
 
   const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
@@ -165,7 +165,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
     const key = e.key || e.keyCode || e.which;
-    setTest(String(key))
+    // setTest(String(key))
     e.preventDefault()
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
@@ -200,11 +200,12 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   }, [car])
 
   const detectKey = (e: KeyboardEvent) => {
-    const key = e.key || e.keyCode || e.which;
-    setTest(String(key))
+    // const key = e.key || e.keyCode || e.which;
+    const key = e.keyCode || e.which;
+    setTest(key)
   }
   useEffect(() => {
-    document.addEventListener('keypress', detectKey, true)
+    document.addEventListener('keydown', detectKey, true)
   }, [])
 
   return (
