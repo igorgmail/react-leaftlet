@@ -162,6 +162,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
+    e.preventDefault()
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
@@ -238,6 +239,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               onKeyDown={handleKeyDown} // Enter
+              onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -300,6 +302,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               onKeyDown={handleKeyDown} // Enter
+              onKeyUp={handleKeyDown} // Enter
               // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -325,6 +328,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               onKeyDown={handleKeyDown} // Enter
+              onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
