@@ -130,6 +130,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
   const handleFieldChange = (event: React.SyntheticEvent) => {
+
     if (event.target instanceof HTMLInputElement) {
 
       const itemName = (event.target as HTMLInputElement).getAttribute('name')
@@ -138,19 +139,22 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'car_imei') {
+        if (!/^\d+$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
         }
       }
       if (itemName === 'car_alterimei') {
+        if (!/^\d+$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarAlterImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
         }
       }
-
     }
+
+
     if (event.currentTarget.hasAttribute('data-iconid')) {
       const target = event.currentTarget as HTMLElement;
       const chooseIconUrl = iconsCars.find((obj) => obj.icon_id === String(target.dataset.iconid))
@@ -161,18 +165,18 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   }
 
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   // Проверяем, была ли нажата клавиша "Enter"
-  //   if (e.key === 'Enter') {
-  //     const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-  //     if (isModifiedData) {
-  //       dispatch(carsSettingsActions.setChooseInputName(null))
-  //       startUpdate()
-  //     } else {
-  //       dispatch(carsSettingsActions.setChooseInputName(null))
-  //     }
-  //   }
-  // };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    if (e.key === 'Enter') {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+    }
+  };
 
   function startUpdate() {
     console.log("▶ ⇛ IN startUpdate:");
@@ -218,7 +222,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={handleKeyDown} // Enter
+              onKeyDown={handleKeyDown} // Enter
               // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -272,6 +276,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={handleKeyDown} // Enter
               // onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -280,7 +285,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.imei.length}ch + 22px)`, fontSize: '0.8rem'
             }}
               // type="number"
-              type="tel" inputMode="numeric" pattern="\d*"
+              type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
@@ -296,6 +301,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
+              onKeyDown={handleKeyDown} // Enter
               // onKeyDown={(evt) => handleNumberValidate(evt)}
               // onChange={(e) => setInputCarAlterImeiValue(e.target.value)}
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -303,7 +309,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               width: '100%',
               // width: `calc(${car.alter_imei?.length || 0}ch + 22px)`, fontSize: '0.8rem'
             }}
-              type="number"
+              // type="number"
+              type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}

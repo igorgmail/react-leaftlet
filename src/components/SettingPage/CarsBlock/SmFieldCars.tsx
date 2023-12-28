@@ -3,7 +3,7 @@ import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback, T
 import { FC, useEffect, useState } from "react";
 
 import RemoveDialog from "../components/RemoveDialog";
-import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
+import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
 // import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
@@ -82,19 +82,19 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
-  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    (evt.key === 'e'
-      || evt.key === '-'
-      || evt.key === '+')
-      && evt.preventDefault()
-  }
-  const handleNumberValidateTouch = (evt: React.TouchEvent<HTMLInputElement>) => {
-    console.log("▶ ⇛ evt:", evt);
-    // (evt.touches === 'e'
-    //   || evt.key === '-'
-    //   || evt.key === '+')
-    //   && evt.preventDefault()
-  }
+  // const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+  //   (evt.key === 'e'
+  //     || evt.key === '-'
+  //     || evt.key === '+')
+  //     && evt.preventDefault()
+  // }
+  // const handleNumberValidateTouch = (evt: React.TouchEvent<HTMLInputElement>) => {
+  //   console.log("▶ ⇛ evt:", evt);
+  //   // (evt.touches === 'e'
+  //   //   || evt.key === '-'
+  //   //   || evt.key === '+')
+  //   //   && evt.preventDefault()
+  // }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLImageElement;
@@ -144,12 +144,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'car_imei') {
+        if (!/^\d+$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, imei: event.target.value } }))
         }
       }
       if (itemName === 'car_alterimei') {
+        if (!/^\d+$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarAlterImeiValue(event.target.value)
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, alter_imei: event.target.value } }))
@@ -157,6 +159,19 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       }
     }
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    if (e.key === 'Enter') {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+    }
+  };
 
   function startUpdate() {
     // startBackDrop()
@@ -221,8 +236,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
           <input
               name={'car_name'}
               onClick={handleInputClick}
-              onChange={(e) => setInputCarNameValue(e.target.value)}
-              // onTouchStart={handleInputClick}
+              onChange={(e) => handleFieldChange(e)}
+              onKeyDown={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -284,7 +299,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_imei'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={(evt) => handleNumberValidate(evt)}
+              onKeyDown={handleKeyDown} // Enter
               // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -309,14 +324,15 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={(evt) => handleNumberValidate(evt)}
+              onKeyDown={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
                 width: `100%`,
                 // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
               }}
-              type="number"
+              // type="number"
+              type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
