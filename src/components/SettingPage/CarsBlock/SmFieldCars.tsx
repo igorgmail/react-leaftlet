@@ -1,6 +1,6 @@
 import { Grid, Stack, Typography } from "@mui/material"
 import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import RemoveDialog from "../components/RemoveDialog";
 import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
@@ -34,6 +34,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   const [test, setTest] = useState<string | number>();
 
+  const nameRef = useRef()
+  const imeyRef = useRef()
+
   const { updateDataRequest } = useUpdateData()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -64,7 +67,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     if (touchNumber === 1) {
       const targ = event.currentTarget
       console.log("▶ ⇛ targ:", targ);
+
       targ.removeAttribute('readonly');
+      targ.blur()
       const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
 
@@ -264,7 +269,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               type="text"
-              // readOnly={chooseInputFromStore !== CAR_KEY.name}
+              readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
           />
@@ -347,8 +352,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       {/* Imei-2 */}
       <Grid item xs={6}>
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
-          <input
-              autoFocus
+            <input
               name={'car_alterimei'}
             onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
