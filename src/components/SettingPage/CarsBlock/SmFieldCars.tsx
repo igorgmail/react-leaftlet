@@ -88,6 +88,13 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       || evt.key === '+')
       && evt.preventDefault()
   }
+  const handleNumberValidateTouch = (evt: React.TouchEvent<HTMLInputElement>) => {
+    console.log("▶ ⇛ evt:", evt);
+    // (evt.touches === 'e'
+    //   || evt.key === '-'
+    //   || evt.key === '+')
+    //   && evt.preventDefault()
+  }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLImageElement;
@@ -278,6 +285,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
               onKeyDown={(evt) => handleNumberValidate(evt)}
+              onTouchStart={(evt) => handleNumberValidateTouch(evt)}
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',

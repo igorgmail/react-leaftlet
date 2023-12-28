@@ -91,7 +91,9 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
   const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     (evt.key === 'e'
       || evt.key === '-'
-      || evt.key === '+')
+      || evt.key === '+'
+      || evt.key === '.'
+      || evt.key === ',')
       && evt.preventDefault()
   }
 

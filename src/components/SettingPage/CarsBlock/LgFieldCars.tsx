@@ -88,7 +88,10 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
   const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     (evt.key === 'e'
       || evt.key === '-'
-      || evt.key === '+')
+      || evt.key === '+'
+      || evt.key === '.'
+      || evt.key === ','
+      || evt.key === 'space')
       && evt.preventDefault()
   }
 
@@ -214,7 +217,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDown} // Enter
               // onTouchStart={handleTouchCarNameInput}
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
