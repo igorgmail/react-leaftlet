@@ -65,7 +65,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       const targ = event.currentTarget
       const dataValue = targ.dataset.forstore
       const inputType = event.currentTarget.type
-      targ.focus()
+      setTimeout(() => targ.focus())
+
 
       if (dataValue === chooseInputFromStore) return
 
