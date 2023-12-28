@@ -100,6 +100,11 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
   const handleNumberValidate2 = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     const target = evt.target as HTMLInputElement;
     const value = target.value;
+    if (value === '') {
+      evt.preventDefault()
+    }
+    if (!['e', '-', '+', '.', ',', 'space'].find((el) => el === value)) evt.preventDefault()
+    if (!/^\d+$/.test(value)) evt.preventDefault()
     const newValue = value.replace(/[^0-9]/g, ''); // Удаляет все, кроме цифр
     if (value !== newValue) {
       target.value = newValue;
