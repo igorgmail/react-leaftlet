@@ -165,8 +165,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
     const key = e.key || e.keyCode || e.which;
-    e.preventDefault()
     setTest(String(key))
+    e.preventDefault()
     if (e.key === 'Enter') {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
@@ -198,6 +198,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     setInputCarIconIdValue(car.pic)
 
   }, [car])
+
+  const detectKey = (e: KeyboardEvent) => {
+    const key = e.key || e.keyCode || e.which;
+    setTest(String(key))
+  }
+  useEffect(() => {
+    document.addEventListener('keydown', detectKey, true)
+  }, [])
 
   return (
     <>
@@ -242,7 +250,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
+              // onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
