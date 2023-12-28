@@ -63,7 +63,7 @@ const AddModalWithIcons: FC<TAddModalWithIconsProps> = ({ children, handleIconCa
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Grid container sx={style} className='cars-popup--wrap'>
+        <Grid container sx={{ ...style, width: { xs: '80%', md: '80%' } }} className='cars-popup--wrap'>
           {carsIconsArray && carsIconsArray.map((icon) => (
             <IconsCarsBlockNet
               iconObject={icon}
