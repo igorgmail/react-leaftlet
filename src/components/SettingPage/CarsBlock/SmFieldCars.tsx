@@ -354,6 +354,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
                 // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
               }}
               // type="number"
+              autoComplete="off"
               type="text" inputMode="numeric" pattern="\d*"
             readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
