@@ -53,11 +53,12 @@ function useHandleInput() {
       if (dataValue === chooseInputFromStore) return
       // targ.removeAttribute('readonly');
       targ.blur()
-      // setTimeout(() => targ.focus())
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-      targ.focus()
+      setTimeout(() => targ.focus())
+      // targ.focus()
       // Установка курсора в конец текста
+
       if (inputType === 'number') {
         targ.type = 'text'
         const textLength = targ.value.length;
@@ -67,6 +68,7 @@ function useHandleInput() {
         const textLength = targ.value.length;
         targ.setSelectionRange(textLength, textLength);
       }
+      targ.focus()
     }
   }
 
