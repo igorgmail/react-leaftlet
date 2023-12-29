@@ -31,7 +31,13 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
   const [lng, setLng] = useState<number | null>(null)
   const [radius, setRadius] = useState('');
 
-
+  const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!/^\d*$/.test(value)) return
+    if (value.length <= 4) {
+      setRadius(value)
+    }
+  };
   const handleSaveModal = (coord: LatLng, addressValue: string | undefined) => {
     const { lat, lng } = coord
     setLat(Number(lat.toFixed(7)))
@@ -88,6 +94,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
                 className="modal-input"
                 value={pointName}
                 required
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -122,6 +129,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
                 value={String(lat)}
                 required
                 disabled
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -142,6 +150,7 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
                 value={String(lng)}
                 required
                 disabled
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -155,15 +164,16 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
           <Grid item xs={9}>
             <Stack display={'flex'}>
               <input
-                onChange={(e) => setRadius(e.target.value)}
+                onChange={(e) => handleRadiusChange(e)}
                 id="pointRadiusInput"
                 placeholder="радиус"
                 className="modal-input"
                 value={radius}
                 required
-                type="number"
+                type="text" inputMode="numeric" pattern="\d*"
                 min='0'
                 max='1000'
+                autoComplete="off"
               />
             </Stack>
           </Grid>

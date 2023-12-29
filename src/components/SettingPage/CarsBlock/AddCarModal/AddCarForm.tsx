@@ -34,7 +34,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
   const handleImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (!/^\d+$/.test(value)) return
+    if (!/^\d*$/.test(value)) return
     if (value.length <= 15) {
       setImeiCar(value)
     }

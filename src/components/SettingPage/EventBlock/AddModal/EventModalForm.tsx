@@ -33,13 +33,13 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
 
   const handlerEventWait = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = e.target.value
+    if (!/^\d*$/.test(num)) return
     if (num.length <= 4 && num.length >= 0) {
       setEventWait(num)
     }
   }
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // ! Ложим все в store перед этим нужна тправка на сервер
-    // ! И проверить
+
     const objectIndex = e.target.value
     console.log("Индекс объекта", objectIndex);
 
@@ -173,7 +173,8 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
                 className="modal-input"
                 style={{ width: '100%' }}
                 value={eventWait || ''}
-                type="number"
+                type="text" inputMode="numeric" pattern="\d*"
+                autoComplete="off"
               />
             </Stack>
           </Grid>

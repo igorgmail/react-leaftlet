@@ -61,10 +61,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    // event.preventDefault()
+    event.preventDefault()
     const touchNumber = event.detail
 
-    if (touchNumber === 1) {
+    if (touchNumber === 2) {
       const targ = event.currentTarget
 
       // targ.setAttribute('readonly', 'false')
@@ -171,21 +171,37 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }
   }
 
-  // const handleKeyDown = (e: KeyboardEvent) => {
-  //   // Проверяем, была ли нажата клавиша "Enter"
-  //   const key = e.key || e.keyCode || e.which;
-  //   setTest(key)
-  //   e.preventDefault()
-  //   if (e.key === 'Enter') {
-  //     const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-  //     if (isModifiedData) {
-  //       dispatch(carsSettingsActions.setChooseInputName(null))
-  //       startUpdate()
-  //     } else {
-  //       dispatch(carsSettingsActions.setChooseInputName(null))
-  //     }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    // e.preventDefault()
+    const key = e.key || e.keyCode || e.which;
+    setTest(key)
+    if (e.key === 'Enter' || key === 13) {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+        const target = e.target as HTMLInputElement
+        target.blur()
+
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+    }
+
+    console.log("▶ ⇛ key:", key);
+
+  // if (e.key === 'Enter') {
+  //   const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+  //   if (isModifiedData) {
+  //     dispatch(carsSettingsActions.setChooseInputName(null))
+  //     startUpdate()
+  //   } else {
+  //     dispatch(carsSettingsActions.setChooseInputName(null))
   //   }
-  // };
+    // }
+
+  };
 
   function startUpdate() {
     // startBackDrop()
@@ -260,7 +276,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={handleKeyDown} // Enter
+              onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
