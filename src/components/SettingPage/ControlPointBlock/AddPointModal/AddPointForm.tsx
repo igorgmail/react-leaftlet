@@ -34,10 +34,11 @@ const AddPointForm: FC<TAddPointForm> = ({ handleClose, handleFormSubmit }) => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!/^\d*$/.test(value)) return
-    if (value.length <= 4) {
+    if (Number(e.target.value) >= 0 && Number(e.target.value) <= 1000) {
       setRadius(value)
     }
   };
+
   const handleSaveModal = (coord: LatLng, addressValue: string | undefined) => {
     const { lat, lng } = coord
     setLat(Number(lat.toFixed(7)))
