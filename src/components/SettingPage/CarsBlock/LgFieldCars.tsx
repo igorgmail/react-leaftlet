@@ -13,6 +13,7 @@ import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
 import useUpdateData from "../hooks/useUpdateData";
+import useStartUpdate from "../hooks/useStartUpdate";
 
 interface ILgFieldCarsProps {
   car: ICarObject,
@@ -34,6 +35,8 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { updateDataRequest } = useUpdateData()
+  const { startUpdate } = useStartUpdate()
+
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
@@ -84,17 +87,6 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
       }
     }
   }
-
-  // const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-  //   console.log("▶ ⇛ evt.key:", evt.key);
-  //   (evt.key === 'e'
-  //     || evt.key === '-'
-  //     || evt.key === '+'
-  //     || evt.key === '.'
-  //     || evt.key === ','
-  //     || evt.key === 'space')
-  //     && evt.preventDefault()
-  // }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     handleFieldChange(e)
@@ -167,7 +159,9 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
-    if (e.key === 'Enter') {
+    const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
+    if (key === 'Enter' || key === 13) {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
         dispatch(carsSettingsActions.setChooseInputName(null))
@@ -175,23 +169,9 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
       } else {
         dispatch(carsSettingsActions.setChooseInputName(null))
       }
+      target.blur()
     }
   };
-
-  function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
-
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
-
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
-
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
-  }
 
   useEffect(() => {
     setInputCarNameValue(car.name)
@@ -235,7 +215,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
             data-interactive
-
+              autoComplete="off"
           />
         </Stack>
       </Grid>
@@ -290,6 +270,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
             data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>
@@ -315,6 +296,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car, setUpdateForm }) => {
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
             data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>

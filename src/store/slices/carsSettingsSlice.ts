@@ -12,7 +12,10 @@ interface IInitSettingStore extends ISettingsData {
     chooseInputName: string | null,
     currentSelectBlock: TSelectedFieldChanged | null,
     mapMove: boolean | undefined,
-    mapCenter: LatLng | null
+    mapCenter: LatLng | null,
+    alertShow: boolean,
+    backDropShow: boolean,
+    forcedUpdateToogle: boolean,
   }
 }
 
@@ -30,7 +33,10 @@ const initialState: IInitSettingStore = {
     chooseInputName: null,
     currentSelectBlock: null,
     mapMove: undefined,
-    mapCenter: null
+    mapCenter: null,
+    alertShow: false,
+    backDropShow: false,
+    forcedUpdateToogle: false,
   }
 }
 
@@ -108,6 +114,18 @@ export const carsSettingsSlice = createSlice({
     setCurrentSelectBlock: (state, action: PayloadAction<TSelectedFieldChanged | null>) => {
       state.config.currentSelectBlock = action.payload
     },
+    // Показать Alert
+    setAlertShow: (state) => {
+      state.config.alertShow = true
+    },
+    // Скрыть Alert
+    setAlertHide: (state) => {
+      state.config.alertShow = false
+    },
+    setForcedUpdateToogle: (state) => {
+      state.config.forcedUpdateToogle = !state.config.forcedUpdateToogle
+    },
+
     // ? CARS BLOCK --------------------------
     // Удалить Авто
     setRemoveCar: (state, action: PayloadAction<string>) => {

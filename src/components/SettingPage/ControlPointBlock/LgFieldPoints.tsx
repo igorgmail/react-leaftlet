@@ -8,12 +8,13 @@ import useRemoveDialog from "../hooks/useRemoveDialog";
 
 
 import { TPointsData, TSelectedFieldChanged } from "../types/carsSettingsTypes";
-import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
+import { useAppSelector, useAppDispatch, carsSettingsActions, store } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useGetAddressService from "./hooks/useGetAddressService";
 import { LatLng } from "leaflet";
 import useAlert from "../hooks/useAlert";
+import useStartUpdate from "../hooks/useStartUpdate";
 import configAdminPage from "../config";
 
 
@@ -44,6 +45,8 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
   const { getAddress } = useGetAddressService()
+
+  const { startUpdate } = useStartUpdate()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -138,14 +141,46 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
           dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, address: event.target.value } }))
       }
       if (itemName === 'point_radius') {
+        if (!/^\d*$/.test(event.target.value)) return
+        if (Number(event.target.value) >= 0 && Number(event.target.value) <= 1000) {
           setPointRadius(event.target.value)
-        dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
+          dispatch(carsSettingsActions.setCurrentSelectBlock({ ...pointObject, selectBlockObject: { ...pointObject.selectBlockObject, radius: event.target.value } }))
+        }
       }
 
     }
-
-
   }
+
+  // function startUpdate() {
+  //   console.log("▶ ⇛ IN startUpdate:");
+
+  //   // startBackDrop()
+  //   updateDataRequest().then((data) => {
+  //     console.log("▶ ⇛ updateDataRequestdata:", data);
+
+  //   }).catch((err) => {
+  //     console.warn("При обновлении произошла ошибка ", err);
+
+  //     showAlert('Ошибка при обновлении', 'error')
+  //     setUpdateForm((cur) => !cur)
+  //   })
+  // }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
+    if (key === 'Enter' || key === 13) {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+      target.blur()
+    }
+  };
 
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
@@ -194,6 +229,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
               name={'point_name'}
             onClick={handleInputClick}
               onChange={handleFieldChange}
+              onKeyDown={handleKeyDown}
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
@@ -216,6 +252,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
               name={'point_address'}
               onClick={handleInputClick}
               onChange={handleFieldChange}
+              onKeyDown={handleKeyDown}
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
@@ -223,6 +260,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
               value={pointAddress}
             data-forstore={POINT_KEY.address}
               data-interactive
+              autoComplete="off"
             />
           }
 
@@ -236,6 +274,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
             name={'point_radius'}
           onClick={handleInputClick}
             onChange={handleFieldChange}
+            onKeyDown={handleKeyDown}
           className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `100%`,
@@ -243,11 +282,12 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
               // width: `calc(${onePoint.radius.length}ch + 22px)`, 
               fontSize: '0.8rem'
             }}
-          type="number"
+            type="text" inputMode="numeric" pattern="\d*" 
           readOnly={chooseInputFromStore !== POINT_KEY.radius}
           value={pointRadius}
           data-forstore={POINT_KEY.radius}
           data-interactive
+            autoComplete="off"
         />
         {/* </Stack> */}
       </Grid>

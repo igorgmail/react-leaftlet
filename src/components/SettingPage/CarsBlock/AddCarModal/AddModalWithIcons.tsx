@@ -11,7 +11,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 'auto',
+  // width: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -63,7 +63,7 @@ const AddModalWithIcons: FC<TAddModalWithIconsProps> = ({ children, handleIconCa
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Grid container sx={{ ...style, width: { xs: '80%', md: '80%' } }} className='cars-popup--wrap'>
+        <Grid container sx={{ ...style, width: { xs: '80%', sm: '40%', md: '30%' } }} className='cars-popup--wrap'>
           {carsIconsArray && carsIconsArray.map((icon) => (
             <IconsCarsBlockNet
               iconObject={icon}

@@ -5,12 +5,13 @@ import { Stack, Grid, Divider } from "@mui/material";
 import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 
 import SelectBlock from "../components/SelectBlock";
-import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
+import { useAppSelector, useAppDispatch, carsSettingsActions, store } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useUpdateData from "../hooks/useUpdateData";
 import useAlert from "../hooks/useAlert";
+import useStartUpdate from "../hooks/useStartUpdate";
 
 
 interface IEventBlockProps {
@@ -34,6 +35,8 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
 
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
+
+  const { startUpdate } = useStartUpdate()
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -140,25 +143,30 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
   }
 
   const handleTimeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!/^\d*$/.test(e.target.value)) return
     const time = e.target.value
-    setEventTimeSec(time)
-    dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
+    if (time.length < 6) {
+      setEventTimeSec(time)
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
+    }
   }
 
-  function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
+    if (key === 'Enter' || key === 13) {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+      target.blur()
+    }
+  };
 
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
-
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
-
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
-  }
 
   useEffect(() => {
     setEventId(oneEvent.event_id)
@@ -211,17 +219,18 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
               data-option-name={'event-time'}
               onClick={handleInputClick}
               onChange={handleTimeInputChange}
+              onKeyDown={handleKeyDown}
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 width: '100%',
                 textAlign: 'right',
               }}
-              type="text"
+              type="text" inputMode="numeric" pattern="\d*"
               readOnly={chooseInputFromStore !== `id${oneEvent.event_id}-event`}
               value={`${eventTimeSec}`}
               data-forstore={`id${oneEvent.event_id}-event`}
               data-interactive
-
+              autoComplete="off"
             />
           </Stack>
         </Grid>

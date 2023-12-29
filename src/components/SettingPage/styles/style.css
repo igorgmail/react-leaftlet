@@ -72,13 +72,6 @@
   text-align: center;
 }
 
-/* Модалка с иконками авто */
-.cars-popup--wrap {
-  border: 2px solid #078c75;
-  border-radius: 8px;
-  background-color: #e7e7e7;
-  max-width: 100%;
-}
 
 .cars-start-icon--block {
   display: flex;
@@ -86,6 +79,13 @@
     justify-content: center;
 }
 
+/* Модалка с иконками авто */
+.cars-popup--wrap {
+  border: 2px solid #078c75;
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  max-width: 90%;
+}
 
 .cars-popup--item {
   display: flex;
@@ -94,6 +94,8 @@
   cursor: pointer;
   border: 2px solid #e7e7e7;
   border-radius: 4px;
+  background-color: #ffffff;
+    height: 100%;
 }
 
 .cars-popup--item:hover {

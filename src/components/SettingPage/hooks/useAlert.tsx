@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import CustomAlert from '../components/CustomAlert';
 
+import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../../store';
+
 type AlertProps = {
   message?: string;
   severity: 'error' | 'warning' | 'info' | 'success';
@@ -11,6 +13,9 @@ const useAlert = () => {
   const [alertProps, setAlertProps] = useState<AlertProps | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
+  const dispatch = useAppDispatch()
+  const alertShowState = useAppSelector((store) => store.carsSettings.config.alertShow)
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -18,7 +23,10 @@ const useAlert = () => {
   const showAlert = useCallback((message: string, severity: 'error' | 'warning' | 'info' | 'success' = 'info') => {
     if (isMounted) {
       setAlertProps({ message, severity });
-      setTimeout(() => setAlertProps(null), 1500);
+      setTimeout(() => {
+        setAlertProps(null)
+        dispatch(carsSettingsActions.setAlertHide())
+      }, 1500);
     }
   }, [isMounted]);
 

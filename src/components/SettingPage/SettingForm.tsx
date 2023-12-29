@@ -21,6 +21,7 @@ import useUpdateData from "./hooks/useUpdateData"
 
 import OutsideClickListener from "./OutsideClickListener "
 import DataExtractor from "./utils/dataExtractor"
+import ForcedUpdate from "./components/ForcedUpdate"
 
 const SettingForm = () => {
   console.log("--Render Setting Form");
@@ -69,6 +70,7 @@ const SettingForm = () => {
         <EventBlock key={'events'} setUpdateForm={setUpdateForm}></EventBlock>
         <UserBlock key={'users'} setUpdateForm={setUpdateForm}></UserBlock>
         <PreloadImages iconsUrls={settingsData.icons} />
+        <ForcedUpdate setUpdateForm={setUpdateForm} />
 
       {alertComponent}
     </Stack>

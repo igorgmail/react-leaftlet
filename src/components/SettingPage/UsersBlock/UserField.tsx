@@ -5,10 +5,11 @@ import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, 
 
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
-import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
+import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
 import SelectBlock from "../components/SelectBlock";
 import useUpdateData from "../hooks/useUpdateData";
 import useAlert from "../hooks/useAlert";
+import useStartUpdate from "../hooks/useStartUpdate";
 
 interface IUserFieldProps {
   oneUser: TUsers,
@@ -30,6 +31,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
   const { updateDataRequest } = useUpdateData()
+  const { startUpdate } = useStartUpdate()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -78,20 +80,38 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
       user_role: userRole,
     }
   }
-  function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
 
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
+    if (key === 'Enter' || key === 13) {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+      }
+      target.blur()
+    }
+  };
 
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
 
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
-  }
+  // function startUpdate() {
+  //   console.log("▶ ⇛ IN startUpdate:");
+
+  //   // startBackDrop()
+  //   updateDataRequest().then((data) => {
+  //     console.log("▶ ⇛ updateDataRequestdata:", data);
+
+  //   }).catch((err) => {
+  //     console.warn("При обновлении произошла ошибка ", err);
+
+  //     showAlert('Ошибка при обновлении', 'error')
+  //     setUpdateForm((cur) => !cur)
+  //   })
+  // }
 
   const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -163,6 +183,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
             <input
               onClick={handleInputClick}
               onChange={handleEmailInputChange}
+              onKeyDown={handleKeyDown}
               // className="all-white-input-style"
               readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
               className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}

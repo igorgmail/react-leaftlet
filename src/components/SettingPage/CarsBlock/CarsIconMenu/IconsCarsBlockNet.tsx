@@ -1,10 +1,6 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
-import { Grid, Stack, Box, Paper } from '@mui/material';
-import { useAppSelector } from '../../../../store';
-
+import { Grid, Stack } from '@mui/material';
 
 type TIconsNetProps = {
   iconObject: {
@@ -18,16 +14,14 @@ const IconsCarsBlockNet: React.FC<TIconsNetProps> = ({ iconObject, handleIconCar
   return (
 
     <Grid item xs={4}>
-      <Paper>
 
       <Stack
-
         className='cars-popup--item'
         data-iconid={iconObject.icon_id}
           onClick={(e) => handleIconCarInNetClick(e)}>
         <img src={iconObject.url} className='cars-popup--image'></img>
       </Stack>
-      </Paper>
+
     </Grid>
   )
 }

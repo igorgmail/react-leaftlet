@@ -12,6 +12,7 @@ import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
 import useUpdateData from "../hooks/useUpdateData";
+import useStartUpdate from "../hooks/useStartUpdate";
 
 interface ISmFieldCarsProps {
   car: ICarObject,
@@ -34,10 +35,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
   const [test, setTest] = useState<string | number>();
 
-  const nameRef = useRef()
-  const imeyRef = useRef()
-
   const { updateDataRequest } = useUpdateData()
+  const { startUpdate } = useStartUpdate()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
@@ -90,20 +89,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       }
     }
   }
-
-  // const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-  //   (evt.key === 'e'
-  //     || evt.key === '-'
-  //     || evt.key === '+')
-  //     && evt.preventDefault()
-  // }
-  // const handleNumberValidateTouch = (evt: React.TouchEvent<HTMLInputElement>) => {
-  //   console.log("▶ ⇛ evt:", evt);
-  //   // (evt.touches === 'e'
-  //   //   || evt.key === '-'
-  //   //   || evt.key === '+')
-  //   //   && evt.preventDefault()
-  // }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
     const target = e.currentTarget as HTMLImageElement;
@@ -188,33 +173,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         dispatch(carsSettingsActions.setChooseInputName(null))
       }
     }
-
-    console.log("▶ ⇛ key:", key);
-
-  // if (e.key === 'Enter') {
-  //   const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-  //   if (isModifiedData) {
-  //     dispatch(carsSettingsActions.setChooseInputName(null))
-  //     startUpdate()
-  //   } else {
-  //     dispatch(carsSettingsActions.setChooseInputName(null))
-  //   }
-    // }
-
   };
 
-  function startUpdate() {
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
 
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
-
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
-  }
 
   useEffect(() => {
     setInputCarNameValue(car.name)
@@ -223,15 +184,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     setInputCarIconIdValue(car.pic)
 
   }, [car])
-
-  // const detectKey = (e: KeyboardEvent) => {
-  //   // const key = e.key || e.keyCode || e.which;
-  //   const key = e.keyCode || e.which;
-  //   setTest(key)
-  // }
-  // useEffect(() => {
-  //   document.addEventListener('keydown', detectKey, true)
-  // }, [])
 
   return (
     <>
