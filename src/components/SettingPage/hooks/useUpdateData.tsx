@@ -46,6 +46,7 @@ function useUpdateData() {
         return carData
       } else {
         console.warn("Error in update new car", response.data.message);
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         throw new Error(response.data.message);
       }
     };
@@ -68,6 +69,7 @@ function useUpdateData() {
         return pointData
       } else {
         console.warn("Error in update new car", response.data.message);
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         throw new Error(response.data.message);
       }
     };
@@ -91,6 +93,7 @@ function useUpdateData() {
         return eventData
       } else {
         console.warn("Error in update new car", response.data.message);
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         throw new Error(response.data.message);
       }
     };
@@ -114,6 +117,7 @@ function useUpdateData() {
         return userData
       } else {
         console.warn("Error in update new car", response.data.message);
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         throw new Error(response.data.message);
       }
     };

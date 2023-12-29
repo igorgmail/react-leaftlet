@@ -4,6 +4,7 @@ import useStartUpdate from './hooks/useStartUpdate';
 
 
 const OutsideClickListener = () => {
+  console.log("--Render OutsideClickListener:");
 
   const dispatch = useAppDispatch()
   const chooseInput = useAppSelector((store) => store.carsSettings.config.chooseInputName)
