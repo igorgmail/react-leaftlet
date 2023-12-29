@@ -175,7 +175,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
-              onBlur={(e) => setTest(e.target.value)}
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
 
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -184,8 +184,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               type="text"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.name}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
               autoComplete="off"
@@ -244,6 +244,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
 
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -253,8 +254,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               }}
 
               type="tel" inputMode="numeric" pattern="\d*"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.imei}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
               data-interactive
@@ -272,6 +273,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
+              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
 
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -281,8 +283,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               }}
               // type="number"
               type="tel" inputMode="numeric" pattern="\d*"
-              // readOnly
-              readOnly={chooseInputFromStore !== CAR_KEY.altImei}
+              readOnly
+              // readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
               data-interactive
