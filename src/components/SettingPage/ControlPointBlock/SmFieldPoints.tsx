@@ -272,5 +272,4 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     </>
   )
 }
-
 export default SmFieldPoints

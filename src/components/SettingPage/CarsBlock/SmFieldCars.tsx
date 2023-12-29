@@ -30,6 +30,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [test, setTest] = useState('test')
 
   const { startUpdate } = useStartUpdate()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
@@ -121,27 +122,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    // e.preventDefault()
-    const key = e.key || e.keyCode || e.which;
-
-    if (e.key === 'Enter' || key === 13) {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-        const target = e.target as HTMLInputElement
-        target.blur()
-
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-    }
-  };
-
-
-
   useEffect(() => {
     setInputCarNameValue(car.name)
     setInputCarImeiValue(car.imei)
@@ -195,6 +175,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
+              onBlur={(e) => setTest(e.target.value)}
 
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -210,6 +191,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               autoComplete="off"
           />
         </Stack>
+          <Stack>{test}</Stack>
 
       </Grid>
 
