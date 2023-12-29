@@ -72,7 +72,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
       const inputType = event.currentTarget.type
 
       if (dataValue === chooseInputFromStore) return
-      targ.removeAttribute('readonly');
+      // targ.removeAttribute('readonly');
       targ.blur()
       // setTimeout(() => targ.focus())
 
@@ -285,8 +285,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               // width: `calc(${car.name.length}ch + 22px)`,
             }}
               type="text"
-              readOnly
-              // readOnly={chooseInputFromStore !== CAR_KEY.name}
+              // readOnly
+              readOnly={chooseInputFromStore !== CAR_KEY.name}
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
               autoComplete="off"
@@ -357,8 +357,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               }}
               // type="number"
               type="tel" inputMode="numeric" pattern="\d*"
-              readOnly
-              // readOnly={chooseInputFromStore !== CAR_KEY.imei}
+              // readOnly
+              readOnly={chooseInputFromStore !== CAR_KEY.imei}
             value={inputCarImeiValue}
             data-forstore={CAR_KEY.imei}
               data-interactive
@@ -384,8 +384,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               }}
               // type="number"
               type="tel" inputMode="numeric" pattern="\d*"
-              readOnly
-              // readOnly={chooseInputFromStore !== CAR_KEY.altImei}
+              // readOnly
+              readOnly={chooseInputFromStore !== CAR_KEY.altImei}
             value={inputCarAlterImeiValue || ''}
             data-forstore={CAR_KEY.altImei}
               data-interactive
