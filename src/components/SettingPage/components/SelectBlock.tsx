@@ -76,6 +76,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
         // selected
           data-option-name={'option-min'}
         >сек</option>
+
         <option key={1}
           value={`мин`}
           data-option-name={'option-min'}

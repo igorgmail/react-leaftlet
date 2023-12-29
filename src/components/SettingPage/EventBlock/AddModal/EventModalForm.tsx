@@ -1,24 +1,17 @@
-import React, { useState, useEffect, FC } from "react"
+import React, { useState, FC } from "react"
 
-import { Fab, Box, Typography, Modal, Fade, Stack, Grid, Button, TextField, IconButton, Divider } from "@mui/material"
-
-// Icons
-import AddIcon from '@mui/icons-material/Add';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-
-import Backdrop from '@mui/material/Backdrop';
-
-import { useAppSelector } from "../../../../store";
-import { TEventsData } from "../../types/carsSettingsTypes";
+import { Stack, Grid, Button } from "@mui/material"
 import SelectBlock from "../../components/SelectBlock";
 
+import { useAppSelector } from "../../../../store";
+
+import { TEventsData } from "../../types/carsSettingsTypes";
 
 
 type TAddEventForm = {
   handleClose: () => void,
   handleFormSubmit: (eventData: Omit<TEventsData, 'event_id'>) => void
 }
-
 
 const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) => {
 
@@ -28,7 +21,6 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
   const [eventWait, setEventWait] = useState('')
   const [eventWaitType, setEventWaitType] = useState<'сек' | 'мин'>('сек');
 
-  const allTypeEvents = useAppSelector((store) => store.carsSettings.type_of_events)
   const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
 
   const handlerEventWait = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,21 +30,17 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
       setEventWait(num)
     }
   }
+
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     const objectIndex = e.target.value
-    console.log("Индекс объекта", objectIndex);
-
+    // console.log("Индекс объекта", objectIndex);
     const selectedIndex = e.target.options.selectedIndex;
-    console.log("Порядковый номер", selectedIndex);
-
+    // console.log("Порядковый номер", selectedIndex);
     const selectedText = e.target.options[selectedIndex].text;
-    console.log("Техт объекта:", selectedText);
-
+    // console.log("Техт объекта:", selectedText);
     const selectedOption = e.target.options[selectedIndex];
     const selectedData = selectedOption.dataset.optionName;
-
-    console.log("DataAttr объекта: ", selectedData);
 
     if (selectedData === 'event-car') {
       setEventCarId(String(objectIndex))
@@ -61,17 +49,14 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
       setEventPointId(objectIndex)
     }
     if (selectedData === 'event-type') {
-      console.log("▶ ⇛ allTypeEvents:", allTypeEvents);
-      console.log("▶ ⇛ allTypeEvents[Number(selectedText):", allTypeEvents[Number(objectIndex)]);
       setEventType(selectedText)
     }
     if (selectedData === 'option-min') {
-      if (selectedText === 'сек' || selectedText === 'мин') {
-        setEventWaitType(selectedText)
+      if (objectIndex === 'сек' || objectIndex === 'мин') {
+        setEventWaitType(objectIndex)
       }
     }
   }
-
 
   const clearState = () => {
     // Очистка формы
@@ -91,11 +76,6 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
       }
       return time
     }
-    console.log("▶ ⇛ eventCarId:", eventCarId);
-    console.log("▶ ⇛ eventPointId:", eventPointId);
-    console.log("▶ ⇛ eventType:", eventType);
-    console.log("▶ ⇛ eventWait:", eventWait);
-    console.log("▶ ⇛ eventWaitType:", eventWaitType);
 
     const eventData = {
       company_id: companyId,
@@ -104,9 +84,11 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
       event: eventType,
       time_response_sec: countTimeWait(eventWait)
     }
+
     handleFormSubmit(eventData)
     clearState()
   }
+
   const handleCancelButton = () => {
     clearState()
     handleClose()
@@ -186,7 +168,7 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
           {/* MIN SEC */}
           <Grid item xs={4}>
             <Stack display={'flex'} sx={{ pl: '8px' }}>
-              <SelectBlock modifier={'MIN'} selectChange={selectChange} />
+              <SelectBlock modifier={'MIN'} selectedItem={eventWaitType} selectChange={selectChange} />
             </Stack>
           </Grid>
         </Grid>
@@ -201,4 +183,5 @@ const EventModalForm: FC<TAddEventForm> = ({ handleClose, handleFormSubmit }) =>
     </Stack>
   )
 }
+
 export default EventModalForm
