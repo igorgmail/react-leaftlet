@@ -6,12 +6,14 @@
   border: 2px solid #ffffff;
   padding: 8px;
   cursor: pointer;
+  user-select: none;
 }
 
 .all-white-input-style:focus {
   outline: none;
   border: 2px solid #1976D2;
   border-radius: 4px;
+  user-select: none;
 }
 
 .all-white-input--choose-style {
@@ -22,6 +24,7 @@
   border: 2px solid #fd3232;
   border-radius: 4px;
   box-shadow: 0 0 8px 0 rgba(243, 74, 74, 0.6);
+  user-select: none;
 }
 .carblock-icon-cars {
   background-color: none;
