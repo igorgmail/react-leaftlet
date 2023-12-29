@@ -3,11 +3,10 @@ import { FC, useEffect, useState } from "react"
 import { Divider, Grid, Stack } from "@mui/material"
 
 import { TEventForDialog, TEventFromDialog, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes"
-import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
+import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
-import useUpdateData from "../hooks/useUpdateData";
 import useAlert from "../hooks/useAlert";
 import useStartUpdate from "../hooks/useStartUpdate";
 
@@ -30,7 +29,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
   const dispatch = useAppDispatch()
 
   const { startUpdate } = useStartUpdate()
-  const { handleInputClickLG, handleKeyDown } = useHandleInput()
+  const { handleInputClickLG, handleKeyDownLG } = useHandleInput()
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -125,7 +124,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
               onClick={handleInputClickLG}
               onChange={handleEmailInputChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDownLG}
 
               // className="all-white-input-style"
               readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}

@@ -70,25 +70,47 @@ function useHandleInput() {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownLG = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Проверяем, была ли нажата клавиша "Enter"
     // e.preventDefault()
     const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
 
     if (e.key === 'Enter' || key === 13) {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
         dispatch(carsSettingsActions.setChooseInputName(null))
         startUpdate()
-        const target = e.target as HTMLInputElement
         target.blur()
 
       } else {
         dispatch(carsSettingsActions.setChooseInputName(null))
+        target.blur()
       }
     }
   };
-  return { handleInputClickLG, handleInputClickSM, handleKeyDown }
+
+  const handleKeyUpSM = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Проверяем, была ли нажата клавиша "Enter"
+    // e.preventDefault()
+    const key = e.key || e.keyCode || e.which;
+    const target = e.target as HTMLInputElement
+
+    if (e.key === 'Enter' || key === 13) {
+      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
+      if (isModifiedData) {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        startUpdate()
+        target.blur()
+
+      } else {
+        dispatch(carsSettingsActions.setChooseInputName(null))
+        target.blur()
+      }
+    }
+  };
+
+  return { handleInputClickLG, handleInputClickSM, handleKeyDownLG, handleKeyUpSM }
 }
 
 export default useHandleInput

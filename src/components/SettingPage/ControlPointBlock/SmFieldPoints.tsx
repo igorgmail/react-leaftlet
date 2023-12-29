@@ -15,11 +15,9 @@ import useAlert from "../hooks/useAlert";
 import RemoveDialog from "../components/RemoveDialog";
 import useHandleInput from "../hooks/useHandleInputEvents";
 
-
 interface ISmFieldPointsProps {
   onePoint: TPointsData
 }
-
 
 const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
@@ -39,7 +37,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
   const [pointLng, setPointLng] = useState(onePoint.lng)
 
   const dispatch = useAppDispatch()
-  const { handleInputClickSM } = useHandleInput()
+  const { handleInputClickSM, handleKeyUpSM } = useHandleInput()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -177,6 +175,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
               onClick={handleInputClickSM}
               onChange={handleFieldChange}
+              onKeyUp={handleKeyUpSM}
 
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
@@ -201,6 +200,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
               onClick={handleInputClickSM}
               onChange={handleFieldChange}
+              onKeyUp={handleKeyUpSM}
 
             className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -237,6 +237,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
               onClick={handleInputClickSM}
               onChange={handleFieldChange}
+              onKeyUp={handleKeyUpSM}
 
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
@@ -271,4 +272,5 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     </>
   )
 }
+
 export default SmFieldPoints

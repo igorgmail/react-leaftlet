@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../.
 import RemoveDialog from "../components/RemoveDialog";
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
-
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
@@ -17,7 +16,6 @@ import useHandleInput from "../hooks/useHandleInputEvents";
 interface ISmFieldCarsProps {
   car: ICarObject,
 }
-
 
 const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   console.log("--Render SmallField");
@@ -39,7 +37,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
-  const { handleInputClickSM } = useHandleInput()
+  const { handleInputClickSM, handleKeyUpSM } = useHandleInput()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -193,10 +191,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
             <input
               name={'car_name'}
+
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={handleKeyDown} // Enter
-              onKeyUp={handleKeyDown} // Enter
+              onKeyUp={handleKeyUpSM} // Enter
+
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -259,9 +258,10 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
         >
             <input
               name={'car_imei'}
+
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={handleKeyDown} // Enter
+              onKeyUp={handleKeyUpSM} // Enter
 
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -286,10 +286,11 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <input
               name={'car_alterimei'}
+
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
-              // onKeyDown={handleKeyDown} // Enter
-              // onKeyUp={handleKeyDown} // Enter
+              onKeyUp={handleKeyUpSM} // Enter
+
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',

@@ -28,7 +28,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
   const [timeVariant, setTimeVariant] = useState('сек')
 
   const { startUpdate } = useStartUpdate()
-  const { handleInputClickLG, handleKeyDown } = useHandleInput()
+  const { handleInputClickLG, handleKeyDownLG } = useHandleInput()
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -173,7 +173,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
               onClick={handleInputClickLG}
               onChange={handleTimeInputChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDownLG}
 
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{

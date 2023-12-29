@@ -16,7 +16,6 @@ function useStartUpdate() {
 
     updateDataRequest()
       .then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
       })
       .catch((err) => {
         console.warn("При обновлении произошла ошибка ", err);

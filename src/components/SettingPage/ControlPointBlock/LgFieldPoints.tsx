@@ -38,7 +38,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { sendRemove } = useRemoveDialog()
   const { getAddress } = useGetAddressService()
-  const { handleInputClickLG, handleKeyDown } = useHandleInput()
+  const { handleInputClickLG, handleKeyDownLG } = useHandleInput()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -161,7 +161,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
               onClick={handleInputClickLG}
               onChange={handleFieldChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDownLG}
 
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
@@ -187,7 +187,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
               onClick={handleInputClickLG}
               onChange={handleFieldChange}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDownLG}
 
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
@@ -211,7 +211,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
             onClick={handleInputClickLG}
             onChange={handleFieldChange}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDownLG}
 
           className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{

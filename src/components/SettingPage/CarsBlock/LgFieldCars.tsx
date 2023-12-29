@@ -31,7 +31,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { startUpdate } = useStartUpdate()
-  const { handleInputClickLG, handleKeyDown } = useHandleInput()
+  const { handleInputClickLG, handleKeyDownLG } = useHandleInput()
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -153,7 +153,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
               onClick={handleInputClickLG}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
+              onKeyDown={handleKeyDownLG} // Enter
 
             onMouseDown={() => { }}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -208,7 +208,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
               onClick={handleInputClickLG}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
+              onKeyDown={handleKeyDownLG} // Enter
 
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
@@ -234,7 +234,7 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
 
               onClick={handleInputClickLG}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
+              onKeyDown={handleKeyDownLG} // Enter
 
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{

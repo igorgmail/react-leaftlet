@@ -33,7 +33,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { startUpdate } = useStartUpdate()
-  const { handleInputClickSM, handleKeyDown } = useHandleInput()
+  const { handleInputClickSM, handleKeyUpSM } = useHandleInput()
   const { sendRemove } = useRemoveDialog()
 
   const dispatch = useAppDispatch()
@@ -226,6 +226,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
               onClick={handleInputClickSM}
               onChange={handleTimeInputChange}
+              onKeyUp={handleKeyUpSM}
 
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
