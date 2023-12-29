@@ -276,8 +276,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               name={'car_name'}
               onClick={handleInputClick}
               onChange={(e) => handleFieldChange(e)}
-              onKeyDown={handleKeyDown} // Enter
-              // onKeyUp={handleKeyDown} // Enter
+              // onKeyDown={handleKeyDown} // Enter
+              onKeyUp={handleKeyDown} // Enter
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
