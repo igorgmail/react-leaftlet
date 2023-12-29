@@ -4,6 +4,7 @@ interface ISpinnerProps {
   className?: string
   props?: any
 }
+
 export const Spinner = (props: ISpinnerProps) => {
 
   return (

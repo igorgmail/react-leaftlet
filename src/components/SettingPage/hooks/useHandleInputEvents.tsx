@@ -1,14 +1,12 @@
 import { carsSettingsActions, store, useAppDispatch, useAppSelector } from "../../../store"
 import useStartUpdate from "./useStartUpdate"
 
-
 function useHandleInput() {
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const dispatch = useAppDispatch()
   const { startUpdate } = useStartUpdate()
-
 
   const handleInputClickLG = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
     event.preventDefault()

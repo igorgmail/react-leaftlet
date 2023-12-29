@@ -2,19 +2,10 @@ import API_ENDPOINTS from "../utils/apiEndpoints";
 
 const apiEndpoint = process.env.REACT_APP_API_SETTINGS;
 
-type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
-
-
-interface IRequestOptions {
-  method: Tmethod;
-  body?: BodyInit | null;
-}
-
 type TEvent = {
   event: 'REMOVE_CAR' | 'REMOVE_POINT' | 'REMOVE_EVENT' | 'REMOVE_USER',
   subjectid: string,
 }
-
 
 function useRemoveDialog() {
 

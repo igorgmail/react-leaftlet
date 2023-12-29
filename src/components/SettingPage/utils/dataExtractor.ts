@@ -1,4 +1,4 @@
-import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData, TEventsData, TEventsDataForServer } from "../types/carsSettingsTypes"
+import { ICarObject, ICarObjectTwo, TPointDataFromServer, ISettingsData } from "../types/carsSettingsTypes"
 
 class DataExtractor {
 
@@ -18,20 +18,6 @@ class DataExtractor {
 
     return { car_id, pic: this.createiconPath(pic), imei, alter_imei, name }
   }
-  // static createEventDataForServer(data: Omit<TEventsData, 'event_id'>): TEventsDataForServer {
-  //   const { company_id, car_id, point_id, event, time_response_sec, point_id: user_id } = { ...data }
-  //   return { car_id, event, time_response_sec, user_id }
-  // }
-
-  // event_id: string;
-  // company_id: string;
-  // car_id: string;
-  // point_id: string;
-  // event: string;
-  // time_response_sec:
-  // При получении первичных данных обрабатываем строку ссылки на иконку
-  // Получаем строку вида :  "CONCAT('https://gpson.ru/',pic)": "https://gpson.ru/pics/car1.png",
-  // Возвращаем : "https://gpson.ru/pics/car1.png"
 
   static createDataWithPicHref(data: ISettingsData) {
 
@@ -59,18 +45,3 @@ class DataExtractor {
 }
 
 export default DataExtractor;
-
-// point_id: string,
-// point_name: string,
-// lat: string,
-// lng: string,
-// radius: string
-
-
-// address: string,
-// point_id: string,
-// point_name: string,
-// lat: string,
-// lng: string,
-// radius: string
-// }

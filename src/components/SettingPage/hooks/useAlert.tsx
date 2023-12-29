@@ -14,7 +14,6 @@ const useAlert = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   const dispatch = useAppDispatch()
-  const alertShowState = useAppSelector((store) => store.carsSettings.config.alertShow)
 
   useEffect(() => {
     setIsMounted(true);

@@ -24,7 +24,6 @@ const LgFieldCars: FC<ILgFieldCarsProps> = ({ car }) => {
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
-
   const [inputCarNameValue, setInputCarNameValue] = useState(car.name);
   const [inputCarImeiValue, setInputCarImeiValue] = useState(car.imei);
   const [inputCarAlterImeiValue, setInputCarAlterImeiValue] = useState(car.alter_imei);

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
 import useApi from "../hooks/useApi";
@@ -17,7 +17,6 @@ const CompName = () => {
   console.log("--Render CompanyName");
 
   const companyName = useAppSelector((store) => store.carsSettings.company.name)
-  const companyId = useAppSelector((store) => store.carsSettings.company.company_id)
 
   const [readonlyName, setReadolyName] = useState(true)
   const [compName, setCompName] = useState(companyName)
@@ -46,15 +45,10 @@ const CompName = () => {
   const submitData = async () => {
     const requestOptions: IRequestOptions = {
       method: 'GET',
-      // body: JSON.stringify({
-      //   company_name: compName,
-      //   // company_id: companyId
-      // }),
     };
 
     const response = await sendRequest(API_ENDPOINTS.SAVE_COMPANY_NAME + `?company_name=${compName}`, requestOptions)
 
-    console.log("▶ ⇛ response:", response);
     if (response.data.status === 'error') {
       console.warn("Error in save company name", response.data.message);
       showAlert('Имя компании не изменено', 'error');
@@ -63,7 +57,7 @@ const CompName = () => {
       return
     }
     if (response.data.status === 'Ok') {
-    // const { company_name } = response.data
+
       showAlert('Имя компании изменено успешно', 'success');
       setCompName(compName)
       dispatch(carsSettingsActions.setCompanyName(compName))
@@ -79,7 +73,6 @@ const CompName = () => {
 
       <Stack display={'flex'}
         flexDirection={'column'}
-      // sx={{ opacity: '0.5' }}
       >
       <Stack display={'flex'} flexDirection={'row'} gap={'1rem'}>
         <input
@@ -92,9 +85,7 @@ const CompName = () => {
           type="text"
             readOnly={readonlyName}
             value={compName}>
-
           </input>
-
 
         <Button
           sx={{
@@ -123,4 +114,5 @@ const CompName = () => {
 
   )
 }
+
 export default CompName

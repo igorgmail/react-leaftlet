@@ -60,9 +60,9 @@ const CompLink = () => {
   const handleRemoveLink = () => {
     deleteLink()
   }
+
   const handleLaunchLink = () => {
     if (shortLink) {
-      // Открытие ссылки в новом окне
       window.open(shortLink, '_blank');
     }
   }
@@ -136,7 +136,6 @@ const CompLink = () => {
       return
     }
     if (response.data.status === 'Ok') {
-      // const { new_link } = response.data
       showAlert('Короткая ссылка удалена', 'success');
       setShortLink('')
       dispatch(carsSettingsActions.setRemoveShortLink())
@@ -151,12 +150,11 @@ const CompLink = () => {
     if (input) {
       // Установка курсора в конец текста
       input.scrollLeft = input.scrollWidth;
-      // input.value = shotLink; // Убедитесь, что shotLink загружен или обновлен
+      // input.value = shotLink;
       // input.focus();
       // input.blur();
     }
-  }, [shortLink]); // Обновление при изменении shortLink
-
+  }, [shortLink]);
 
 
   return (
@@ -169,8 +167,7 @@ const CompLink = () => {
         <input
             style={{ width: '80%' }}
             ref={inputRef}
-          className="company-block--dis-input"
-          // style={inputDisableStyle}
+              className="company-block--dis-input"
           type="text"
               readOnly
             value={shortLink} />
@@ -251,5 +248,6 @@ const CompLink = () => {
 
   )
 }
+
 export default CompLink
 

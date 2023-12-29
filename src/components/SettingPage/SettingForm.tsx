@@ -24,7 +24,6 @@ import ForcedUpdate from "./components/ForcedUpdate"
 const SettingForm = () => {
   console.log("--Render Setting Form");
 
-
   const [settingsData, setSettingsData] = useState<ISettingsData>()
   const [updateForm, setUpdateForm] = useState<boolean>(false)
   const dispatch = useAppDispatch()
@@ -59,14 +58,19 @@ const SettingForm = () => {
       sx={{ width: { sm: "90%", md: "70%" }, }}
       >
         <OutsideClickListener />
+        {process.env.NODE_ENV === 'development' &&
+          <>
         <small>You are running this application in <b>{process.env.NODE_ENV}</b> mode.</small>
         <small>Your device has a touchscreen <b>{String(isHasToushScreen())}</b></small>
-          <CompanyBlock key={'company'}></CompanyBlock>
+          </>
+        }
+
+        <CompanyBlock key={'company'}></CompanyBlock>
         <CarsBlock key={'cars'}></CarsBlock>
-          <ControlPointBlock key={'control'}></ControlPointBlock>
+        <ControlPointBlock key={'control'}></ControlPointBlock>
         <EventBlock key={'events'}></EventBlock>
         <UserBlock key={'users'} ></UserBlock>
-        <PreloadImages iconsUrls={settingsData.icons} />
+        <PreloadImages key={'preloadImages'} iconsUrls={settingsData.icons} />
         <ForcedUpdate setUpdateForm={setUpdateForm} />
 
       {alertComponent}

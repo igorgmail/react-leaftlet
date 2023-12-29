@@ -1,7 +1,6 @@
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, carsSettingsActions, useAppSelector, store } from '../../store';
 import useStartUpdate from './hooks/useStartUpdate';
-
 
 
 const OutsideClickListener = () => {
@@ -10,7 +9,6 @@ const OutsideClickListener = () => {
   const chooseInput = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const { startUpdate } = useStartUpdate()
-
 
   useEffect(() => {
 
@@ -42,4 +40,5 @@ const OutsideClickListener = () => {
     </>
   )
 }
+
 export default OutsideClickListener 

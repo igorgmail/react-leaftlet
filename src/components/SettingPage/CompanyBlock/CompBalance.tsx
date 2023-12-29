@@ -16,10 +16,8 @@ import { IRequestOptions } from "../types/carsSettingsTypes";
 const CompBalance = () => {
   console.log("--Render CompanyBalance");
 
-
   const companyBalance = useAppSelector((store) => store.carsSettings.company.balance);
   const currencyStore = useAppSelector((store) => store.carsSettings.company.currency);
-  const companyId = useAppSelector((store) => store.carsSettings.company.company_id);
 
   const [compBalance, setCompBalance] = useState(companyBalance)
   const [currency, setCurrency] = useState(currencyStore)
@@ -28,7 +26,6 @@ const CompBalance = () => {
 
   const dispatch = useAppDispatch()
 
-  //TODO Запрос GET body не имеет, либо передать в параметрах company_id либо поменять на сервере на POST
   const handleUpdateBalance = async () => {
 
     const requestOptions: IRequestOptions = {
@@ -40,7 +37,6 @@ const CompBalance = () => {
     if (response.data.status === 'error') {
       console.warn("Error in refresh balance", response.error);
       showAlert(response.data.message, 'error');
-
       return
     }
     if (response.data.status === 'Ok') {
@@ -92,4 +88,5 @@ const CompBalance = () => {
     </>
   )
 }
+
 export default CompBalance

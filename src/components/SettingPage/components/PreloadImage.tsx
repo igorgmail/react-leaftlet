@@ -19,4 +19,4 @@ const PreloadImages: FC<TPreloadImagesProps> = ({ iconsUrls }) => {
   );
 };
 
-export default PreloadImages;
+export default React.memo(PreloadImages);

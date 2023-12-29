@@ -1,15 +1,12 @@
-
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-
 import { Stack, Typography } from '@mui/material';
 import { FC } from 'react';
 
 type TBlockHeaderProps = {
   header: string
 }
+
 const BlockHeader: FC<TBlockHeaderProps> = ({ header }) => {
+
   return (
     <Stack
       display={'flex'} justifyContent={'center'}
@@ -20,8 +17,6 @@ const BlockHeader: FC<TBlockHeaderProps> = ({ header }) => {
         // borderTopLeftRadius: '10px',
         // borderTopRightRadius: '10px',
         padding: '.8rem',
-        // paddingLeft: '1rem',
-        // paddingTop: '1rem',
         marginBottom: '0',
         marginTop: '2rem',
         position: 'sticky',
@@ -34,4 +29,5 @@ const BlockHeader: FC<TBlockHeaderProps> = ({ header }) => {
     </Stack>
   )
 }
+
 export default BlockHeader

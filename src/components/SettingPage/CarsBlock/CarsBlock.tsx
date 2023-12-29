@@ -34,21 +34,20 @@ const CarsBlock: FC<TCarsBlockProps> = () => {
 
       <BlockHeader header={'Автомобили'} />
 
+      {/* {!isHasToushScreen() ? ( */}
       {!isSmallScreen ? (
 
         <CarsLargeScreen carsData={carsData} />
-
       ) : (
-
           <CarsSmallScreen carsData={carsData} />
 
       )}
-
 
       <AddCarModal />
     </Stack>
   )
 }
+
 export default CarsBlock
 
 

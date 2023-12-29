@@ -1,18 +1,19 @@
-import React, { useState } from "react"
+import { useState } from "react"
 
 import { Stack } from "@mui/material"
 
-
 import ModalWrap from "../../components/ModalWrap";
-
 import AddCarForm from "./AddCarForm";
+
+import { ICarObjectThree, IRequestOptions } from "../../types/carsSettingsTypes";
+import { carsSettingsActions, useAppDispatch } from "../../../../store";
+
 import useBackDrop from "../../hooks/useBackdrop";
 import useApi from "../../hooks/useApi";
-import { ICarObject, ICarObjectThree, IRequestOptions, TAddCarObject } from "../../types/carsSettingsTypes";
-import API_ENDPOINTS from "../../utils/apiEndpoints";
-import { carsSettingsActions, useAppDispatch } from "../../../../store";
-import DataExtractor from "../../utils/dataExtractor";
 import useAlert from '../../hooks/useAlert'
+
+import API_ENDPOINTS from "../../utils/apiEndpoints";
+import DataExtractor from "../../utils/dataExtractor";
 
 const AddCarModal = () => {
   console.log("--Render Modal AddCar");
@@ -34,9 +35,7 @@ const AddCarModal = () => {
         if (data) {
           stopBackDrop()
           const newIconPath = DataExtractor.createiconPath(data.pic)
-          // console.log("▶ ⇛ newIconPath:", newIconPath);
           dispatch(carsSettingsActions.setCreateCar({ ...data, pic: newIconPath }))
-          // dispatch(carsSettingsActions.setCreateCar({ ...data.car }))
         } else {
           console.info("Не удалось создать Авто,");
           console.info("С сервера не пришли данные, или пришли неверные данные");
@@ -48,7 +47,6 @@ const AddCarModal = () => {
       )
       .finally(() => stopBackDrop())
   }
-
 
   const fetchAddNewCar = async (data: Omit<ICarObjectThree, 'car_id'>) => {
     const requestOptions: IRequestOptions = {
@@ -64,9 +62,6 @@ const AddCarModal = () => {
     }
     if (response.data.status === 'Ok') {
       const carData = await response.data.car
-      console.info("▶FROMSERVER ⇛ Создан новый авто");
-      console.info("▶FROMSERVER ⇛ CREATE_CAR", carData);
-
       return carData
     }
   }

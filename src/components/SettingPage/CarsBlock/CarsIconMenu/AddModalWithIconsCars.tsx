@@ -1,10 +1,9 @@
-import React, { FC, ReactNode, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
+import React, { FC, ReactNode } from 'react';
 
+import { Button, Modal, Grid } from '@mui/material/';
 import IconsCarsBlockNet from './IconsCarsBlockNet';
-import { useAppDispatch, useAppSelector, carsSettingsActions } from '../../../../store';
-import { Grid } from '@mui/material';
+
+import { useAppSelector } from '../../../../store';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -25,26 +24,18 @@ type TModalWithIconsProps = {
   iconParentId?: string,
   setModalOpen: (a: boolean) => void
 }
-const ModalWithIconsCars: FC<TModalWithIconsProps> = ({ children, handleIconCarInNetClick, iconParentId, modalOpen, setModalOpen }) => {
 
+const ModalWithIconsCars: FC<TModalWithIconsProps> = ({ children, handleIconCarInNetClick, iconParentId, modalOpen, setModalOpen }) => {
 
   const carsIconsArray = useAppSelector((store) => store.carsSettings.icons)
 
-
   const handleOpen = (e: React.SyntheticEvent) => {
-    const target = e.currentTarget as HTMLButtonElement
-    // if (target.dataset.forstore) dispatch(carsSettingsActions.setChooseInputName(target.dataset.forstore))
-    // setOpen(modalOpen)
     setModalOpen(true)
   };
+
   const handleClose = () => {
-
-    // dispatch(carsSettingsActions.setChooseInputName(null))
     setModalOpen(false)
-    // setOpen(modalOpen)
   };
-
-
 
   return (
     <>
@@ -79,8 +70,5 @@ const ModalWithIconsCars: FC<TModalWithIconsProps> = ({ children, handleIconCarI
     </>
   );
 }
-
-
-
 
 export default ModalWithIconsCars

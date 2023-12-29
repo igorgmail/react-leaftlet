@@ -42,7 +42,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
 
   const handleAlterImeiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (!/^\d+$/.test(value)) return
+    if (!/^\d*$/.test(value)) return
     if (value.length <= 15) {
       setAlterImeiCar(value)
     }
@@ -90,15 +90,6 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
     handleClose()
   }
 
-  const handleNumberValidate = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    (evt.key === 'e'
-      || evt.key === '-'
-      || evt.key === '+'
-      || evt.key === '.'
-      || evt.key === ',')
-      && evt.preventDefault()
-  }
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, nextFieldId: string) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -108,26 +99,10 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
       }
     }
   };
-  // const handleNumberValidate2 = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-  //   console.log("▶ ⇛ evt.keyCode:", evt.keyCode);
-  //   if (evt.key === 'Enter') return
-  //   const target = evt.target as HTMLInputElement;
-  //   const value = target.value;
-  //   if (value === '') {
-  //     evt.preventDefault()
-  //   }
-  //   if (!['e', '-', '+', '.', ',', 'space'].find((el) => el === value)) evt.preventDefault()
-  //   if (!/^\d+$/.test(value)) evt.preventDefault()
-  //   const newValue = value.replace(/[^0-9]/g, ''); // Удаляет все, кроме цифр
-  //   if (value !== newValue) {
-  //     target.value = newValue;
-  //   }
-  // };
 
   useEffect(() => {
     if (nameCar.length > 2 && iconCar && imeiCar.length === 15) {
       if (alterImeiCar.length === 0 || alterImeiCar.length === 15) {
-        console.log("▶ ⇛ alterImeiCar.length:", alterImeiCar.length);
         setButDisabled(false)
       } else {
         setButDisabled(true)
@@ -143,7 +118,6 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
       <form onSubmit={handleAddCarSubmit}>
         <Grid container
           rowSpacing={1}
-
         >
           <Grid item xs={3} sx={{ borderTopLeftRadius: '8px' }} display={'flex'} alignItems={'center'}>
             <Stack >
@@ -158,11 +132,11 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
                 onChange={(e) => setNameCar(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, "carImeiInput")}
                 id="carNameInput"
-                // readOnly={true}
                 className="modal-input"
                 placeholder="минимум 3 символа"
                 value={nameCar}
                 required
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -174,7 +148,6 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
             </Stack>
           </Grid>
           <Grid item xs={9}>
-            {/* <Stack display={'flex'}> */}
             <AddModalWithIcons
               handleIconCarInNetClick={handleIconCarInNetClick}
               modalOpen={modalOpen}
@@ -211,6 +184,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
                 type="text" inputMode="numeric" pattern="\d*"
                 minLength={15}
                 maxLength={15}
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -226,16 +200,15 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
               <input
                 onChange={(e) => handleAlterImeiChange(e)}
                 onKeyDown={(e) => handleKeyDown(e, "butSubmit")}
-                // onKeyDown={(evt) => handleNumberValidate(evt)}
+
                 id="carAlterImeiInput"
-                // readOnly={true}
                 className="modal-input"
                 placeholder="15 или 0 символов"
                 value={alterImeiCar}
-                // type="number"
                 type="text" inputMode="numeric" pattern="\d*"
                 minLength={15}
                 maxLength={15}
+                autoComplete="off"
               />
             </Stack>
           </Grid>
@@ -251,4 +224,5 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
     </Stack>
   )
 }
+
 export default AddCarForm

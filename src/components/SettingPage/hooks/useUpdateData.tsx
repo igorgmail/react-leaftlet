@@ -1,12 +1,9 @@
-import { useAppSelector, useAppDispatch, carsSettingsActions, store } from "../../../store";
+import { useAppDispatch, carsSettingsActions, store } from "../../../store";
 import useApi from "./useApi";
 
 import API_ENDPOINTS from "../utils/apiEndpoints";
 import DataExtractor from "../utils/dataExtractor";
 import { ICarObject, TEventsDataForServer, TPointsData, TUsers } from "../types/carsSettingsTypes";
-
-
-const apiEndpoint = process.env.REACT_APP_API_SETTINGS;
 
 type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -16,9 +13,6 @@ interface IRequestOptions {
 }
 
 function useUpdateData() {
-
-  const username = 'test';
-  const password = '123';
 
   const { sendRequest } = useApi()
   const dispatch = useAppDispatch()
@@ -43,10 +37,8 @@ function useUpdateData() {
 
       if (response.data.status === 'Ok') {
         const carData = await response.data.car
-        console.log("▶ ⇛ carData:", carData);
 
         const newData = DataExtractor.createCarDataFromServer(carData[0])
-        console.log("▶ ⇛ newData:", newData);
 
         dispatch(carsSettingsActions.setUpdateCar(newData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
@@ -59,7 +51,7 @@ function useUpdateData() {
     };
 
     if (selectBlock?.typeField === 'points') {
-      console.log("▶ ⇛ selectBlock: points");
+
       const point = selectBlock.selectBlockObject as TPointsData
       param = `?point_id=${point.point_id}&point_name=${point.name}&address=${point.address}&lat=${point.lat}&lng=${point.lng}&radius=${point.radius}`
       url = API_ENDPOINTS.SAVE_POINT + param
@@ -81,7 +73,7 @@ function useUpdateData() {
     };
 
     if (selectBlock?.typeField === 'events') {
-      console.log("▶ ⇛ selectBlock: events");
+
       const event = selectBlock.selectBlockObject as TEventsDataForServer
       // ?event_id=1&car_id=1&point_id=1&event=IN&time_response_sec=5
       param = `?event_id=${event.event_id}&car_id=${event.car_id}&point_id=${event.point_id}&event=${event.event}&time_response_sec=${event.time_response_sec}`
@@ -129,7 +121,5 @@ function useUpdateData() {
 
   return { updateDataRequest }
 }
-
-
 
 export default useUpdateData;

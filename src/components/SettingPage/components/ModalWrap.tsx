@@ -7,7 +7,6 @@ import AddIcon from '@mui/icons-material/Add';
 
 import Backdrop from '@mui/material/Backdrop';
 
-
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -28,7 +27,6 @@ type TModalWrap = {
 }
 const ModalWrap: FC<TModalWrap> = ({ modalTitle, children, open, setOpen }) => {
 
-  // const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 

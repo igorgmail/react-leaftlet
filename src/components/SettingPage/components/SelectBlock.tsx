@@ -1,17 +1,15 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
-import useSelectorEvents from '../hooks/useSelectorEvents'
 import '../styles/style_select.css'
 import { useAppSelector } from '../../../store'
-
 
 type TSelectBlock = {
   eventId?: string,
   modifier: 'CARS' | 'POINTS' | 'EVENTS' | 'MIN' | 'ROLE',
   selectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void,
   selectedItem?: string
-
 }
+
 const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange }) => {
 
   const allCars = useAppSelector((store) => store.carsSettings.cars)
@@ -19,6 +17,7 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
   const allTypeEvents = useAppSelector((store) => store.carsSettings.type_of_events)
 
   const CarsOptions = () => {
+
     return (
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите автомобиль</option>
@@ -32,7 +31,9 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       </>
     );
   }
+
   const PointsOptions = () => {
+
     return (
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите точку</option>
@@ -47,7 +48,9 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       </>
     );
   }
+
   const TypeEventsOptions = () => {
+
     return (
       <>
         <option value="" disabled={selectedItem !== ''} hidden={selectedItem !== ''}>Выберите событие</option>
@@ -63,10 +66,11 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
       </>
     );
   }
+
   const MinSecOptions = () => {
+
     return (
       <>
-
         <option key={0}
           value={`sec`}
         // selected
@@ -76,11 +80,12 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
           value={`мин`}
           data-option-name={'option-min'}
         >мин</option>
-
       </>
     );
   }
+
   const RoleOptions = () => {
+
     return (
       <>
         <option key={0}
@@ -102,10 +107,12 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
 
   return (
     <>
-      <label className="select all-white-input-style" htmlFor="slct" >
+      <label className="select all-white-input-style"
+      // htmlFor="slct" 
+      >
         <select
           onChange={selectChange}
-          id="slct"
+          // id="slct"
           required
           value={selectedItem}
         >
@@ -123,12 +130,14 @@ const SelectBlock: FC<TSelectBlock> = ({ selectedItem, modifier, selectChange })
 
       {/* <!-- SVG Sprites --> */}
       <svg className="sprites">
-        <symbol id="select-arrow-down" viewBox="0 0 10 6">
+        <symbol
+          id="select-arrow-down"
+          viewBox="0 0 10 6">
           <polyline points="1 1 5 5 9 1"></polyline>
         </symbol>
       </svg>
     </>
-
   )
 }
+
 export default SelectBlock
