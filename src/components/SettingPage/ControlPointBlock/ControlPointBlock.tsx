@@ -1,9 +1,6 @@
-import React, { useState, useEffect, FC } from "react"
+import { useState, useEffect, FC } from "react"
 
-import { Container, Stack, Box, Typography, Grid } from "@mui/material"
-
-
-import { ICarObject } from "../types/carsSettingsTypes";
+import { Stack } from "@mui/material"
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -11,7 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ControlBlockSmScreen from "./ControlBlockSmScreen";
 import ControlBlockLgScreen from "./ControlBlockLgScreen";
 import AddPointModal from "./AddPointModal/AddPointModal";
-import { TPointsData } from "../types/carsSettingsTypes";
+
 import BlockHeader from "../components/BlockHeader";
 import { store, useAppSelector } from "../../../store";
 

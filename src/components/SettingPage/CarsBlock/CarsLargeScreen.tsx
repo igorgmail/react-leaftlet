@@ -1,20 +1,14 @@
-import { useState, useEffect, FC, useRef } from "react"
-
-import { Stack, Grid } from "@mui/material"
-
-
-import LgFieldCars from "./LgFieldCars";
+import { FC } from "react"
 
 import { ICarObject } from "../types/carsSettingsTypes";
+import { Stack, Grid } from "@mui/material"
+import LgFieldCars from "./LgFieldCars";
 
 interface ICarsBlockProps {
   carsData: ICarObject[],
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData, setUpdateForm }) => {
-
+const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData }) => {
 
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -48,18 +42,13 @@ const CarsLargeScreen: FC<ICarsBlockProps> = ({ carsData, setUpdateForm }) => {
           </Grid>
         </Grid>
 
-        {carsData.length > 0 && carsData.map((car) => (<LgFieldCars car={car} key={`cars-block-` + car.car_id} setUpdateForm={setUpdateForm} />))
+        {carsData.length > 0 && carsData.map((car) => (<LgFieldCars car={car} key={`cars-block-` + car.car_id} />))
         }
 
       </Stack>
 
     </Stack >
-
-
   )
 }
-
-
-
 
 export default CarsLargeScreen

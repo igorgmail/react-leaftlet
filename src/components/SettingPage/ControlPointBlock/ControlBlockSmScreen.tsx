@@ -1,16 +1,8 @@
-import React, { useState, useEffect, FC } from "react"
+import { FC } from "react"
 
-import { Container, Stack, Box, Typography, Grid, Divider } from "@mui/material"
-
-
-import { ICarObject, TEventFromDialog, TRemoveDialogCallback } from "../types/carsSettingsTypes";
-
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-
+import { Box } from "@mui/material"
 import { TPointsData } from "../types/carsSettingsTypes";
-import RemoveDialog from "../components/RemoveDialog";
+
 import SmFieldPoints from "./SmFieldPoints";
 
 interface IPointDataProps {
@@ -18,22 +10,6 @@ interface IPointDataProps {
 }
 
 const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
-
-
-  const handleDialog = (eventData: TEventFromDialog) => {
-    console.log("▶ ⇛ eventData:", eventData);
-  }
-
-  const makeEventData = (point: TPointsData) => {
-
-    const eventData = {
-      event: 'REMOVE_POINT',
-      subjectid: point.point_id,
-      msg: `Будет удалена контрольная точка <br>${point.name}`
-    }
-
-    return eventData
-  }
 
   return (
     <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -46,4 +22,5 @@ const ControlBlockSmScreen: FC<IPointDataProps> = ({ pointData }) => {
     </Box >
   )
 }
+
 export default ControlBlockSmScreen

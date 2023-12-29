@@ -1,24 +1,25 @@
-import { Box, Divider, Grid, Stack } from "@mui/material"
 import { FC, useEffect, useState } from "react"
-import RemoveDialog from "../components/RemoveDialog"
-import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes"
+
+import { Divider, Grid, Stack } from "@mui/material"
+
+import { TEventForDialog, TEventFromDialog, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes"
+import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
 
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
-import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
-import SelectBlock from "../components/SelectBlock";
 import useUpdateData from "../hooks/useUpdateData";
 import useAlert from "../hooks/useAlert";
 import useStartUpdate from "../hooks/useStartUpdate";
 
+import RemoveDialog from "../components/RemoveDialog"
+import SelectBlock from "../components/SelectBlock";
+import useHandleInput from "../hooks/useHandleInputEvents";
+
 interface IUserFieldProps {
   oneUser: TUsers,
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-
-const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
+const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
@@ -26,18 +27,19 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
   const [userEmail, setUserEmail] = useState(oneUser.user_email)
   const [userRole, setUserRole] = useState(oneUser.user_role)
 
+  const dispatch = useAppDispatch()
+
+  const { startUpdate } = useStartUpdate()
+  const { handleInputClickLG, handleKeyDown } = useHandleInput()
+
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
-  const dispatch = useAppDispatch()
-  const { updateDataRequest } = useUpdateData()
-  const { startUpdate } = useStartUpdate()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
     sendRemove(eventData)
       .then((data) => {
-        console.log("▶ ⇛ data:", data);
 
         if (data?.data) {
           const id = data.data
@@ -56,13 +58,10 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
 
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-
     const objectIndex = e.target.value
     // console.log("Индекс объекта", objectIndex);
-
     const selectedIndex = e.target.options.selectedIndex;
     // console.log("Порядковый номер", selectedIndex);
-
     const selectedOption = e.target.options[selectedIndex];
     const selectedData = selectedOption.dataset.optionName;
 
@@ -78,64 +77,6 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
       user_id: userId,
       user_email: userEmail,
       user_role: userRole,
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    const key = e.key || e.keyCode || e.which;
-    const target = e.target as HTMLInputElement
-    if (key === 'Enter' || key === 13) {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-      target.blur()
-    }
-  };
-
-
-  // function startUpdate() {
-  //   console.log("▶ ⇛ IN startUpdate:");
-
-  //   // startBackDrop()
-  //   updateDataRequest().then((data) => {
-  //     console.log("▶ ⇛ updateDataRequestdata:", data);
-
-  //   }).catch((err) => {
-  //     console.warn("При обновлении произошла ошибка ", err);
-
-  //     showAlert('Ошибка при обновлении', 'error')
-  //     setUpdateForm((cur) => !cur)
-  //   })
-  // }
-
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
-
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-      targ.focus()
-
-      if (dataValue === chooseInputFromStore) return
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
     }
   }
 
@@ -181,9 +122,11 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
             />
 
             <input
-              onClick={handleInputClick}
+
+              onClick={handleInputClickLG}
               onChange={handleEmailInputChange}
               onKeyDown={handleKeyDown}
+
               // className="all-white-input-style"
               readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
               className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}
@@ -197,21 +140,6 @@ const UserField: FC<IUserFieldProps> = ({ oneUser, setUpdateForm }) => {
               data-forstore={`id${oneUser.user_id}-email`}
               data-interactive
             />
-            {/* <input
-              data-option-name={'event-time'}
-              onClick={handleInputClick}
-              onChange={handleTimeInputChange}
-              className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
-              style={{
-                width: '100%',
-                textAlign: 'right',
-              }}
-              type="text"
-              readOnly={chooseInputFromStore !== `id${oneEvent.event_id}-event`}
-              value={`${eventTimeSec}`}
-              data-forstore={`id${oneEvent.event_id}-event`}
-              data-interactive
-            /> */}
 
           </Stack>
         </Grid>

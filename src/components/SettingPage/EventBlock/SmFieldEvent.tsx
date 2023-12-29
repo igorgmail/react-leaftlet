@@ -12,19 +12,17 @@ import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useUpdateData from "../hooks/useUpdateData";
 import useAlert from "../hooks/useAlert";
+import useStartUpdate from "../hooks/useStartUpdate";
+import useHandleInput from "../hooks/useHandleInputEvents";
 
 
 
 
 interface IEventBlockProps {
   oneEvent: TEventsData,
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
-
-
-  const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
+const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const [eventId, setEventId] = useState<string>(oneEvent.event_id)
   const [eventCarId, setEventCarId] = useState(oneEvent.car_id)
@@ -33,18 +31,14 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
   const [eventTimeSec, setEventTimeSec] = useState(oneEvent.time_response_sec)
   const [timeVariant, setTimeVariant] = useState('сек')
 
-
-  const [selectCar, setSelectCar] = useState(oneEvent.car_id)
-
-
-  const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
-
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
-  const { showAlert, alertComponent } = useAlert()
+  const { startUpdate } = useStartUpdate()
+  const { handleInputClickSM, handleKeyDown } = useHandleInput()
   const { sendRemove } = useRemoveDialog()
-  const { updateDataRequest } = useUpdateData()
+
   const dispatch = useAppDispatch()
 
+  const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -63,33 +57,33 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
       }).finally(() => stopBackDrop())
   }
 
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
+  // const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
+  //   event.preventDefault()
+  //   const touchNumber = event.detail
 
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-      targ.focus()
+  //   if (touchNumber === 2) {
+  //     const targ = event.currentTarget
+  //     const dataValue = targ.dataset.forstore
+  //     const inputType = event.currentTarget.type
+  //     targ.focus()
 
-      // ! Этот вариант
-      if (dataValue === chooseInputFromStore) return
+  //     // ! Этот вариант
+  //     if (dataValue === chooseInputFromStore) return
 
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
+  //     if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
 
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
-    }
-  }
+  //     // Установка курсора в конец текста
+  //     if (inputType === 'number') {
+  //       targ.type = 'text'
+  //       const textLength = targ.value.length;
+  //       targ.setSelectionRange(textLength, textLength);
+  //       targ.type = 'number'
+  //     } else {
+  //       const textLength = targ.value.length;
+  //       targ.setSelectionRange(textLength, textLength);
+  //     }
+  //   }
+  // }
 
   const makeEventData = (event: TEventsData) => {
     const eventData: TEventForDialog = {
@@ -115,8 +109,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
 
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // ! Ложтм все в store перед эти нужна тпрака на сервер
-    // ! И проеверить
+
     const target = e.target as HTMLSelectElement
 
     const objectIndex = target.value
@@ -149,24 +142,12 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
   }
 
   const handleTimeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!/^\d*$/.test(e.target.value)) return
     const time = e.target.value
-    setEventTimeSec(time)
-    dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
-  }
-
-  function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
-
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
-
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
-
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
+    if (time.length < 6) {
+      setEventTimeSec(time)
+      dispatch(carsSettingsActions.setCurrentSelectBlock({ ...eventObject, selectBlockObject: { ...eventObject.selectBlockObject, time_response_sec: time } }))
+    }
   }
 
   useEffect(() => {
@@ -187,7 +168,6 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
           marginTop: '2rem',
           borderRadius: '10px'
         }}>
-
 
         {/* Block - 1 */}
         <Grid item xs={6}>
@@ -242,8 +222,11 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
         <Grid item xs={4}>
           <Stack margin={'auto'} display={'flex'} alignItems={'center'}>
             <input
-              onClick={handleInputClick}
+              data-option-name={'event-time'}
+
+              onClick={handleInputClickSM}
               onChange={handleTimeInputChange}
+
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 width: '100%',
@@ -254,7 +237,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
               value={`${eventTimeSec}`}
               data-forstore={`id${oneEvent.event_id}-event`}
               data-interactive
-
+              autoComplete="off"
             />
           </Stack>
         </Grid>
@@ -288,7 +271,6 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
         </Grid>
       </Grid>
       {BackDropComponent}
-      {alertComponent}
     </>
   )
 }

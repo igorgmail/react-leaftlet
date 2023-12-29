@@ -1,24 +1,22 @@
 import { FC, useEffect, useState } from "react"
 
-import { Stack } from "@mui/material"
-
-import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
-
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Stack } from "@mui/material"
 
-// import useCheckWhereIsClick from "./hooks/useCheckWhereIsClick";
+import { useAppSelector, store } from "../../../store";
 
 import BlockHeader from "../components/BlockHeader";
 import CarsSmallScreen from "./CarsSmallScreen";
 import CarsLargeScreen from "./CarsLargeScreen";
 import AddCarModal from "./AddCarModal/AddCarModal";
+import isHasToushScreen from "../utils/isMobile";
 
 type TCarsBlockProps = {
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
-const CarsBlock: FC<TCarsBlockProps> = ({ setUpdateForm }) => {
+const CarsBlock: FC<TCarsBlockProps> = () => {
   console.log("--Render CarsBlock");
 
   const dataFromStore = useAppSelector((store) => store.carsSettings.cars);
@@ -38,11 +36,11 @@ const CarsBlock: FC<TCarsBlockProps> = ({ setUpdateForm }) => {
 
       {!isSmallScreen ? (
 
-        <CarsLargeScreen carsData={carsData} setUpdateForm={setUpdateForm} />
+        <CarsLargeScreen carsData={carsData} />
 
       ) : (
 
-          <CarsSmallScreen carsData={carsData} setUpdateForm={setUpdateForm} />
+          <CarsSmallScreen carsData={carsData} />
 
       )}
 

@@ -2,30 +2,22 @@ import React, { useState, useEffect, FC } from "react"
 
 import { Stack, Box, Grid, Divider } from "@mui/material"
 
-
 import { TEventForDialog, TEventFromDialog } from "../types/carsSettingsTypes";
 import useRemoveDialog from "../hooks/useRemoveDialog";
 
-
 import { TPointsData, TSelectedFieldChanged } from "../types/carsSettingsTypes";
-import { useAppSelector, useAppDispatch, carsSettingsActions, store } from "../../../store";
+import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useGetAddressService from "./hooks/useGetAddressService";
 import { LatLng } from "leaflet";
 import useAlert from "../hooks/useAlert";
-import useStartUpdate from "../hooks/useStartUpdate";
-import configAdminPage from "../config";
-
+import useHandleInput from "../hooks/useHandleInputEvents";
 
 
 interface ILgFieldPointsProps {
   onePoint: TPointsData
 }
-// type TSelectedFieldChanged = {
-//   typeField: 'cars' | 'points' | 'events' | 'users',
-//   selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsData | TUsers
-// }
 
 const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   console.log("--Render lgFieldPoint");
@@ -41,12 +33,12 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
   const [pointLat, setPointLat] = useState(onePoint.lat)
   const [pointLng, setPointLng] = useState(onePoint.lng)
 
+  const dispatch = useAppDispatch()
+
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { sendRemove } = useRemoveDialog()
-  const dispatch = useAppDispatch()
   const { getAddress } = useGetAddressService()
-
-  const { startUpdate } = useStartUpdate()
+  const { handleInputClickLG, handleKeyDown } = useHandleInput()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -73,36 +65,6 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
     }
 
     return eventData
-  }
-
-
-
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
-
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-      targ.focus()
-
-      // ! Этот вариант
-      if (dataValue === chooseInputFromStore) return
-
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
-    }
   }
 
   const POINT_KEY = {
@@ -151,37 +113,6 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
     }
   }
 
-  // function startUpdate() {
-  //   console.log("▶ ⇛ IN startUpdate:");
-
-  //   // startBackDrop()
-  //   updateDataRequest().then((data) => {
-  //     console.log("▶ ⇛ updateDataRequestdata:", data);
-
-  //   }).catch((err) => {
-  //     console.warn("При обновлении произошла ошибка ", err);
-
-  //     showAlert('Ошибка при обновлении', 'error')
-  //     setUpdateForm((cur) => !cur)
-  //   })
-  // }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    const key = e.key || e.keyCode || e.which;
-    const target = e.target as HTMLInputElement
-    if (key === 'Enter' || key === 13) {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-      target.blur()
-    }
-  };
-
   useEffect(() => {
     const coordinates = new LatLng(Number(onePoint.lat), Number(onePoint.lng))
 
@@ -227,9 +158,11 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
 
           <input
               name={'point_name'}
-            onClick={handleInputClick}
+
+              onClick={handleInputClickLG}
               onChange={handleFieldChange}
               onKeyDown={handleKeyDown}
+
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
@@ -240,6 +173,7 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
             value={pointName}
             data-forstore={POINT_KEY.name}
             data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>
@@ -250,9 +184,11 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
           {pointAddress?.length &&
             <input
               name={'point_address'}
-              onClick={handleInputClick}
+
+              onClick={handleInputClickLG}
               onChange={handleFieldChange}
               onKeyDown={handleKeyDown}
+
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
@@ -272,9 +208,11 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
         {/* <Stack display={'flex'} alignItems={'center'}> */}
         <input
             name={'point_radius'}
-          onClick={handleInputClick}
+
+            onClick={handleInputClickLG}
             onChange={handleFieldChange}
             onKeyDown={handleKeyDown}
+
           className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               width: `100%`,
@@ -300,4 +238,5 @@ const LgFieldPoints: FC<ILgFieldPointsProps> = ({ onePoint }) => {
     </>
   )
 }
+
 export default LgFieldPoints

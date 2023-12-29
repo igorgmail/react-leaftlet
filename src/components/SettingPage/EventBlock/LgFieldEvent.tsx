@@ -2,26 +2,23 @@ import React, { FC, useEffect, useState } from "react";
 
 import { Stack, Grid, Divider } from "@mui/material";
 
-import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
+import { TEventForDialog, TEventFromDialog, TEventsData, TSelectedFieldChanged } from "../types/carsSettingsTypes";
 
 import SelectBlock from "../components/SelectBlock";
-import { useAppSelector, useAppDispatch, carsSettingsActions, store } from "../../../store";
+import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
 import RemoveDialog from "../components/RemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
-import useUpdateData from "../hooks/useUpdateData";
-import useAlert from "../hooks/useAlert";
+
 import useStartUpdate from "../hooks/useStartUpdate";
+import useHandleInput from "../hooks/useHandleInputEvents";
 
 
 interface IEventBlockProps {
   oneEvent: TEventsData
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
-
-  const [eventCompanyId, setEventCompanyId] = useState(oneEvent.company_id)
+const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   const [eventId, setEventId] = useState<string>(oneEvent.event_id)
   const [eventCarId, setEventCarId] = useState<string>(oneEvent.car_id)
@@ -30,16 +27,14 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
   const [eventTimeSec, setEventTimeSec] = useState(oneEvent.time_response_sec)
   const [timeVariant, setTimeVariant] = useState('сек')
 
-  const { updateDataRequest } = useUpdateData()
-  const [selectCar, setSelectCar] = useState(oneEvent.car_id)
-
+  const { startUpdate } = useStartUpdate()
+  const { handleInputClickLG, handleKeyDown } = useHandleInput()
 
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
-  const { startUpdate } = useStartUpdate()
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
-  const { showAlert, alertComponent } = useAlert()
+  // const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
 
@@ -62,31 +57,6 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
       }).finally(() => stopBackDrop())
   }
 
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
-
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-      targ.focus()
-
-      if (dataValue === chooseInputFromStore) return
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
-    }
-  }
 
   const makeEventData = (event: TEventsData) => {
     const eventData: TEventForDialog = {
@@ -151,23 +121,6 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Проверяем, была ли нажата клавиша "Enter"
-    const key = e.key || e.keyCode || e.which;
-    const target = e.target as HTMLInputElement
-    if (key === 'Enter' || key === 13) {
-      const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
-      if (isModifiedData) {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-        startUpdate()
-      } else {
-        dispatch(carsSettingsActions.setChooseInputName(null))
-      }
-      target.blur()
-    }
-  };
-
-
   useEffect(() => {
     setEventId(oneEvent.event_id)
     setEventCarId(oneEvent.car_id)
@@ -217,9 +170,11 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
           <Stack margin={'auto'} display={'flex'} alignItems={'end'}>
             <input
               data-option-name={'event-time'}
-              onClick={handleInputClick}
+
+              onClick={handleInputClickLG}
               onChange={handleTimeInputChange}
               onKeyDown={handleKeyDown}
+
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 width: '100%',
@@ -251,7 +206,7 @@ const LgFieldEvent: FC<IEventBlockProps> = ({ oneEvent, setUpdateForm }) => {
         <Divider />
       </Grid>
       {BackDropComponent}
-      {alertComponent}
+      {/* {alertComponent} */}
     </>
   )
 }

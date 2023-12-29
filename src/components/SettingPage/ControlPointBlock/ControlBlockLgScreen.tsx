@@ -1,11 +1,9 @@
-import React, { FC } from "react"
+import { FC } from "react"
 
 import { Stack, Grid } from "@mui/material"
-
 import { TPointsData } from "../types/carsSettingsTypes";
 
 import LgFieldPoints from "./LgFieldPoints";
-
 
 interface IPointDataProps {
   pointData: TPointsData[]
@@ -13,7 +11,6 @@ interface IPointDataProps {
 
 const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
   console.log("--Render ControlBlockLgScreen");
-
 
   return (
     <Stack sx={{ flexGrow: 1, overflow: 'hidden' }}>
@@ -54,4 +51,5 @@ const ControlBlockLgScreen: FC<IPointDataProps> = ({ pointData }) => {
     </Stack >
   )
 }
+
 export default ControlBlockLgScreen

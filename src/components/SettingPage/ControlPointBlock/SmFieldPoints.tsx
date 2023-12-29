@@ -1,21 +1,19 @@
 import React, { useState, useEffect, FC } from "react"
 
-import { Stack, Box, Grid, Divider, Typography } from "@mui/material"
+import { Stack, Grid, Typography } from "@mui/material"
 
+import { TEventForDialog, TEventFromDialog, TSelectedFieldChanged, TPointsData } from "../types/carsSettingsTypes";
+import { LatLng } from "leaflet";
 
-import { TEventForDialog, TEventFromDialog, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
-
-
-
-import { TPointsData } from "../types/carsSettingsTypes";
 import { useAppSelector, useAppDispatch, carsSettingsActions } from "../../../store";
-import RemoveDialog from "../components/RemoveDialog";
+
 import useBackDrop from "../hooks/useBackdrop";
 import useRemoveDialog from "../hooks/useRemoveDialog";
-import { LatLng } from "leaflet";
 import useGetAddressService from "./hooks/useGetAddressService";
 import useAlert from "../hooks/useAlert";
 
+import RemoveDialog from "../components/RemoveDialog";
+import useHandleInput from "../hooks/useHandleInputEvents";
 
 
 interface ISmFieldPointsProps {
@@ -41,6 +39,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
   const [pointLng, setPointLng] = useState(onePoint.lng)
 
   const dispatch = useAppDispatch()
+  const { handleInputClickSM } = useHandleInput()
+
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
     sendRemove(eventData)
@@ -66,34 +66,6 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
     }
 
     return eventData
-  }
-
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
-
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-      targ.focus()
-
-      // ! Этот вариант
-      if (dataValue === chooseInputFromStore) return
-
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
-    }
   }
 
   const POINT_KEY = {
@@ -202,12 +174,10 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
           <input
               name={'point_name'}
-              onClick={handleInputClick}
+
+              onClick={handleInputClickSM}
               onChange={handleFieldChange}
-            // onTouchStart={handleTouchCarNameInput}
-              // onMouseDown={handleInputClick}
-            // onMouseLeave={handleMouseLeave}
-              // onDoubleClick={() => handleInputDoubleClick()}
+
             className={chooseInputFromStore === POINT_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             readOnly={chooseInputFromStore !== POINT_KEY.name}
             style={{
@@ -218,6 +188,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             value={pointName}
             data-forstore={POINT_KEY.name}
             data-interactive
+              autoComplete="off"
           />
         </Stack>
       </Grid>
@@ -227,8 +198,10 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
         <Stack display={'flex'} alignItems={'center'} justifyContent={'center'}>
           <input
               name={'point_radius'}
-            onClick={handleInputClick}
+
+              onClick={handleInputClickSM}
               onChange={handleFieldChange}
+
             className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 width: `100%`,
@@ -241,7 +214,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             value={pointRadius}
             data-forstore={POINT_KEY.radius}
             data-interactive
-          />
+              autoComplete="off" />
         </Stack>
       </Grid>
 
@@ -261,8 +234,10 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
           {pointAddress?.length &&
             <input
               name={'point_address'}
-              onClick={handleInputClick}
+
+              onClick={handleInputClickSM}
               onChange={handleFieldChange}
+
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
@@ -270,6 +245,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
               value={pointAddress}
             data-forstore={POINT_KEY.address}
               data-interactive
+              autoComplete="off"
             />
           }
 

@@ -1,21 +1,15 @@
-import { Box, Divider, Grid, Stack } from "@mui/material"
-import { FC, useState } from "react"
-import RemoveDialog from "../components/RemoveDialog"
-import { TEventForDialog, TEventFromDialog, TEventsData, TRemoveDialogCallback, TUsers } from "../types/carsSettingsTypes"
+import { FC, } from "react"
 
-import useBackDrop from "../hooks/useBackdrop";
-import useRemoveDialog from "../hooks/useRemoveDialog";
-import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
-import SelectBlock from "../components/SelectBlock";
+import { Grid, Stack } from "@mui/material"
+import { TUsers } from "../types/carsSettingsTypes"
+
 import UserField from "./UserField";
 
 interface IUserBlockProps {
   usersData: TUsers[],
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-const UserLgBlock: FC<IUserBlockProps> = ({ usersData, setUpdateForm }) => {
+const UserLgBlock: FC<IUserBlockProps> = ({ usersData }) => {
 
   return (
     <>
@@ -44,7 +38,7 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData, setUpdateForm }) => {
       </Grid>
           </Grid>
           {usersData.length > 0 && usersData.map((oneUser) => (
-            <UserField oneUser={oneUser} setUpdateForm={setUpdateForm} key={`userblock-${oneUser.user_id}`}
+            <UserField oneUser={oneUser} key={`userblock-${oneUser.user_id}`}
             />
         ))
         }
@@ -54,4 +48,5 @@ const UserLgBlock: FC<IUserBlockProps> = ({ usersData, setUpdateForm }) => {
     </>
   )
 }
+
 export default UserLgBlock

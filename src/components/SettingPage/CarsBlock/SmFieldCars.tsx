@@ -1,26 +1,25 @@
 import { Grid, Stack, Typography } from "@mui/material"
-import { ICarObject, TEventForDialog, TEventFromDialog, TRemoveDialogCallback, TSelectedFieldChanged } from "../types/carsSettingsTypes";
-import { FC, useEffect, useRef, useState } from "react";
+import { ICarObject, TEventForDialog, TEventFromDialog, TSelectedFieldChanged } from "../types/carsSettingsTypes";
+import { FC, useEffect, useState } from "react";
+
+import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
 
 import RemoveDialog from "../components/RemoveDialog";
-import { useAppDispatch, useAppSelector, carsSettingsActions, store } from "../../../store";
-// import IconsCarsMenu from "./CarsIconMenu/IconsCarsMenu";
 import ModalWithIconsCars from "./CarsIconMenu/AddModalWithIconsCars";
 
 
 import useRemoveDialog from "../hooks/useRemoveDialog";
 import useBackDrop from "../hooks/useBackdrop";
 import useAlert from "../hooks/useAlert";
-import useUpdateData from "../hooks/useUpdateData";
 import useStartUpdate from "../hooks/useStartUpdate";
+import useHandleInput from "../hooks/useHandleInputEvents";
 
 interface ISmFieldCarsProps {
   car: ICarObject,
-  setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
-const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
+const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   console.log("--Render SmallField");
 
   const iconsCars = useAppSelector((store) => store.carsSettings.icons)
@@ -33,14 +32,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [test, setTest] = useState<string | number>();
 
-  const { updateDataRequest } = useUpdateData()
   const { startUpdate } = useStartUpdate()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
   const { sendRemove } = useRemoveDialog()
   const dispatch = useAppDispatch()
+
+  const { handleInputClickSM } = useHandleInput()
 
   const handleDialog = (eventData: TEventFromDialog) => {
     startBackDrop()
@@ -57,37 +56,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     }).catch((err) => {
       console.warn("ERROR, Ошибка при удалении Авто", err);
     }).finally(() => stopBackDrop())
-  }
-
-  const handleInputClick = (event: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    const touchNumber = event.detail
-
-    if (touchNumber === 2) {
-      const targ = event.currentTarget
-
-      // targ.setAttribute('readonly', 'false')
-      const dataValue = targ.dataset.forstore
-      const inputType = event.currentTarget.type
-
-      if (dataValue === chooseInputFromStore) return
-      // targ.removeAttribute('readonly');
-      targ.blur()
-      // setTimeout(() => targ.focus())
-
-      if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-      targ.focus()
-      // Установка курсора в конец текста
-      if (inputType === 'number') {
-        targ.type = 'text'
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-        targ.type = 'number'
-      } else {
-        const textLength = targ.value.length;
-        targ.setSelectionRange(textLength, textLength);
-      }
-    }
   }
 
   const handleIconCarInNetClick = (e: React.MouseEvent) => {
@@ -139,7 +107,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         dispatch(carsSettingsActions.setCurrentSelectBlock({ ...carObject, selectBlockObject: { ...carObject.selectBlockObject, name: event.target.value } }))
       }
       if (itemName === 'car_imei') {
-        console.log("▶ ⇛ event.target.value:", event.target.value);
         if (!/^\d*$/.test(event.target.value)) return
         if (event.target.value.length <= 15) {
           setInputCarImeiValue(event.target.value)
@@ -160,7 +127,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
     // Проверяем, была ли нажата клавиша "Enter"
     // e.preventDefault()
     const key = e.key || e.keyCode || e.which;
-    setTest(key)
+
     if (e.key === 'Enter' || key === 13) {
       const isModifiedData = store.getState().carsSettings.config.currentSelectBlock
       if (isModifiedData) {
@@ -226,7 +193,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
 
             <input
               name={'car_name'}
-              onClick={handleInputClick}
+              onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               // onKeyDown={handleKeyDown} // Enter
               onKeyUp={handleKeyDown} // Enter
@@ -244,11 +211,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
               autoComplete="off"
           />
         </Stack>
-          {/*  TEST*/}
-          <Stack sx={{ backgroundColor: '#078c75', color: 'white' }}>
-            <Typography align="center">{test}</Typography>
-          </Stack>
-          {/* TEST */}
+
       </Grid>
 
       {/* Icon */}
@@ -296,18 +259,17 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         >
             <input
               name={'car_imei'}
-              onClick={handleInputClick}
+              onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               // onKeyDown={handleKeyDown} // Enter
-              // onKeyUp={handleKeyDown} // Enter
-              // onTouchStart={(evt) => handleNumberValidateTouch(evt)}
+
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
                 textAlign: 'center',
                 width: `100%`,
                 // width: `calc(${car.imei.length}ch + 22px)` 
               }}
-              // type="number"
+
               type="tel" inputMode="numeric" pattern="\d*"
               // readOnly
               readOnly={chooseInputFromStore !== CAR_KEY.imei}
@@ -324,7 +286,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car, setUpdateForm }) => {
         <Stack display={'flex'} justifyContent={'center'} alignItems={'center'}>
             <input
               name={'car_alterimei'}
-            onClick={handleInputClick}
+              onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               // onKeyDown={handleKeyDown} // Enter
               // onKeyUp={handleKeyDown} // Enter

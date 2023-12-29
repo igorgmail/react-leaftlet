@@ -3,13 +3,12 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { ICarObject, TRemoveDialogProps, TEventForDialog, TEventFromDialog } from "../types/carsSettingsTypes";
-import { Stack } from '@mui/material';
+import { TRemoveDialogProps, TEventFromDialog } from "../types/carsSettingsTypes";
+import { Paper, Stack } from '@mui/material';
 
 
 const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
@@ -49,11 +48,13 @@ const RemoveDialog: FC<TRemoveDialogProps> = ({ callback, eventData }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Удаление !!!"}
+          {"Удаление !"}
         </DialogTitle>
         <DialogContent>
+          <Paper>
 
           <div dangerouslySetInnerHTML={{ __html: eventData.msg }} className='dialog-modal--content'></div>
+          </Paper>
 
         </DialogContent>
         <DialogActions >
