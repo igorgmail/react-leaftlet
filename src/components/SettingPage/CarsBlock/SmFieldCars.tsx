@@ -243,7 +243,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
-              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
+              // onBlur={(e) => e.target.setAttribute('readonly', 'true')}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
             className={chooseInputFromStore === CAR_KEY.imei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -272,7 +273,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
-              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
+              // onBlur={(e) => e.target.setAttribute('readonly', 'true')}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
             className={chooseInputFromStore === CAR_KEY.altImei ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
