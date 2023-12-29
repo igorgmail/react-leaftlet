@@ -14,8 +14,9 @@ class DataExtractor {
   }
 
   static createCarDataFromServer(data: ICarObjectTwo) {
-    const { car_id, pic, imei, alter_imei, car_name: name } = { ...data }
-    return { car_id, pic, imei, alter_imei, name }
+    const { car_id, pic, imei, alter_imei, name } = { ...data }
+
+    return { car_id, pic: this.createiconPath(pic), imei, alter_imei, name }
   }
   // static createEventDataForServer(data: Omit<TEventsData, 'event_id'>): TEventsDataForServer {
   //   const { company_id, car_id, point_id, event, time_response_sec, point_id: user_id } = { ...data }

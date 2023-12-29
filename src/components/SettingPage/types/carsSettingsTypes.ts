@@ -29,7 +29,7 @@ export type ICarObject = {
 }
 export type ICarObjectTwo = {
   car_id: string,
-  car_name: string,
+  name: string,
   pic: string,
   imei: string,
   alter_imei: string | null

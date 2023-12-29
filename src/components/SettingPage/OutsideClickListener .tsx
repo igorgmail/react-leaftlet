@@ -3,6 +3,7 @@ import { useAppDispatch, carsSettingsActions, useAppSelector, store } from '../.
 import useUpdateData from './hooks/useUpdateData';
 import useBackDrop from './hooks/useBackdrop';
 import useAlert from './hooks/useAlert';
+import useStartUpdate from './hooks/useStartUpdate';
 
 type TOutsideClickProps = {
   setUpdateForm: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,26 +13,8 @@ const OutsideClickListener: FC<TOutsideClickProps> = ({ setUpdateForm }) => {
 
   const dispatch = useAppDispatch()
   const chooseInput = useAppSelector((store) => store.carsSettings.config.chooseInputName)
-  const { updateDataRequest } = useUpdateData()
-  const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop()
-  const { showAlert, alertComponent } = useAlert()
 
-
-
-  function startUpdate() {
-    console.log("▶ ⇛ IN startUpdate:");
-
-    // startBackDrop()
-    updateDataRequest().then((data) => {
-      console.log("▶ ⇛ updateDataRequestdata:", data);
-
-    }).catch((err) => {
-      console.warn("При обновлении произошла ошибка ", err);
-
-      showAlert('Ошибка при обновлении', 'error')
-      setUpdateForm((cur) => !cur)
-    })
-  }
+  const { startUpdate } = useStartUpdate()
 
 
   useEffect(() => {
@@ -64,8 +47,6 @@ const OutsideClickListener: FC<TOutsideClickProps> = ({ setUpdateForm }) => {
 
   return (
     <>
-      {BackDropComponent}
-      {alertComponent}
     </>
   )
 }

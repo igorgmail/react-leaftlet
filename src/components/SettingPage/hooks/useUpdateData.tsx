@@ -43,8 +43,10 @@ function useUpdateData() {
 
       if (response.data.status === 'Ok') {
         const carData = await response.data.car
+        console.log("▶ ⇛ carData:", carData);
 
-        const newData = DataExtractor.createCarDataFromServer(carData)
+        const newData = DataExtractor.createCarDataFromServer(carData[0])
+        console.log("▶ ⇛ newData:", newData);
 
         dispatch(carsSettingsActions.setUpdateCar(newData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
@@ -71,7 +73,6 @@ function useUpdateData() {
         const pointData = await response.data.point
         dispatch(carsSettingsActions.setUpdatePoint(pointData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
-        // const newData = DataExtractor.createCarDataFromServer(carData)
         return pointData
       } else {
         console.warn("Error in update new car", response.data.message);
@@ -95,7 +96,6 @@ function useUpdateData() {
         const eventData = await response.data.event
         dispatch(carsSettingsActions.setUpdateEvent(eventData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
-        // const newData = DataExtractor.createCarDataFromServer(carData)
         return eventData
       } else {
         console.warn("Error in update new car", response.data.message);
@@ -119,7 +119,6 @@ function useUpdateData() {
         const userData = await response.data.user
         dispatch(carsSettingsActions.setUpdateUser(userData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
-        // const newData = DataExtractor.createCarDataFromServer(carData)
         return userData
       } else {
         console.warn("Error in update new car", response.data.message);

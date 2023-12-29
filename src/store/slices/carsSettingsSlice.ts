@@ -122,8 +122,17 @@ export const carsSettingsSlice = createSlice({
     setAlertHide: (state) => {
       state.config.alertShow = false
     },
+    // Переключатель Обновления данных(Перезагрузки SettingsForm)
     setForcedUpdateToogle: (state) => {
       state.config.forcedUpdateToogle = !state.config.forcedUpdateToogle
+    },
+    // Запустить BackDrop
+    setBackDropShow: (state) => {
+      state.config.backDropShow = true
+    },
+    // Остановить BackDrop
+    setBackDropHide: (state) => {
+      state.config.backDropShow = false
     },
 
     // ? CARS BLOCK --------------------------
