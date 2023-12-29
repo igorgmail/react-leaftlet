@@ -282,7 +282,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
                 width: `100%`,
                 // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
               }}
-              // type="number"
               type="tel" inputMode="numeric" pattern="\d*"
               readOnly
               // readOnly={chooseInputFromStore !== CAR_KEY.altImei}

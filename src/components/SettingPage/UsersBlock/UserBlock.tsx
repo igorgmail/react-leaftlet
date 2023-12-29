@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { Stack } from "@mui/material"
 
 import BlockHeader from "../components/BlockHeader";
-import UserLgBlock from "./UserLgBlock";
+import UserWrapFields from "./UserWrapFields";
 import AddUserModal from "./AddModal/AddUserModal";
 import { useAppSelector, store } from "../../../store";
 
@@ -24,7 +24,7 @@ const UserBlock = () => {
     <Stack sx={{ whidth: '100%' }}>
       <BlockHeader header={"Пользователи"} />
 
-      <UserLgBlock usersData={userData}></UserLgBlock>
+      <UserWrapFields usersData={userData}></UserWrapFields>
 
       <AddUserModal />
     </Stack>

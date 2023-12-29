@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react"
 
-import { Divider, Grid, Stack } from "@mui/material"
+import { Divider, Grid, Stack, useMediaQuery, useTheme } from "@mui/material"
 
 import { TEventForDialog, TEventFromDialog, TSelectedFieldChanged, TUsers } from "../types/carsSettingsTypes"
 import { useAppDispatch, useAppSelector, carsSettingsActions } from "../../../store";
@@ -20,6 +20,9 @@ interface IUserFieldProps {
 
 const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   const chooseInputFromStore = useAppSelector((store) => store.carsSettings.config.chooseInputName)
 
   const [userId, setUserId] = useState(oneUser.user_id)
@@ -29,7 +32,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
   const dispatch = useAppDispatch()
 
   const { startUpdate } = useStartUpdate()
-  const { handleInputClickLG, handleKeyDownLG } = useHandleInput()
+  const { handleInputClickLG, handleInputClickSM, handleKeyDownLG, handleKeyUpSM } = useHandleInput()
 
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -55,7 +58,6 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
       }).finally(() => stopBackDrop())
   }
 
-
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const objectIndex = e.target.value
     // console.log("Индекс объекта", objectIndex);
@@ -70,6 +72,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
       startUpdate()
     }
   }
+
   const eventObject: TSelectedFieldChanged = {
     typeField: 'users',
     selectBlockObject: {
@@ -96,11 +99,53 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
     return eventData
   }
 
+  const inputField =
+    !isSmallScreen ? (
+      <input
+        onClick={handleInputClickLG}
+        onChange={handleEmailInputChange}
+        onKeyDown={handleKeyDownLG}
+
+        readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
+        className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}
+        style={{
+          width: `100%`,
+          textAlign: 'left',
+          // width: `calc(${oneUser.user_email.length}ch + 30px)`,
+        }}
+        value={userEmail}
+        data-forstore={`id${oneUser.user_id}-email`}
+        data-interactive
+      />
+    ) : (
+      <input
+
+        onClick={handleInputClickSM}
+        onChange={handleEmailInputChange}
+        onKeyUp={handleKeyUpSM}
+        onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
+
+        readOnly
+        // readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
+        className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}
+        style={{
+          width: `100%`,
+          textAlign: 'left',
+          // width: `calc(${oneUser.user_email.length}ch + 30px)`,
+          // margin: 'auto'
+        }}
+        value={userEmail}
+        data-forstore={`id${oneUser.user_id}-email`}
+        data-interactive
+      />
+    )
+
   useEffect(() => {
     setUserId(oneUser.user_id)
     setUserEmail(oneUser.user_email)
     setUserRole(oneUser.user_role)
   }, [oneUser])
+
   return (
     <>
       <Grid
@@ -116,29 +161,11 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
           <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} >
 
             {/* Remove Button */}
-            <RemoveDialog callback={handleDialog}
+            <RemoveDialog
+              callback={handleDialog}
               eventData={makeEventData(oneUser)}
             />
-
-            <input
-
-              onClick={handleInputClickLG}
-              onChange={handleEmailInputChange}
-              onKeyDown={handleKeyDownLG}
-
-              // className="all-white-input-style"
-              readOnly={chooseInputFromStore !== `id${oneUser.user_id}-email`}
-              className={chooseInputFromStore === `id${oneUser.user_id}-email` ? "all-white-input--choose-style" : "all-white-input-style"}
-              style={{
-                width: `100%`,
-                textAlign: 'left',
-                // width: `calc(${oneUser.user_email.length}ch + 30px)`,
-                // margin: 'auto'
-              }}
-              value={userEmail}
-              data-forstore={`id${oneUser.user_id}-email`}
-              data-interactive
-            />
+            {inputField}
 
           </Stack>
         </Grid>
@@ -155,4 +182,5 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
     </>
   )
 }
+
 export default UserField

@@ -201,6 +201,7 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
               onClick={handleInputClickSM}
               onChange={handleFieldChange}
               onKeyUp={handleKeyUpSM}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
             className={chooseInputFromStore === POINT_KEY.radius ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -210,7 +211,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
                 fontSize: '0.8rem'
               }}
             type="number"
-            readOnly={chooseInputFromStore !== POINT_KEY.radius}
+              readOnly
+              // readOnly={chooseInputFromStore !== POINT_KEY.radius}
             value={pointRadius}
             data-forstore={POINT_KEY.radius}
             data-interactive
@@ -238,11 +240,13 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
               onClick={handleInputClickSM}
               onChange={handleFieldChange}
               onKeyUp={handleKeyUpSM}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{ width: `100%`, fontSize: '0.8rem' }}
               type="text"
-            readOnly={chooseInputFromStore !== POINT_KEY.address}
+              readOnly
+              // readOnly={chooseInputFromStore !== POINT_KEY.address}
               value={pointAddress}
             data-forstore={POINT_KEY.address}
               data-interactive

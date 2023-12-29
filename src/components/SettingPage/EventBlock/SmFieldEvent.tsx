@@ -227,6 +227,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
               onClick={handleInputClickSM}
               onChange={handleTimeInputChange}
               onKeyUp={handleKeyUpSM}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
               className={chooseInputFromStore === `id${oneEvent.event_id}-event` ? "all-white-input--choose-style" : "all-white-input-style"}
               style={{
@@ -234,7 +235,8 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
                 textAlign: 'right',
               }}
               type="text"
-              readOnly={chooseInputFromStore !== `id${oneEvent.event_id}-event`}
+              readOnly
+              // readOnly={chooseInputFromStore !== `id${oneEvent.event_id}-event`}
               value={`${eventTimeSec}`}
               data-forstore={`id${oneEvent.event_id}-event`}
               data-interactive
