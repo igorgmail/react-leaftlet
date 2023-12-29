@@ -52,7 +52,7 @@ function useHandleInput() {
 
       if (dataValue === chooseInputFromStore) return
       targ.removeAttribute('readonly');
-      targ.blur()
+      // targ.blur()
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
       // setTimeout(() => targ.focus())
