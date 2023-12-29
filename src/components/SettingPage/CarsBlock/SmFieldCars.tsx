@@ -175,8 +175,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               onClick={handleInputClickSM}
               onChange={(e) => handleFieldChange(e)}
               onKeyUp={handleKeyUpSM} // Enter
-              onBlur={(e) => e.target.setAttribute('readonly', 'true')}
-
+              // onBlur={(e) => e.target.setAttribute('readonly', 'true')}
+              onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
             className={chooseInputFromStore === CAR_KEY.name ? "all-white-input--choose-style" : "all-white-input-style"}
             style={{
               textAlign: 'center',
@@ -190,8 +190,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             data-forstore={CAR_KEY.name}
               autoComplete="off"
           />
-        </Stack>
-          <Stack>{test}</Stack>
+          </Stack>
 
       </Grid>
 
