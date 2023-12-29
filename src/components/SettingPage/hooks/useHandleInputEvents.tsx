@@ -43,7 +43,7 @@ function useHandleInput() {
     event.preventDefault()
     const touchNumber = event.detail
 
-    if (touchNumber === 2) {
+    if (touchNumber === 1) {
       const targ = event.currentTarget
 
       // targ.setAttribute('readonly', 'false')
