@@ -55,8 +55,8 @@ function useHandleInput() {
       // targ.blur()
 
       if (dataValue) dispatch(carsSettingsActions.setChooseInputName(dataValue))
-      // setTimeout(() => targ.focus())
-      targ.focus()
+      setTimeout(() => targ.focus())
+      // targ.focus()
       // Установка курсора в конец текста
 
       if (inputType === 'number') {
