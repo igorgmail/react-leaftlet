@@ -137,7 +137,7 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
                 value={nameCar}
                 required
                 autoComplete="off"
-                type="text"
+                type="search"
                 inputMode="search"
               />
             </Stack>
