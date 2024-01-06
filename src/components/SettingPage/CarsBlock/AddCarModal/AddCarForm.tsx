@@ -137,7 +137,8 @@ const AddCarForm: FC<TAddCarForm> = ({ handleClose, handleFormSubmit }) => {
                 value={nameCar}
                 required
                 autoComplete="off"
-                type="search"
+                type="text"
+                enterKeyHint="done"
               />
             </Stack>
           </Grid>
