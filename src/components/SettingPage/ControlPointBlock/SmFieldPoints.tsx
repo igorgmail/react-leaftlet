@@ -135,6 +135,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
   return (
     <>
+      <form>
+
     <Grid
       container alignItems="center" justifyContent="center"
       sx={{
@@ -188,6 +190,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
             data-forstore={POINT_KEY.name}
             data-interactive
               autoComplete="off"
+                type="text"
+                enterKeyHint="done"
           />
         </Stack>
       </Grid>
@@ -210,13 +214,16 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
                 // width: `calc(${onePoint.radius.length}ch + 22px)`, 
                 fontSize: '0.8rem'
               }}
-            type="number"
               readOnly
               // readOnly={chooseInputFromStore !== POINT_KEY.radius}
             value={pointRadius}
             data-forstore={POINT_KEY.radius}
             data-interactive
-              autoComplete="off" />
+                autoComplete="off"
+                type="text"
+                inputMode="numeric" pattern="\d*"
+                enterKeyHint="done"
+              />
         </Stack>
       </Grid>
 
@@ -243,14 +250,15 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
               onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 
             className={chooseInputFromStore === POINT_KEY.address ? "all-white-input--choose-style" : "all-white-input-style"}
-              style={{ width: `100%`, fontSize: '0.8rem' }}
-              type="text"
+                style={{ width: `100%`, fontSize: '0.8rem' }}
               readOnly
               // readOnly={chooseInputFromStore !== POINT_KEY.address}
               value={pointAddress}
-            data-forstore={POINT_KEY.address}
+                data-forstore={POINT_KEY.address}
               data-interactive
+                type="text"
               autoComplete="off"
+                enterKeyHint="done"
             />
           }
 
@@ -271,6 +279,8 @@ const SmFieldPoints: FC<ISmFieldPointsProps> = ({ onePoint }) => {
 
       </Grid>
     </Grid>
+      </form>
+
       {BackDropComponent}
       {alertComponent}
     </>

@@ -160,6 +160,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
   return (
     <>
+      <form>
       <Grid
         key={`events-block-` + oneEvent.event_id}
         container alignItems="center" justifyContent="center"
@@ -234,13 +235,15 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
                 width: '100%',
                 textAlign: 'right',
               }}
-              type="text"
               readOnly
               // readOnly={chooseInputFromStore !== `id${oneEvent.event_id}-event`}
               value={`${eventTimeSec}`}
               data-forstore={`id${oneEvent.event_id}-event`}
               data-interactive
               autoComplete="off"
+                type="text"
+                inputMode="numeric" pattern="\d*"
+                enterKeyHint="done"
             />
           </Stack>
         </Grid>
@@ -273,6 +276,7 @@ const SmFieldEvent: FC<IEventBlockProps> = ({ oneEvent }) => {
 
         </Grid>
       </Grid>
+      </form>
       {BackDropComponent}
     </>
   )

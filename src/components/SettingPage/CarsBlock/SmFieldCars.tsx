@@ -260,8 +260,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
                 data-forstore={CAR_KEY.imei}
               data-interactive
               autoComplete="off"
-                type="tel"
-                // inputMode="numeric" pattern="\d*"
+                type="text"
+                inputMode="numeric" pattern="\d*"
                 enterKeyHint="done"
           />
         </Stack>
@@ -290,8 +290,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
                 value={inputCarAlterImeiValue || ''}
                 data-forstore={CAR_KEY.altImei}
               data-interactive
-              autoComplete="off"
-                // type="tel"
+                autoComplete="off"
                 type="text"
                 inputMode="numeric" pattern="\d*"
                 enterKeyHint="done"

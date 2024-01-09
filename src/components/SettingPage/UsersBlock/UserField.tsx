@@ -137,6 +137,9 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
         value={userEmail}
         data-forstore={`id${oneUser.user_id}-email`}
         data-interactive
+          autoComplete="off"
+          type="text"
+          enterKeyHint="done"
       />
     )
 
@@ -148,6 +151,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
   return (
     <>
+      <form>
       <Grid
         key={`user-block-` + oneUser.user_id}
         container
@@ -177,6 +181,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
         <Divider />
       </Grid>
+      </form>
       {BackDropComponent}
       {alertComponent}
     </>
