@@ -118,8 +118,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
         data-interactive
       />
     ) : (
-      <input
-
+        <input
         onClick={handleInputClickSM}
         onChange={handleEmailInputChange}
         onKeyUp={handleKeyUpSM}
