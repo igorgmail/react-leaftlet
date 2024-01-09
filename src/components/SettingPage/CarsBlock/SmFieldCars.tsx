@@ -292,8 +292,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
               data-interactive
               autoComplete="off"
                 // type="tel"
-                type="number"
-                // inputMode="numeric" pattern="\d*"
+                type="text"
+                inputMode="numeric" pattern="\d*"
                 enterKeyHint="done"
           />
         </Stack>
