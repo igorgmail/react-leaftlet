@@ -150,7 +150,7 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
 
   return (
     <>
-      <form>
+      <form onSubmit={(e) => e.preventDefault()}>
       <Grid
         key={`user-block-` + oneUser.user_id}
         container
