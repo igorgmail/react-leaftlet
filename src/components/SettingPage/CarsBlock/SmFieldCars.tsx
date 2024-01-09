@@ -254,14 +254,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
                 width: `100%`,
                 // width: `calc(${car.imei.length}ch + 22px)` 
               }}
-
-              type="tel" inputMode="numeric" pattern="\d*"
               readOnly
               // readOnly={chooseInputFromStore !== CAR_KEY.imei}
-            value={inputCarImeiValue}
-            data-forstore={CAR_KEY.imei}
+                value={inputCarImeiValue}
+                data-forstore={CAR_KEY.imei}
               data-interactive
               autoComplete="off"
+                type="tel"
+                // inputMode="numeric" pattern="\d*"
                 enterKeyHint="done"
           />
         </Stack>
@@ -285,13 +285,14 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
                 width: `100%`,
                 // width: `calc(${car.alter_imei?.length || 0}ch + 22px)` 
               }}
-              type="tel" inputMode="numeric" pattern="\d*"
               readOnly
               // readOnly={chooseInputFromStore !== CAR_KEY.altImei}
-            value={inputCarAlterImeiValue || ''}
-            data-forstore={CAR_KEY.altImei}
+                value={inputCarAlterImeiValue || ''}
+                data-forstore={CAR_KEY.altImei}
               data-interactive
               autoComplete="off"
+                type="tel"
+                // inputMode="numeric" pattern="\d*"
                 enterKeyHint="done"
           />
         </Stack>
@@ -304,8 +305,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
           color: 'white',
           borderBottomRightRadius: '10px',
           borderBottomLeftRadius: '10px',
-          height: '1.5rem',
-
+              height: '1.5rem',
         }}>
         </Stack>
 
