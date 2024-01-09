@@ -30,8 +30,6 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
   const [inputCarIconIdValue, setInputCarIconIdValue] = useState<string>(car.pic);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [test, setTest] = useState('test')
-
   const { startUpdate } = useStartUpdate()
   const { startBackDrop, stopBackDrop, BackDropComponent } = useBackDrop();
   const { showAlert, alertComponent } = useAlert()
@@ -132,6 +130,8 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
 
   return (
     <>
+      <form>
+
     <Grid
       container alignItems="center" justifyContent="center"
       sx={{
@@ -141,6 +141,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
       }}
       data-carid={car.car_id}
     >
+
 
       {/* Block - 1 Name and Icon */}
       <Grid item xs={6}>
@@ -189,6 +190,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             value={inputCarNameValue}
             data-forstore={CAR_KEY.name}
               autoComplete="off"
+                enterKeyHint="done"
           />
           </Stack>
 
@@ -260,6 +262,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             data-forstore={CAR_KEY.imei}
               data-interactive
               autoComplete="off"
+                enterKeyHint="done"
           />
         </Stack>
       </Grid>
@@ -289,6 +292,7 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
             data-forstore={CAR_KEY.altImei}
               data-interactive
               autoComplete="off"
+                enterKeyHint="done"
           />
         </Stack>
       </Grid>
@@ -306,7 +310,9 @@ const SmFieldCars: FC<ISmFieldCarsProps> = ({ car }) => {
         </Stack>
 
       </Grid>
+
     </Grid>
+      </form>
       {BackDropComponent}
       {alertComponent}
     </>
