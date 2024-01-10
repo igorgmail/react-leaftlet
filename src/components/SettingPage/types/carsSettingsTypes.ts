@@ -131,7 +131,11 @@ export type TPointsDataWithAddress = TPointsData & {
   address: string;
 };
 
+export type TCompName = {
+  company_name: string
+}
+
 export type TSelectedFieldChanged = {
-  typeField: 'cars' | 'points' | 'events' | 'users',
-  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsDataForServer | TUsers
+  typeField: 'cars' | 'points' | 'events' | 'users' | 'company-name',
+  selectBlockObject: ICarObject | TPointsDataWithAddress | TEventsDataForServer | TUsers | TCompName
 }

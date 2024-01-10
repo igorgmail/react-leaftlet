@@ -42,7 +42,10 @@
   padding: 8px;
   border: 2px solid transparent;
   }
-  
+
+.company-name--dis {
+  cursor: pointer;
+}
   .company-block--name-active-input {
     background-color: #ffffff;
     border-radius: 8px;

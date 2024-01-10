@@ -119,8 +119,8 @@ const UserField: FC<IUserFieldProps> = ({ oneUser }) => {
       />
     ) : (
         <input
-        onClick={handleInputClickSM}
         onChange={handleEmailInputChange}
+          onClick={handleInputClickSM}
         onKeyUp={handleKeyUpSM}
         onTouchStart={(e) => e.currentTarget.removeAttribute('readonly')}
 

@@ -3,7 +3,7 @@ import useApi from "./useApi";
 
 import API_ENDPOINTS from "../utils/apiEndpoints";
 import DataExtractor from "../utils/dataExtractor";
-import { ICarObject, TEventsDataForServer, TPointsData, TUsers } from "../types/carsSettingsTypes";
+import { ICarObject, TEventsDataForServer, TPointsData, TUsers, TCompName } from "../types/carsSettingsTypes";
 
 type Tmethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -115,6 +115,26 @@ function useUpdateData() {
         dispatch(carsSettingsActions.setUpdateUser(userData))
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
         return userData
+      } else {
+        console.warn("Error in update new car", response.data.message);
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
+        throw new Error(response.data.message);
+      }
+    };
+
+
+    if (selectBlock?.typeField === 'company-name') {
+      const { company_name } = selectBlock.selectBlockObject as TCompName
+      param = `?company_name=${company_name}`
+      url = API_ENDPOINTS.SAVE_COMPANY_NAME + param
+      options = {
+        method: 'GET',
+      }
+      const response = await sendRequest(url, options)
+
+      if (response.data.status === 'Ok') {
+        dispatch(carsSettingsActions.setCurrentSelectBlock(null))
+        return company_name
       } else {
         console.warn("Error in update new car", response.data.message);
         dispatch(carsSettingsActions.setCurrentSelectBlock(null))
